@@ -263,6 +263,6 @@ postgresql:
   # For now we only support a db installed with a subchart
 
   postgresqlPostgresPassword: admin
-  postgresqlUsername: kobo
+  postgresqlUsername: postgres
   postgresqlPassword: kobo
   initdbScriptsConfigMap: "{{ .Release.Name }}-postgres-init"
