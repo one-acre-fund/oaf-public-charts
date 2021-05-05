@@ -3,6 +3,7 @@ name: kobotoolbox
 version: 0.1.1
 description: KoboToolbox field data collection solution
 home: https://www.kobotoolbox.org/
+icon: https://avatars.githubusercontent.com/u/5543677?s=400&v=4
 sources:
   - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/kobotoolbox
 maintainers:

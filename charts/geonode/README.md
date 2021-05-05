@@ -2,7 +2,7 @@
 
 ![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
-Helm Chart for Geonode
+Geonode - a CMS for Geospatial data
 
 **Homepage:** <https://geonode.org/>
 
