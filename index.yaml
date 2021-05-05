@@ -1,0 +1,28 @@
+apiVersion: v1
+entries:
+  geonode:
+  - apiVersion: v2
+    created: "2021-05-05T15:00:21.79914949Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~10.1.2
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: ~8.6.0
+    description: Helm Chart for Geonode
+    digest: 766753ab1f6f19c2f56179a42fb8e9d14bf46ef5023d543887a2e523a2801f8f
+    home: https://github.com/one-acre-fund/oaf-public-charts
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: geonode
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/geonode
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/geonode-0.1.1/geonode-0.1.1.tgz
+    version: 0.1.1
+generated: "2021-05-05T15:00:21.799162891Z"
