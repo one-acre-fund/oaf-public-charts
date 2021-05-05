@@ -3,3 +3,4 @@ chart-repos:
 helm-extra-args: --timeout 15m
 debug: true
 target-branch: main
+lint-conf: .yamllint.yaml
