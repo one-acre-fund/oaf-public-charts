@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-test-geonode
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - image: jwilder/dockerize
+      imagePullPolicy: IfNotPresent
+      name: test-connections
+      args:
+        - -timeout=120s
+        # Postgres
+        - -wait=tcp://{{ include "database_host" .}}
+        # RabbitMQ
+        - -wait=tcp://{{ include "rabbit_host" .}}
+        # Nginx
+        - -wait=http://{{ .Release.Name }}-geonode/static/geonode/img/favicon.ico
+        # Geoserver
+        - -wait=http://{{ .Release.Name }}-geonode/geoserver
+  restartPolicy: Never

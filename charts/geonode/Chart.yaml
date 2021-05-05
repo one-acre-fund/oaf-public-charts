@@ -1,0 +1,20 @@
+apiVersion: v2
+name: geonode
+version: 0.1.0
+type: application
+description: Helm Chart for Geonode
+home: https://github.com/one-acre-fund/oaf-public-charts
+sources:
+  - https://github.com/one-acre-fund/oaf-public-charts/geonode
+maintainers:
+  - name: Yann-J
+    email: yann.jouanique@gmail.com
+dependencies:
+  - name: postgresql
+    version: ~10.1.2
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: rabbitmq
+    version: ~8.6.0
+    repository: https://charts.bitnami.com/bitnami
+    condition: rabbitmq.enabled
