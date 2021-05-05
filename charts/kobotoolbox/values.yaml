@@ -1,36 +1,46 @@
-# kobocat is the standard OpenRosa form server that form filling apps will connect to
 kobocat:
   image:
-    # We're using an immutable tag here to avoid surprise upgrades
-    # see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags
+    # -- KoboCat docker image name
     name: kobotoolbox/kobocat
+    # -- KoboCat docker image tag
+    # see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags
     tag: "2.021.09"
+  # -- DNS subdomain name to serve the form server from
   subdomain: kc
+  # -- Dictionary of env variables to pass
   extraEnv: {}
 
-# kpi is the main Kobotoolbox UI
 kpi:
   image:
-    # See https://hub.docker.com/r/kobotoolbox/kpi
+    # -- kpi docker image name
+    # See https://hub.docker.com/r/kobotoolbox/kpi for list of tags
     name: kobotoolbox/kpi
+    # -- kpi docker image tag
     tag: "2.021.12b"
+  # -- DNS subdomain to serve the main UI from
   subdomain: kobo
-  # Background image override (base64 encoded)
-  signupPhoto: ""
+  # -- Dictionary of env variables to pass
   extraEnv: {}
 
-# Enketo is the web-based form preview and filling UI
 enketo:
   image:
-    # See https://hub.docker.com/r/kobotoolbox/enketo-express-extra-widgets
+    # -- Enketo image name - the web-based form preview and filling UI
     name: kobotoolbox/enketo-express-extra-widgets
+    # -- Enketo image tag
+    # See https://hub.docker.com/r/kobotoolbox/enketo-express-extra-widgets
     tag: "2.6.1"
+  # -- DNS subdomain to serve Enketo from
   subdomain: ee
+  # -- Number of Enketo pods
   replicas: 1
-  # Override those!
+  # -- Random API key
   apiKey: WEHQJCXHJ2XOBXGOGMXCUJYXQP9ZZFVY4FHLCSKJIWAWPTCMGMECGNBCHXVBFCFT1H5TQTQCKB0J7DF2X23WC7EHOCCVQ7K8CY6QO9C8NMERACUM6S2QQEER
+  # -- Random API key
   encryptionKey: w0RkyuQSB33md8cZB5Xx
+  # -- Random API key
   lessSecureEncryptionKey: wUNQWPwA3bDVzckKKtS4
+  # -- Enketo configuration - will be evaluated as a template
+  # @default -- see `values.yaml`
   config: |-
     {
       "app name": "Enketo Express for KoBo Toolbox",
@@ -124,38 +134,48 @@ enketo:
     }
 
 general:
-  # WARNING: if using more than 1 replicas, you NEED to use a ReadWriteMany accessmode in mediaStorage.accessMode, and a storage class that supports it!
+  # -- Replica for the kpi+kobocat pod. __WARNING__: if using more than 1 replicas, you NEED to use a ReadWriteMany accessmode in mediaStorage.accessMode, and a storage class that supports it!
   replicas: 1
-  # The subdomains MUST be reachable since the application will try to call itself at this address
-  # If you don't have a working domain yet, you may use forceInternal below to resolve it to the pod's localhost IP
+  # -- Parent domain to serve all apps from
+  # __WARNING__: The subdomains MUST be reachable since the application will try to call itself at this address
   externalDomain: example.com
+  # -- Public URL scheme
   externalScheme: http
+  # -- Public URL port
   externalPort:
+  # -- Random Django secret
   djangoSecret: EKMvRtT2RFB3xDvFty4SVCsTyaQAHS9aA2mkRqtTp9zQYz48fp
+  # -- Enable various debug flags?
   debug: false
-  # This user will have access to kobotoolbox UI but also the built-in Django admin interface (/admin)
   superUser:
+    # -- Admin user name - This user will have access to kobotoolbox UI but also the built-in Django admin interface (/admin)
     username: kobo
+    # -- Admin user password
     password: kobo
+  # -- Support email visible from the website
   supportEmail: support@example.com
+  # -- Service type to expose
   serviceType: ClusterIP
-  # set this to true in order to force internal resolution of external domains.
-  # Useful for troubleshooting, but won't work if the schemes are different...
+  # -- Set this to true in order to force internal resolution of external domains, in case those aren't reachable from inside the containers.
+  # Useful for troubleshooting, but won't work if the public scheme is https
   forceInternal: false
-  # These storage settings will apply to the volume used for uploaded media
   mediaStorage:
+    # -- Storage size for uploaded media volume
     size: 10Gi
-    # storage class will default to global.storageClass if provided, but can be specifically overridden here
+    # -- Storage class will default to global.storageClass if provided, but can be specifically overridden here
     storageClass: ""
-    # Needs to be ReadWriteMany if you intend to scale ro more than 1 pod!
+    # -- Needs to be ReadWriteMany if you intend to scale to more than 1 pod!
     accessMode: ReadWriteOnce
 
 ingress:
+  # -- Install ingress?
   enabled: false
+  # -- Ingress annotations
   annotations:
     {}
     # You typically want to enable large media uploads
     # nginx.ingress.kubernetes.io/proxy-body-size: 100M
+  # -- Ingress TLS settings
   tls: {}
 
 external:
@@ -168,18 +188,24 @@ external:
     kpiJs: ""
 
 smtp:
+  # -- SMTP Host
   host: smtp.gmail.com
+  # -- Use TLS for SMTP?
   tls: true
+  # -- SMTP port
   port: "587"
+  # -- SMTP Username
   user: ""
+  # -- SMTP Password
   password: ""
+  # -- SMTP "from" address
   from: ""
 
 global:
   redis:
-    # Override this!
+    # -- Redis password
     password: brFdS9b7Xp
-  # Will be used by this and all subcharts
+  # -- Will be used by this and all subcharts
   storageClass: standard
 
 rediscache:
@@ -198,12 +224,15 @@ redismain:
     enabled: false
     slaveCount: 1
 
+# -- Standard MongoDB values
+# See https://artifacthub.io/packages/helm/bitnami/mongodb for doc
+# @default -- see `values.yaml`
 mongodb:
+  # -- Install MongoDB?
   enabled: true
   # TODO: support external db
   # For now we only support a db installed with a subchart
 
-  # See https://artifacthub.io/packages/helm/bitnami/mongodb for mongodb values doc
   auth:
     rootPassword: kobo
     username: kobo
@@ -218,16 +247,21 @@ mongodb:
         pwd: "{{ .Values.auth.password }}",
         roles: [ { role: 'readWrite', db: "{{ .Values.auth.database }}" } ]
       })
+
+# -- Standard postgres chart values
+# See https://artifacthub.io/packages/helm/bitnami/postgresql for docs
+# @default -- see `values.yaml`
 postgresql:
+  # -- Install Postgres?
   enabled: true
+  # -- DB name for the form server
   kobocatDatabase: kobocat
+  # -- DN name for the main Kobo UI
   kpiDatabase: koboform
 
   # TODO: support external db
   # For now we only support a db installed with a subchart
 
-  # Standard postgres chart values
-  # See https://artifacthub.io/packages/helm/bitnami/postgresql for docs
   postgresqlPostgresPassword: admin
   postgresqlUsername: kobo
   postgresqlPassword: kobo

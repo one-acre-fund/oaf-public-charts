@@ -36,61 +36,52 @@ $ helm install my-release one-acre-fund/kobotoolbox
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| enketo.apiKey | string | `"WEHQJCXHJ2XOBXGOGMXCUJYXQP9ZZFVY4FHLCSKJIWAWPTCMGMECGNBCHXVBFCFT1H5TQTQCKB0J7DF2X23WC7EHOCCVQ7K8CY6QO9C8NMERACUM6S2QQEER"` |  |
-| enketo.config | string | `"{\n  \"app name\": \"Enketo Express for KoBo Toolbox\",\n  \"linked form and data server\": {\n    \"name\": \"KoBo Toolbox\",\n    \"server url\": \"\",\n    \"api key\": \"{{ .Values.enketo.apiKey }}\"\n  },\n  \"encryption key\": \"{{ .Values.enketo.encryptionKey }}\",\n  \"less secure encryption key\": \"{{ .Values.enketo.lessSecureEncryptionKey }}\",\n  \"widgets\": [\n    \"note\",\n    \"select-desktop\",\n    \"select-mobile\",\n    \"autocomplete\",\n    \"geo\",\n    \"textarea\",\n    \"url\",\n    \"table\",\n    \"radio\",\n    \"date\",\n    \"time\",\n    \"datetime\",\n    \"select-media\",\n    \"file\",\n    \"draw\",\n    \"rank\",\n    \"likert\",\n    \"range\",\n    \"columns\",\n    \"image-view\",\n    \"comment\",\n    \"image-map\",\n    \"date-native\",\n    \"date-native-ios\",\n    \"date-mobile\",\n    \"text-max\",\n    \"text-print\",\n    \"rating\",\n    \"thousands-sep\",\n    \"../../../node_modules/enketo-image-customization-widget/image-customization\",\n    \"../../../node_modules/enketo-literacy-test-widget/literacywidget\"\n  ],\n  \"redis\": {\n    \"cache\": {\n      \"host\": \"{{ .Release.Name }}-rediscache-master\",\n      {{- if .Values.rediscache.usePassword }}\n      \"password\": \"{{ .Values.global.redis.password }}\",\n      {{- end }}\n      \"port\": \"6379\"\n    },\n    \"main\": {\n      \"host\": \"{{ .Release.Name }}-redismain-master\",\n      {{- if .Values.redismain.usePassword }}\n      \"password\": \"{{ .Values.global.redis.password }}\",\n      {{- end }}\n      \"port\": \"6379\"\n    }\n  },\n  \"google\": {\n    \"api key\": \"{{ .Values.external.google.apiKey }}\",\n    \"analytics\": {\n      \"ua\": \"{{ .Values.external.google.analyticsToken }}\",\n      \"domain\": \"{{ .Values.general.externalScheme }}://{{ .Values.enketo.subdomain }}.{{ .Values.general.externalDomain }}{{ .Values.general.publicPort }}\"\n    }\n  },\n  \"payload limit\": \"1mb\",\n  \"text field character limit\": 1000000,\n  \"maps\": [\n    {\n      \"name\": \"humanitarian\",\n      \"tiles\": [ \"https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png\" ],\n      \"attribution\": \"&copy; <a href=\\\"http://openstreetmap.org\\\">OpenStreetMap</a> & <a href=\\\"https://www.hotosm.org/updates/2013-09-29_a_new_window_on_openstreetmap_data\\\">Yohan Boniface & Humanitarian OpenStreetMap Team</a> | <a href=\\\"https://www.openstreetmap.org/copyright\\\">Terms</a>\"\n    },\n    {\n      \"name\": \"satellite\",\n      \"tiles\": [ \"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}\" ],\n      \"attribution\": \"Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community\"\n    },\n    {\n      \"name\": \"terrain\",\n      \"tiles\": [ \"https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png\" ],\n      \"attribution\": \"&copy; <a href=\\\"https://openstreetmap.org\\\">OpenStreetMap</a> | <a href=\\\"https://www.openstreetmap.org/copyright\\\">Terms</a>\"\n    },\n    {\n      \"name\": \"streets\",\n      \"tiles\": [ \"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\" ],\n      \"attribution\": \"&copy; <a href=\\\"https://openstreetmap.org\\\">OpenStreetMap</a> | <a href=\\\"https://www.openstreetmap.org/copyright\\\">Terms</a>\"\n    }\n  ]\n}"` |  |
-| enketo.encryptionKey | string | `"w0RkyuQSB33md8cZB5Xx"` |  |
-| enketo.image.name | string | `"kobotoolbox/enketo-express-extra-widgets"` |  |
-| enketo.image.tag | string | `"2.6.1"` |  |
-| enketo.lessSecureEncryptionKey | string | `"wUNQWPwA3bDVzckKKtS4"` |  |
-| enketo.replicas | int | `1` |  |
-| enketo.subdomain | string | `"ee"` |  |
+| enketo.apiKey | string | `"WEHQJCXHJ2XOBXGOGMXCUJYXQP9ZZFVY4FHLCSKJIWAWPTCMGMECGNBCHXVBFCFT1H5TQTQCKB0J7DF2X23WC7EHOCCVQ7K8CY6QO9C8NMERACUM6S2QQEER"` | Random API key |
+| enketo.config | string | see `values.yaml` | Enketo configuration - will be evaluated as a template |
+| enketo.encryptionKey | string | `"w0RkyuQSB33md8cZB5Xx"` | Random API key |
+| enketo.image.name | string | `"kobotoolbox/enketo-express-extra-widgets"` | Enketo image name - the web-based form preview and filling UI |
+| enketo.image.tag | string | `"2.6.1"` | Enketo image tag See https://hub.docker.com/r/kobotoolbox/enketo-express-extra-widgets |
+| enketo.lessSecureEncryptionKey | string | `"wUNQWPwA3bDVzckKKtS4"` | Random API key |
+| enketo.replicas | int | `1` | Number of Enketo pods |
+| enketo.subdomain | string | `"ee"` | DNS subdomain to serve Enketo from |
 | external.google.analyticsToken | string | `""` |  |
 | external.google.apiKey | string | `""` |  |
 | external.ravenDSN.kobocat | string | `""` |  |
 | external.ravenDSN.kpi | string | `""` |  |
 | external.ravenDSN.kpiJs | string | `""` |  |
-| general.debug | bool | `false` |  |
-| general.djangoSecret | string | `"EKMvRtT2RFB3xDvFty4SVCsTyaQAHS9aA2mkRqtTp9zQYz48fp"` |  |
-| general.externalDomain | string | `"example.com"` |  |
-| general.externalPort | string | `nil` |  |
-| general.externalScheme | string | `"http"` |  |
-| general.forceInternal | bool | `false` |  |
-| general.mediaStorage.accessMode | string | `"ReadWriteOnce"` |  |
-| general.mediaStorage.size | string | `"10Gi"` |  |
-| general.mediaStorage.storageClass | string | `""` |  |
-| general.replicas | int | `1` |  |
-| general.serviceType | string | `"ClusterIP"` |  |
-| general.superUser.password | string | `"kobo"` |  |
-| general.superUser.username | string | `"kobo"` |  |
-| general.supportEmail | string | `"support@example.com"` |  |
-| global.redis.password | string | `"brFdS9b7Xp"` |  |
-| global.storageClass | string | `"standard"` |  |
-| ingress.annotations | object | `{}` |  |
-| ingress.enabled | bool | `false` |  |
+| general.debug | bool | `false` | Enable various debug flags? |
+| general.djangoSecret | string | `"EKMvRtT2RFB3xDvFty4SVCsTyaQAHS9aA2mkRqtTp9zQYz48fp"` | Random Django secret |
+| general.externalDomain | string | `"example.com"` | Parent domain to serve all apps from __WARNING__: The subdomains MUST be reachable since the application will try to call itself at this address |
+| general.externalPort | string | `nil` | Public URL port |
+| general.externalScheme | string | `"http"` | Public URL scheme |
+| general.forceInternal | bool | `false` | Set this to true in order to force internal resolution of external domains, in case those aren't reachable from inside the containers. Useful for troubleshooting, but won't work if the public scheme is https |
+| general.mediaStorage.accessMode | string | `"ReadWriteOnce"` | Needs to be ReadWriteMany if you intend to scale to more than 1 pod! |
+| general.mediaStorage.size | string | `"10Gi"` | Storage size for uploaded media volume |
+| general.mediaStorage.storageClass | string | `""` | Storage class will default to global.storageClass if provided, but can be specifically overridden here |
+| general.replicas | int | `1` | Replica for the kpi+kobocat pod. __WARNING__: if using more than 1 replicas, you NEED to use a ReadWriteMany accessmode in mediaStorage.accessMode, and a storage class that supports it! |
+| general.serviceType | string | `"ClusterIP"` | Service type to expose |
+| general.superUser.password | string | `"kobo"` | Admin user password |
+| general.superUser.username | string | `"kobo"` | Admin user name - This user will have access to kobotoolbox UI but also the built-in Django admin interface (/admin) |
+| general.supportEmail | string | `"support@example.com"` | Support email visible from the website |
+| global.redis.password | string | `"brFdS9b7Xp"` | Redis password |
+| global.storageClass | string | `"standard"` | Will be used by this and all subcharts |
+| ingress.annotations | object | `{}` | Ingress annotations |
+| ingress.enabled | bool | `false` | Install ingress? |
 | ingress.tls | object | `{}` |  |
-| kobocat.extraEnv | object | `{}` |  |
-| kobocat.image.name | string | `"kobotoolbox/kobocat"` |  |
-| kobocat.image.tag | string | `"2.021.09"` |  |
-| kobocat.subdomain | string | `"kc"` |  |
-| kpi.extraEnv | object | `{}` |  |
-| kpi.image.name | string | `"kobotoolbox/kpi"` |  |
-| kpi.image.tag | string | `"2.021.12b"` |  |
-| kpi.signupPhoto | string | `""` |  |
-| kpi.subdomain | string | `"kobo"` |  |
-| mongodb.auth.database | string | `"formhub"` |  |
-| mongodb.auth.password | string | `"kobo"` |  |
-| mongodb.auth.rootPassword | string | `"kobo"` |  |
-| mongodb.auth.username | string | `"kobo"` |  |
-| mongodb.enabled | bool | `true` |  |
-| mongodb.initdbScripts."create-user.js" | string | `"db.createUser({\n  user: \"{{ .Values.auth.username }}\",\n  pwd: \"{{ .Values.auth.password }}\",\n  roles: [ { role: 'readWrite', db: \"{{ .Values.auth.database }}\" } ]\n})\n"` |  |
-| mongodb.initdbScripts."index.js" | string | `"db.getSiblingDB('{{ .Values.auth.database }}').instances.createIndex( { _userform_id: 1 } )\n"` |  |
-| postgresql.enabled | bool | `true` |  |
-| postgresql.initdbScriptsConfigMap | string | `"{{ .Release.Name }}-postgres-init"` |  |
-| postgresql.kobocatDatabase | string | `"kobocat"` |  |
-| postgresql.kpiDatabase | string | `"koboform"` |  |
-| postgresql.postgresqlPassword | string | `"kobo"` |  |
-| postgresql.postgresqlPostgresPassword | string | `"admin"` |  |
-| postgresql.postgresqlUsername | string | `"kobo"` |  |
+| kobocat.extraEnv | object | `{}` | Dictionary of env variables to pass |
+| kobocat.image.name | string | `"kobotoolbox/kobocat"` | KoboCat docker image name |
+| kobocat.image.tag | string | `"2.021.09"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
+| kobocat.subdomain | string | `"kc"` | DNS subdomain name to serve the form server from |
+| kpi.extraEnv | object | `{}` | Dictionary of env variables to pass |
+| kpi.image.name | string | `"kobotoolbox/kpi"` | kpi docker image name See https://hub.docker.com/r/kobotoolbox/kpi for list of tags |
+| kpi.image.tag | string | `"2.021.12b"` | kpi docker image tag |
+| kpi.subdomain | string | `"kobo"` | DNS subdomain to serve the main UI from |
+| mongodb | object | see `values.yaml` | Standard MongoDB values See https://artifacthub.io/packages/helm/bitnami/mongodb for doc |
+| mongodb.enabled | bool | `true` | Install MongoDB? |
+| postgresql | object | see `values.yaml` | Standard postgres chart values See https://artifacthub.io/packages/helm/bitnami/postgresql for docs |
+| postgresql.enabled | bool | `true` | Install Postgres? |
+| postgresql.kobocatDatabase | string | `"kobocat"` | DB name for the form server |
+| postgresql.kpiDatabase | string | `"koboform"` | DN name for the main Kobo UI |
 | rediscache.cluster.enabled | bool | `false` |  |
 | rediscache.cluster.slaveCount | int | `1` |  |
 | rediscache.enabled | bool | `true` |  |
@@ -99,9 +90,9 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | redismain.cluster.slaveCount | int | `1` |  |
 | redismain.enabled | bool | `true` |  |
 | redismain.usePassword | bool | `true` |  |
-| smtp.from | string | `""` |  |
-| smtp.host | string | `"smtp.gmail.com"` |  |
-| smtp.password | string | `""` |  |
-| smtp.port | string | `"587"` |  |
-| smtp.tls | bool | `true` |  |
-| smtp.user | string | `""` |  |
+| smtp.from | string | `""` | SMTP "from" address |
+| smtp.host | string | `"smtp.gmail.com"` | SMTP Host |
+| smtp.password | string | `""` | SMTP Password |
+| smtp.port | string | `"587"` | SMTP port |
+| smtp.tls | bool | `true` | Use TLS for SMTP? |
+| smtp.user | string | `""` | SMTP Username |

@@ -81,6 +81,7 @@ flagsmith:
         # -- List of Environments to create, if an organization/project is provided
         environments: []
         # -- Dictionary of Features to create, if an organization/project/environment is provided
+        # @default -- see `values.yaml`
         features:
           segment_operators: |-
             [{"value":"EQUAL","label":"Exactly Matches (=)"},{"value":"NOT_EQUAL","label":"Does not match (!=)"},{"value":"PERCENTAGE_SPLIT","label":"% Split"},{"value":"GREATER_THAN","label":">"},{"value":"GREATER_THAN_INCLUSIVE","label":">="},{"value":"LESS_THAN","label":"<"},{"value":"LESS_THAN_INCLUSIVE","label":"<="},{"value":"CONTAINS","label":"Contains"},{"value":"NOT_CONTAINS","label":"Does not contain"},{"value":"REGEX","label":"Matches regex"}]
@@ -143,6 +144,7 @@ ingress:
   tls: {}
 
 # -- Postgres settings - See https://artifacthub.io/packages/helm/bitnami/postgresql for docs
+# @default -- see `values.yaml`
 postgresql:
   # -- Install postgres chart?
   enabled: true

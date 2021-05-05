@@ -42,7 +42,7 @@ $ helm install my-release one-acre-fund/flagsmith
 | flagsmith.api.image | string | `"flagsmith/flagsmith-api"` | API docker image name |
 | flagsmith.api.init.initAdminUser | bool | `true` | Should we create admin user? |
 | flagsmith.api.init.initialSetup.environments | list | `[]` | List of Environments to create, if an organization/project is provided |
-| flagsmith.api.init.initialSetup.features | object | `{"segment_operators":"[{\"value\":\"EQUAL\",\"label\":\"Exactly Matches (=)\"},{\"value\":\"NOT_EQUAL\",\"label\":\"Does not match (!=)\"},{\"value\":\"PERCENTAGE_SPLIT\",\"label\":\"% Split\"},{\"value\":\"GREATER_THAN\",\"label\":\">\"},{\"value\":\"GREATER_THAN_INCLUSIVE\",\"label\":\">=\"},{\"value\":\"LESS_THAN\",\"label\":\"<\"},{\"value\":\"LESS_THAN_INCLUSIVE\",\"label\":\"<=\"},{\"value\":\"CONTAINS\",\"label\":\"Contains\"},{\"value\":\"NOT_CONTAINS\",\"label\":\"Does not contain\"},{\"value\":\"REGEX\",\"label\":\"Matches regex\"}]"}` | Dictionary of Features to create, if an organization/project/environment is provided |
+| flagsmith.api.init.initialSetup.features | object | see `values.yaml` | Dictionary of Features to create, if an organization/project/environment is provided |
 | flagsmith.api.init.initialSetup.organizationName | string | `""` | Organization name to create if needed? |
 | flagsmith.api.init.initialSetup.projectName | string | `""` | Create Project name to create if needed, if an organization is provided |
 | flagsmith.api.replicas | int | `1` | API pods |
@@ -70,7 +70,7 @@ $ helm install my-release one-acre-fund/flagsmith
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/proxy-body-size":"100M"}` | Ingress annotations dictionary |
 | ingress.enabled | bool | `false` | Install ingress? |
 | ingress.tls | object | `{}` | Ingress TLS settings |
-| postgresql | object | `{"enabled":true,"host":null,"postgresqlDatabase":"flagsmith","postgresqlPassword":"ciJ8KfiMUK","postgresqlPostgresPassword":"H55Djpc7Vs","postgresqlUsername":"flagsmith","service":{"port":5432}}` | Postgres settings - See https://artifacthub.io/packages/helm/bitnami/postgresql for docs |
+| postgresql | object | see `values.yaml` | Postgres settings - See https://artifacthub.io/packages/helm/bitnami/postgresql for docs |
 | postgresql.enabled | bool | `true` | Install postgres chart? |
 | resources | object | `{"limits":{"cpu":"200m","memory":"200Mi"},"requests":{"cpu":"50m","memory":"100Mi"}}` | Resource specifications to apply to each container |
 | securityContext | object | `{"runAsGroup":1000,"runAsUser":1000}` | SecurityContext to apply to all pods |
