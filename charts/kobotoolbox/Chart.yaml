@@ -4,7 +4,7 @@ version: 0.1.1
 description: KoboToolbox field data collection solution
 home: https://www.kobotoolbox.org/
 sources:
-  -   - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/kobotoolbox
+  - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/kobotoolbox
 maintainers:
   - name: Yann-J
     email: yann.jouanique@gmail.com

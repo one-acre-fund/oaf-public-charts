@@ -17,14 +17,14 @@ flagsmith:
       # -- Public address domain for the UI
       domain: example.com
       # -- Public address port for the UI (leave empty for default 80/443 based on protocol)
-      port: 
+      port: ""
     api:
       # -- Public address scheme for the API
       scheme: https
       # -- Public address domain for the API
       domain: example.com
       # -- Public address port for the API
-      port: 
+      port: ""
       # -- Public API path
       path: /api/v1
   admin:
@@ -149,7 +149,7 @@ postgresql:
   # -- Install postgres chart?
   enabled: true
   # Specify an external host here if desired - otherwise we will use the subchart dependency
-  host: 
+  host: ""
 
   # Standard postgres chart values
   postgresqlPostgresPassword: H55Djpc7Vs

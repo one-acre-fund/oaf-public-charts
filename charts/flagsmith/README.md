@@ -52,10 +52,10 @@ $ helm install my-release one-acre-fund/flagsmith
 | flagsmith.djangoSecret | string | `"NXdxCtOWfK"` | Override this to some secret key |
 | flagsmith.externalURL.api.domain | string | `"example.com"` | Public address domain for the API |
 | flagsmith.externalURL.api.path | string | `"/api/v1"` | Public API path |
-| flagsmith.externalURL.api.port | string | `nil` | Public address port for the API |
+| flagsmith.externalURL.api.port | string | `""` | Public address port for the API |
 | flagsmith.externalURL.api.scheme | string | `"https"` | Public address scheme for the API |
 | flagsmith.externalURL.web.domain | string | `"example.com"` | Public address domain for the UI |
-| flagsmith.externalURL.web.port | string | `nil` | Public address port for the UI (leave empty for default 80/443 based on protocol) |
+| flagsmith.externalURL.web.port | string | `""` | Public address port for the UI (leave empty for default 80/443 based on protocol) |
 | flagsmith.externalURL.web.scheme | string | `"https"` | Public address scheme for the UI |
 | flagsmith.extraConf | string | `""` | Free-text extra python conf to append to common.py (see https://github.com/Flagsmith/flagsmith-api/blob/master/src/app/settings/common.py) |
 | flagsmith.frontend.extraEnv | object | `{}` | Dictionary of env var key/values. Will be evaluated as a template. See https://hub.docker.com/r/flagsmith/flagsmith-frontend |

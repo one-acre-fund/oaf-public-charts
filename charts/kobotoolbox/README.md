@@ -1,10 +1,10 @@
 # kobotoolbox
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square)
 
-Helm Chart for KoboToolbox
+KoboToolbox field data collection solution
 
-**Homepage:** <https://github.com/one-acre-fund/kobo-k8s>
+**Homepage:** <https://www.kobotoolbox.org/>
 
 ## Maintainers
 
@@ -14,7 +14,7 @@ Helm Chart for KoboToolbox
 
 ## Source Code
 
-* <https://github.com/one-acre-fund/kobo-k8s>
+* <https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/kobotoolbox>
 
 ## TL;DR;
 
