@@ -1,10 +1,10 @@
 apiVersion: v2
 name: kobotoolbox
-version: 0.1.0
-description: Helm Chart for KoboToolbox
-home: https://github.com/one-acre-fund/kobo-k8s
+version: 0.1.1
+description: KoboToolbox field data collection solution
+home: https://www.kobotoolbox.org/
 sources:
-  - https://github.com/one-acre-fund/kobo-k8s
+  -   - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/kobotoolbox
 maintainers:
   - name: Yann-J
     email: yann.jouanique@gmail.com

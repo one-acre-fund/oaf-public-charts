@@ -1,11 +1,11 @@
 apiVersion: v2
 name: geonode
-version: 0.1.3
+version: 0.1.4
 type: application
 description: Helm Chart for Geonode
-home: https://github.com/one-acre-fund/oaf-public-charts
+home: https://geonode.org/
 sources:
-  - https://github.com/one-acre-fund/oaf-public-charts/geonode
+  - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/geonode
 maintainers:
   - name: Yann-J
     email: yann.jouanique@gmail.com
