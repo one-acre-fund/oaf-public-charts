@@ -1,0 +1,98 @@
+# Sync gateway pod
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-enketo
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.enketo.replicas }}
+  selector:
+    matchLabels:
+      org.kobotoolbox.instance: {{ .Release.Name }}-enketo
+  template:
+    metadata:
+      annotations:
+        # Add a checksum to force the re-creation of the pods on every config update
+        checksum/config: {{ tpl .Values.enketo.config . | sha256sum }}
+      labels:
+        org.kobotoolbox.instance: {{ .Release.Name }}-enketo
+    spec:
+      initContainers:
+        # Copy settings from configmap to a volume, since it needs to be writable by the container, which ConfigMaps cannot be
+        - name: copy-config
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              cp /config-init/config.json /srv/src/enketo_express/config/
+          volumeMounts:
+            - name: enketo-config
+              mountPath: /config-init/config.json
+              subPath: config.json
+              readOnly: true
+            - name: cache-volume
+              subPath: config
+              mountPath: /srv/src/enketo_express/config
+
+      containers:
+        # Enketo is the web-based form viewer
+        - name: enketo
+          image: "{{ .Values.enketo.image.name }}:{{ .Values.enketo.image.tag }}"
+          terminationMessagePolicy: FallbackToLogsOnError
+          volumeMounts:
+            # Config
+            - name: cache-volume
+              subPath: config/config.json
+              mountPath: /srv/src/enketo_express/config/config.json
+            # Cache build
+            - name: cache-volume
+              subPath: checksum
+              mountPath: /srv/src/enketo_express/checksum
+            - name: cache-volume
+              subPath: build/css
+              mountPath: /srv/src/enketo_express/public/css
+            - name: cache-volume
+              subPath: build/js
+              mountPath: /srv/src/enketo_express/public/js/build
+            - name: cache-volume
+              subPath: build/locales
+              mountPath: /srv/src/enketo_express/locales/build
+            # Custom icons
+            - name: kobo-assets
+              mountPath: /srv/src/enketo_express/public/images/favicon.ico
+              subPath: favicon.ico
+              readOnly: true
+            - name: kobo-assets
+              mountPath: /srv/src/enketo_express/public/images/icon_180x180.png
+              subPath: icon_180x180.png
+              readOnly: true
+          ports:
+            - containerPort: 8005
+          env:
+            - name: ENKETO_BUILD_IE11
+              value: 'true'
+            # This one is REALLY slow to come up since we rebuild the entire webapp at startup...
+            # It's probably best to not have a readiness probe, as this would delay the termination of older pods
+            # readinessProbe:
+            #   tcpSocket:
+            #     port: 8005
+            #   initialDelaySeconds: 30
+            #   periodSeconds: 30
+            #   failureThreshold: 15
+          livenessProbe:
+            tcpSocket:
+              port: 8005
+            initialDelaySeconds: 600
+            periodSeconds: 20
+
+      volumes:
+        - name: enketo-config
+          secret:
+            secretName: {{ .Release.Name }}-enketo
+        - name: kobo-assets
+          configMap:
+            name: {{ .Release.Name }}-assets
+        # Using an emptyDir to cache compiled statics... it will survive container crashes, but not pod restarts
+        - name: cache-volume
+          emptyDir: {}

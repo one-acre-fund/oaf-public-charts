@@ -1,0 +1,15 @@
+apiVersion: v2
+name: flagsmith
+version: 0.1.0
+description: Sample Chart
+home: https://github.com/one-acre-fund/my-project
+sources:
+  - https://github.com/one-acre-fund/my-project
+maintainers:
+  - name: Yann-J
+    email: yann.jouanique@gmail.com
+dependencies:
+  - name: postgresql
+    version: ~10.1.2
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled

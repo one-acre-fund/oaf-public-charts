@@ -1,0 +1,34 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-kobo
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- .Values.ingress.annotations | toYaml | nindent 4 }}
+spec:
+  # The kobo sidecar nginx will do further host-based routing for kpi and kobocat
+  rules:
+    - host: {{ .Values.kpi.subdomain }}.{{ .Values.general.externalDomain }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ .Release.Name }}-kobo
+              servicePort: 80
+    - host: {{ .Values.kobocat.subdomain }}.{{ .Values.general.externalDomain }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ .Release.Name }}-kobo
+              servicePort: 80
+    - host: {{ .Values.enketo.subdomain }}.{{ .Values.general.externalDomain }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ .Release.Name }}-enketo
+              servicePort: enketo
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- .Values.ingress.tls | toYaml | nindent 4 }}
+  {{- end }}
+{{- end -}}

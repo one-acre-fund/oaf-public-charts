@@ -1,0 +1,234 @@
+# kobocat is the standard OpenRosa form server that form filling apps will connect to
+kobocat:
+  image:
+    # We're using an immutable tag here to avoid surprise upgrades
+    # see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags
+    name: kobotoolbox/kobocat
+    tag: "2.021.09"
+  subdomain: kc
+  extraEnv: {}
+
+# kpi is the main Kobotoolbox UI
+kpi:
+  image:
+    # See https://hub.docker.com/r/kobotoolbox/kpi
+    name: kobotoolbox/kpi
+    tag: "2.021.12b"
+  subdomain: kobo
+  # Background image override (base64 encoded)
+  signupPhoto: ""
+  extraEnv: {}
+
+# Enketo is the web-based form preview and filling UI
+enketo:
+  image:
+    # See https://hub.docker.com/r/kobotoolbox/enketo-express-extra-widgets
+    name: kobotoolbox/enketo-express-extra-widgets
+    tag: "2.6.1"
+  subdomain: ee
+  replicas: 1
+  # Override those!
+  apiKey: WEHQJCXHJ2XOBXGOGMXCUJYXQP9ZZFVY4FHLCSKJIWAWPTCMGMECGNBCHXVBFCFT1H5TQTQCKB0J7DF2X23WC7EHOCCVQ7K8CY6QO9C8NMERACUM6S2QQEER
+  encryptionKey: w0RkyuQSB33md8cZB5Xx
+  lessSecureEncryptionKey: wUNQWPwA3bDVzckKKtS4
+  config: |-
+    {
+      "app name": "Enketo Express for KoBo Toolbox",
+      "linked form and data server": {
+        "name": "KoBo Toolbox",
+        "server url": "",
+        "api key": "{{ .Values.enketo.apiKey }}"
+      },
+      "encryption key": "{{ .Values.enketo.encryptionKey }}",
+      "less secure encryption key": "{{ .Values.enketo.lessSecureEncryptionKey }}",
+      "widgets": [
+        "note",
+        "select-desktop",
+        "select-mobile",
+        "autocomplete",
+        "geo",
+        "textarea",
+        "url",
+        "table",
+        "radio",
+        "date",
+        "time",
+        "datetime",
+        "select-media",
+        "file",
+        "draw",
+        "rank",
+        "likert",
+        "range",
+        "columns",
+        "image-view",
+        "comment",
+        "image-map",
+        "date-native",
+        "date-native-ios",
+        "date-mobile",
+        "text-max",
+        "text-print",
+        "rating",
+        "thousands-sep",
+        "../../../node_modules/enketo-image-customization-widget/image-customization",
+        "../../../node_modules/enketo-literacy-test-widget/literacywidget"
+      ],
+      "redis": {
+        "cache": {
+          "host": "{{ .Release.Name }}-rediscache-master",
+          {{- if .Values.rediscache.usePassword }}
+          "password": "{{ .Values.global.redis.password }}",
+          {{- end }}
+          "port": "6379"
+        },
+        "main": {
+          "host": "{{ .Release.Name }}-redismain-master",
+          {{- if .Values.redismain.usePassword }}
+          "password": "{{ .Values.global.redis.password }}",
+          {{- end }}
+          "port": "6379"
+        }
+      },
+      "google": {
+        "api key": "{{ .Values.external.google.apiKey }}",
+        "analytics": {
+          "ua": "{{ .Values.external.google.analyticsToken }}",
+          "domain": "{{ .Values.general.externalScheme }}://{{ .Values.enketo.subdomain }}.{{ .Values.general.externalDomain }}{{ .Values.general.publicPort }}"
+        }
+      },
+      "payload limit": "1mb",
+      "text field character limit": 1000000,
+      "maps": [
+        {
+          "name": "humanitarian",
+          "tiles": [ "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" ],
+          "attribution": "&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap</a> & <a href=\"https://www.hotosm.org/updates/2013-09-29_a_new_window_on_openstreetmap_data\">Yohan Boniface & Humanitarian OpenStreetMap Team</a> | <a href=\"https://www.openstreetmap.org/copyright\">Terms</a>"
+        },
+        {
+          "name": "satellite",
+          "tiles": [ "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" ],
+          "attribution": "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+        },
+        {
+          "name": "terrain",
+          "tiles": [ "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" ],
+          "attribution": "&copy; <a href=\"https://openstreetmap.org\">OpenStreetMap</a> | <a href=\"https://www.openstreetmap.org/copyright\">Terms</a>"
+        },
+        {
+          "name": "streets",
+          "tiles": [ "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" ],
+          "attribution": "&copy; <a href=\"https://openstreetmap.org\">OpenStreetMap</a> | <a href=\"https://www.openstreetmap.org/copyright\">Terms</a>"
+        }
+      ]
+    }
+
+general:
+  # WARNING: if using more than 1 replicas, you NEED to use a ReadWriteMany accessmode in mediaStorage.accessMode, and a storage class that supports it!
+  replicas: 1
+  # The subdomains MUST be reachable since the application will try to call itself at this address
+  # If you don't have a working domain yet, you may use forceInternal below to resolve it to the pod's localhost IP
+  externalDomain: example.com
+  externalScheme: http
+  externalPort:
+  djangoSecret: EKMvRtT2RFB3xDvFty4SVCsTyaQAHS9aA2mkRqtTp9zQYz48fp
+  debug: false
+  # This user will have access to kobotoolbox UI but also the built-in Django admin interface (/admin)
+  superUser:
+    username: kobo
+    password: kobo
+  supportEmail: support@example.com
+  serviceType: ClusterIP
+  # set this to true in order to force internal resolution of external domains.
+  # Useful for troubleshooting, but won't work if the schemes are different...
+  forceInternal: false
+  # These storage settings will apply to the volume used for uploaded media
+  mediaStorage:
+    size: 10Gi
+    # storage class will default to global.storageClass if provided, but can be specifically overridden here
+    storageClass: ""
+    # Needs to be ReadWriteMany if you intend to scale ro more than 1 pod!
+    accessMode: ReadWriteOnce
+
+ingress:
+  enabled: false
+  annotations:
+    {}
+    # You typically want to enable large media uploads
+    # nginx.ingress.kubernetes.io/proxy-body-size: 100M
+  tls: {}
+
+external:
+  google:
+    apiKey: ""
+    analyticsToken: ""
+  ravenDSN:
+    kobocat: ""
+    kpi: ""
+    kpiJs: ""
+
+smtp:
+  host: smtp.gmail.com
+  tls: true
+  port: "587"
+  user: ""
+  password: ""
+  from: ""
+
+global:
+  redis:
+    # Override this!
+    password: brFdS9b7Xp
+  # Will be used by this and all subcharts
+  storageClass: standard
+
+rediscache:
+  enabled: true
+  usePassword: true
+  cluster:
+    # disable slaves
+    enabled: false
+    slaveCount: 1
+
+redismain:
+  enabled: true
+  usePassword: true
+  cluster:
+    # disable slaves
+    enabled: false
+    slaveCount: 1
+
+mongodb:
+  enabled: true
+  # TODO: support external db
+  # For now we only support a db installed with a subchart
+
+  # See https://artifacthub.io/packages/helm/bitnami/mongodb for mongodb values doc
+  auth:
+    rootPassword: kobo
+    username: kobo
+    password: kobo
+    database: formhub
+  initdbScripts:
+    index.js: |
+      db.getSiblingDB('{{ .Values.auth.database }}').instances.createIndex( { _userform_id: 1 } )
+    create-user.js: |
+      db.createUser({
+        user: "{{ .Values.auth.username }}",
+        pwd: "{{ .Values.auth.password }}",
+        roles: [ { role: 'readWrite', db: "{{ .Values.auth.database }}" } ]
+      })
+postgresql:
+  enabled: true
+  kobocatDatabase: kobocat
+  kpiDatabase: koboform
+
+  # TODO: support external db
+  # For now we only support a db installed with a subchart
+
+  # Standard postgres chart values
+  # See https://artifacthub.io/packages/helm/bitnami/postgresql for docs
+  postgresqlPostgresPassword: admin
+  postgresqlUsername: kobo
+  postgresqlPassword: kobo
+  initdbScriptsConfigMap: "{{ .Release.Name }}-postgres-init"

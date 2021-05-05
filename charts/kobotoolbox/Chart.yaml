@@ -1,0 +1,29 @@
+apiVersion: v2
+name: kobotoolbox
+version: 0.1.0
+description: Helm Chart for KoboToolbox
+home: https://github.com/one-acre-fund/kobo-k8s
+sources:
+  - https://github.com/one-acre-fund/kobo-k8s
+maintainers:
+  - name: Yann-J
+    email: yann.jouanique@gmail.com
+dependencies:
+  - name: redis
+    version: ~10.7.4
+    repository: https://charts.bitnami.com/bitnami
+    condition: redismain.enabled
+    alias: redismain
+  - name: redis
+    version: ~10.7.4
+    repository: https://charts.bitnami.com/bitnami
+    condition: rediscache.enabled
+    alias: rediscache
+  - name: postgresql
+    version: ~10.1.2
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: mongodb
+    version: ~10.1.3
+    repository: https://charts.bitnami.com/bitnami
+    condition: mongodb.enabled

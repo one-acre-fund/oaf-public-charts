@@ -1,0 +1,158 @@
+global:
+  # -- This will be used on all pods for all PVCs, including dependencies (Redis...)
+  storageClass: standard
+
+tests:
+  enabled: true
+
+general:
+  # -- This will be applied to all services
+  serviceType: ClusterIP
+
+flagsmith:
+  externalURL:
+    web:
+      # -- Public address scheme for the UI
+      scheme: https
+      # -- Public address domain for the UI
+      domain: example.com
+      # -- Public address port for the UI (leave empty for default 80/443 based on protocol)
+      port: 
+    api:
+      # -- Public address scheme for the API
+      scheme: https
+      # -- Public address domain for the API
+      domain: example.com
+      # -- Public address port for the API
+      port: 
+      # -- Public API path
+      path: /api/v1
+  admin:
+    # -- Admin email address
+    email: admin@example.com
+    # -- Admin user
+    firstName: admin
+    # -- Admin user
+    lastName: admin
+    # -- Admin password
+    password: x1Hw138BCy
+  api:
+    # -- Wait for dependencies (postgres)?
+    wait: true
+    # -- API pods
+    replicas: 1
+    # -- API docker image name
+    image: flagsmith/flagsmith-api
+    # -- API docker image tag
+    tag: v2.6.0
+    # -- Dictionary of env var key/values. Will be evaluated as a template.
+    # See `values.yaml` for defaults, and the docs at https://github.com/Flagsmith/flagsmith-api
+    extraEnv:
+      DJANGO_ALLOWED_HOSTS: '*'
+      DJANGO_CSRF_TRUSTED_ORIGINS: "{{ .Values.flagsmith.externalURL.web.domain | quote }}"
+    # -- Same as `extraEnv` but passed as `Secret`. Will be evaluated as a template
+    extraSecretEnv: {}
+    # Potential variables to pass based on the docs at https://github.com/Flagsmith/flagsmith-api
+    # DJANGO_SETTINGS_MODULE: python path to settings file for the given environment, e.g. "app.settings.develop"
+    # EMAIL_BACKEND: email provider. Allowed values are sgbackend.SendGridBackend for Sendgrid or django_ses.SESBackend for Amazon SES. Defaults to sgbackend.SendGridBackend.
+    # SENDER_EMAIL: Email address from which emails are sent
+    # AWS_SES_REGION_NAME: If using Amazon SES as the email provider, specify the region (e.g. eu-central-1) that contains your verified sender e-mail address. Defaults to us-east-1
+    # AWS_SES_REGION_ENDPOINT: ses region endpoint, e.g. email.eu-central-1.amazonaws.com. Required when using ses in a region other than us-east-1
+    # AWS_ACCESS_KEY_ID: If using Amazon SES, these form part of your SES credentials.
+    # AWS_SECRET_ACCESS_KEY: If using Amazon SES, these form part of your SES credentials.
+    # GOOGLE_ANALYTICS_KEY: if google analytics is required, add your tracking code
+    # GOOGLE_SERVICE_ACCOUNT: service account json for accessing the google API, used for getting usage of an organisation - needs access to analytics.readonly scope
+    # GA_TABLE_ID: GA table ID (view) to query when looking for organisation usage
+    # AWS_STORAGE_BUCKET_NAME: bucket name to store static files. Required if `USE_S3_STORAGE' is true.
+    # AWS_S3_REGION_NAME: region name of the static files bucket. Defaults to eu-west-2.
+    # ALLOWED_ADMIN_IP_ADDRESSES: restrict access to the django admin console to a comma separated list of IP addresses (e.g. 127.0.0.1,127.0.0.2)
+    # USER_CREATE_PERMISSIONS: set the permissions for creating new users, using a comma separated list of djoser or rest_framework permissions. Use this to turn off public user creation for self hosting. e.g. 'djoser.permissions.CurrentUserOrAdmin' Defaults to 'rest_framework.permissions.AllowAny'.
+    # ENABLE_EMAIL_ACTIVATION: new user registration will go via email activation flow, default False
+    # SENTRY_SDK_DSN: If using Sentry, set the project DSN here.
+    # SENTRY_TRACE_SAMPLE_RATE: Float. If using Sentry, sets the trace sample rate. Defaults to 1.0.
+    init:
+      # -- Should we create admin user?
+      initAdminUser: true
+      initialSetup:
+        # -- Organization name to create if needed?
+        organizationName: ""
+        # -- Create Project name to create if needed, if an organization is provided
+        projectName: ""
+        # -- List of Environments to create, if an organization/project is provided
+        environments: []
+        # -- Dictionary of Features to create, if an organization/project/environment is provided
+        features:
+          segment_operators: |-
+            [{"value":"EQUAL","label":"Exactly Matches (=)"},{"value":"NOT_EQUAL","label":"Does not match (!=)"},{"value":"PERCENTAGE_SPLIT","label":"% Split"},{"value":"GREATER_THAN","label":">"},{"value":"GREATER_THAN_INCLUSIVE","label":">="},{"value":"LESS_THAN","label":"<"},{"value":"LESS_THAN_INCLUSIVE","label":"<="},{"value":"CONTAINS","label":"Contains"},{"value":"NOT_CONTAINS","label":"Does not contain"},{"value":"REGEX","label":"Matches regex"}]
+
+  frontend:
+    # -- Wait for API to be up?
+    wait: true
+    # -- Number of UI pods
+    replicas: 1
+    # -- UI image name
+    image: flagsmith/flagsmith-frontend
+    # -- UI image tag
+    tag: v2.6.0
+    # -- Should we use this installation's API server to fetch Flagsmith customizations?
+    useOwnFlagsmithApi: false
+    # -- Dictionary of env var key/values. Will be evaluated as a template.
+    # See https://hub.docker.com/r/flagsmith/flagsmith-frontend
+    extraEnv: {}
+    # -- Same as `extraEnv` but passed as `Secret`. Will be evaluated as a template
+    extraSecretEnv: {}
+    # Optional vars to pass: see https://hub.docker.com/r/flagsmith/flagsmith-frontend
+    # FLAGSMITH: The flagsmith environment key we use to manage features - Flagsmith runs on Flagsmith.
+    # FLAGSMITH_CLIENT_API: The api which the flagsmith client should communicate with. Flagsmith runs on flagsmith. E.g. https://api.flagsmith.com/api/v1/.
+    # GA: Google analytics key
+    # CRISP_CHAT: Crisp Chat widget key
+    # PREVENT_SIGNUP: Determines whether to prevent manual signup without invite. Set it to any value to disable signups.
+    # MAINTENANCE: Puts the site into maintenance mode. Set it to any value to disable signups.
+    # AMPLITUDE: The ampitude key to use for behaviour tracking.
+    # MIXPANEL: Mixpanel analytics key to use for behaviour tracking.
+    # SENTRY: Sentry key for error reporting.
+    # BASENAME: Used for specifying a base url path that's ignored during routing if serving from a subdirectory
+  # -- Free-text extra python conf to append to common.py (see https://github.com/Flagsmith/flagsmith-api/blob/master/src/app/settings/common.py)
+  extraConf: ""
+  # -- Override this to some secret key
+  djangoSecret: NXdxCtOWfK
+  # -- Enable some debug logging?
+  debug: false
+
+# -- Resource specifications to apply to each container
+resources:
+  requests:
+    cpu: 50m
+    memory: 100Mi
+  limits:
+    cpu: 200m
+    memory: 200Mi
+
+# -- SecurityContext to apply to all pods
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+
+ingress:
+  # -- Install ingress?
+  enabled: false
+  # -- Ingress annotations dictionary
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 100M
+  # -- Ingress TLS settings
+  tls: {}
+
+# -- Postgres settings - See https://artifacthub.io/packages/helm/bitnami/postgresql for docs
+postgresql:
+  # -- Install postgres chart?
+  enabled: true
+  # Specify an external host here if desired - otherwise we will use the subchart dependency
+  host: 
+
+  # Standard postgres chart values
+  postgresqlPostgresPassword: H55Djpc7Vs
+  postgresqlDatabase: flagsmith
+  postgresqlUsername: flagsmith
+  postgresqlPassword: ciJ8KfiMUK
+  service:
+    port: 5432

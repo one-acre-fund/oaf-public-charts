@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-api
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    org.oneacrefund.instance: {{ .Release.Name }}-flagsmith-api
+  ports:
+  - targetPort: 8000
+    port: 8000
+    name: api
+  type: {{ .Values.general.serviceType }}

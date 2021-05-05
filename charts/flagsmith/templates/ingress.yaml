@@ -1,0 +1,29 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-flagsmith
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- .Values.ingress.annotations | toYaml | nindent 4 }}
+spec:
+  rules:
+  - host: {{ .Values.flagsmith.externalURL.web.domain }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Release.Name }}-frontend
+          servicePort: 8080
+        path: /
+        pathType: Prefix
+  - host: {{ .Values.flagsmith.externalURL.api.domain }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Release.Name }}-api
+          servicePort: 8000
+        path: /
+        pathType: Prefix
+  tls:
+  {{ .Values.ingress.tls | toYaml | nindent 2 }}
+{{- end -}}

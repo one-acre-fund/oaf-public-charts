@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-flagsmith-frontend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    org.oneacrefund.project: flagsmith
+    org.oneacrefund.app: frontend
+    org.oneacrefund.instance: {{ .Release.Name }}-flagsmith-frontend
+spec:
+  replicas: {{ .Values.flagsmith.frontend.replicas }}
+  selector:
+    matchLabels:
+      org.oneacrefund.instance: {{ .Release.Name }}-flagsmith-frontend
+  template:
+    metadata:
+      annotations:
+        checksum/secrets: {{ include "frontend_secrets" . | sha256sum }}
+      labels:
+        org.oneacrefund.project: flagsmith
+        org.oneacrefund.app: frontend
+        org.oneacrefund.instance: {{ .Release.Name }}-flagsmith-frontend
+    spec:
+      {{- if .Values.securityContext }}
+      securityContext:
+        {{- .Values.securityContext | toYaml | nindent 8 }}
+      {{- end}}
+
+      initContainers:
+        {{- if .Values.flagsmith.frontend.wait }}
+        # Wait for API
+        - name: wait-api
+          image: jwilder/dockerize
+          imagePullPolicy: IfNotPresent
+          args:
+            - -wait
+            - http://{{ include "apiHost" . }}:8000
+            - -timeout
+            - 300s
+        {{- end}}
+
+      containers:
+        - name: frontend
+          image: "{{ .Values.flagsmith.frontend.image }}:{{.Values.flagsmith.frontend.tag }}"
+          imagePullPolicy: IfNotPresent
+
+          env:
+            # Absolute *external* URL for the API
+            - name: API_URL
+              value: "{{ include "fullUrl" .Values.flagsmith.externalURL.api }}{{ .Values.flagsmith.externalURL.api.path }}/"
+            {{- if .Values.flagsmith.frontend.useOwnFlagsmithApi }}
+            # Absolute *external* Flagsmith API URL to fetch Flagsmith customizations
+            - name: FLAGSMITH_CLIENT_API
+              value: "{{ include "fullUrl" .Values.flagsmith.externalURL.api }}{{ .Values.flagsmith.externalURL.api.path }}/"
+            {{- end }}
+            # Absolute *external* URL for assets
+            - name: ASSET_URL
+              value: {{ include "fullUrl" .Values.flagsmith.externalURL.web | quote }}
+            {{- range $key, $value := .Values.flagsmith.frontend.extraEnv }}
+            - name: {{ $key | quote }}
+              value: |-
+                {{- tpl $value $ | nindent 16 }}
+            {{- end }}
+
+          envFrom:
+            - secretRef:
+                name: {{ .Release.Name }}-flagsmith-frontend
+
+          ports:
+            - containerPort: 8080
+
+          # This one is REALLY slow to start... give it plenty of time
+          # For some reason this gives a 404 when hitting it over http, so using a TCP probe here
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            failureThreshold: 20
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 600
+            periodSeconds: 5
+            failureThreshold: 5
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "50m"
+            limits:
+              memory: "800Mi"
+              cpu: "100m" 

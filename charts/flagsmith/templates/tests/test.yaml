@@ -1,0 +1,22 @@
+{{- if .Values.tests.enabled -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-test
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": test-success
+    # "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+    - name: test-http
+      image: blacktop/httpie
+      imagePullPolicy: IfNotPresent
+      command:
+      - sh
+      - -ce
+      - |
+        http --print bh --ignore-stdin --check-status "http://{{ .Release.Name }}-api.{{ .Release.Namespace }}.svc:8000/api/v1/"
+        http --print h --ignore-stdin --check-status "http://{{ .Release.Name }}-frontend.{{ .Release.Namespace }}.svc:8080/"
+{{- end -}}
