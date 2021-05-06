@@ -13,9 +13,11 @@
 
 ## TL;DR;
 
+__NOTE__: Providing values for at least `mysql.auth.password` and `mysql.auth.rootPassword` is mandatory at installation time
+
 ```console
 $ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
-$ helm install my-release one-acre-fund/fineract
+$ helm install --set mysql.auth.password=xxx --set mysql.auth.rootPassword=yyy my-release one-acre-fund/fineract
 ```
 
 {{ template "chart.requirementsSection" . }}

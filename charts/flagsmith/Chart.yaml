@@ -5,6 +5,9 @@ description: Flagsmith - a Feature flag and remote configuration solution
 type: application
 icon: https://avatars.githubusercontent.com/u/58150233?s=400&v=4
 home: https://flagsmith.com/
+keywords:
+  - feature-flags
+  - remote-config
 sources:
   - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/flagsmith
 maintainers:

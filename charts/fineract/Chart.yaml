@@ -20,6 +20,9 @@ description: "Apache Fineract: A Platform for Microfinance"
 name: finteract
 version: 0.1.0
 home: https://github.com/apache/fineract
+icon: https://fineract.apache.org/images/apache-fineract-logo.png
+keywords:
+  - microfinance
 sources:
   - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/fineract
 maintainers:
