@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-postgres-init
+  namespace: {{ .Release.Namespace }}
+data:
+  init.sql: |
+    ALTER USER "{{ .Values.postgresql.postgresqlUsername }}" WITH SUPERUSER;
+    CREATE DATABASE "{{ .Values.postgresql.kobocatDatabase }}" OWNER "{{ .Values.postgresql.postgresqlUsername }}";
+    \c "{{ .Values.postgresql.kobocatDatabase }}"
+    CREATE EXTENSION IF NOT EXISTS postgis;
+    CREATE EXTENSION IF NOT EXISTS postgis_topology;
+    CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
+    CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder;
+    CREATE DATABASE "{{ .Values.postgresql.kpiDatabase }}" OWNER "{{ .Values.postgresql.postgresqlUsername }}";
+    \c "{{ .Values.postgresql.kpiDatabase }}"
+    CREATE EXTENSION IF NOT EXISTS postgis;
+    CREATE EXTENSION IF NOT EXISTS postgis_topology;
+    CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
+    CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder;

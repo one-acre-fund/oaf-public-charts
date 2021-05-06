@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-conf
+  namespace: {{ .Release.Namespace }}
+data:
+  admin.py: |
+    ADMIN_USERNAME         = env("ADMIN_USERNAME",         default="admin")
+    ADMIN_EMAIL            = env("ADMIN_EMAIL",            default="admin@example.com")
+    ADMIN_INITIAL_PASSWORD = env("ADMIN_INITIAL_PASSWORD", default="password")
+  {{- if .Values.flagsmith.extraConf }}
+  extra-conf.py: |
+    {{ .Values.flagsmith.extraConf | nindent 4 }}
+  {{- end -}}

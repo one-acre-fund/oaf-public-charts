@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-flagsmith-api
+  namespace: {{ .Release.Namespace }}
+  labels:
+    org.oneacrefund.project: flagsmith
+    org.oneacrefund.app: api
+    org.oneacrefund.instance: {{ .Release.Name }}-flagsmith-api
+spec:
+  replicas: {{ .Values.flagsmith.api.replicas }}
+  selector:
+    matchLabels:
+      org.oneacrefund.instance: {{ .Release.Name }}-flagsmith-api
+  template:
+    metadata:
+      annotations:
+        checksum/secrets: {{ include "api_secrets" . | sha256sum }}
+      labels:
+        org.oneacrefund.project: flagsmith
+        org.oneacrefund.app: api
+        org.oneacrefund.instance: {{ .Release.Name }}-flagsmith-api
+    spec:
+      {{- if .Values.securityContext }}
+      securityContext:
+        {{- .Values.securityContext | toYaml | nindent 8 }}
+      {{- end}}
+
+      initContainers:
+        {{- if .Values.flagsmith.api.wait }}
+        # Wait for db
+        - name: wait-db
+          image: jwilder/dockerize:0.6.1
+          args:
+            - -wait
+            - tcp://{{ include "dbHost" . }}:{{ .Values.postgresql.service.port }}
+            - -timeout
+            - 300s
+        {{- end}}
+
+        # Customize conf to pass admin user from env
+        - name: init-conf
+          image: "{{ .Values.flagsmith.api.image }}:{{.Values.flagsmith.api.tag }}"
+          command:
+            - bash
+            - -c
+            - |
+              if [ ! -f /cache/common.py ]; then
+                cp /app/src/app/settings/common.py /cache/
+                cat /config/*.py >> /cache/common.py
+              fi
+          volumeMounts:
+            - name: cache-volume
+              mountPath: /cache
+              subPath: config
+            - name: config
+              mountPath: /config
+              readOnly: true
+
+      containers:
+        - name: api
+          image: "{{ .Values.flagsmith.api.image }}:{{.Values.flagsmith.api.tag }}"
+          imagePullPolicy: IfNotPresent
+          # Mount custom conf file
+          volumeMounts:
+            - name: cache-volume
+              mountPath: /app/src/app/settings/common.py
+              subPath: config/common.py
+            # Mount static folder as an emptydir so we control the permissions
+            - name: cache-volume
+              mountPath: /app/src/static
+              subPath: static
+
+          env:
+            {{- if .Values.flagsmith.debug }}
+            - name: DEBUG
+              value: "True"
+            {{- end }}
+            - name: ADMIN_USERNAME
+              value: {{ .Values.flagsmith.admin.firstName | quote }}
+            - name: ADMIN_EMAIL
+              value: {{ .Values.flagsmith.admin.email | quote }}
+            - name: DJANGO_DB_HOST
+              value: {{ include "dbHost" . | quote }}
+            - name: DJANGO_DB_NAME
+              value: {{ .Values.postgresql.postgresqlDatabase | quote }}
+            - name: DJANGO_DB_USER
+              value: {{ .Values.postgresql.postgresqlUsername | quote }}
+            - name: DJANGO_DB_PORT
+              value: {{ .Values.postgresql.service.port | quote }}
+
+            # Extra vars
+            {{- range $key, $value := .Values.flagsmith.api.extraEnv }}
+            - name: {{ $key | quote }}
+              value: |-
+                {{- tpl $value $ | nindent 16 }}
+            {{- end }}
+
+          envFrom:
+            - secretRef:
+                name: {{ .Release.Name }}-flagsmith
+
+          ports:
+            - containerPort: 8000
+
+          {{- if .Values.resources }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+
+          readinessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 15
+          livenessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            failureThreshold: 5
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "50m"
+            limits:
+              memory: "800Mi"
+              cpu: "100m" 
+      volumes:
+        # Temp folder to host cache files
+        - name: cache-volume
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: {{ .Release.Name }}-conf

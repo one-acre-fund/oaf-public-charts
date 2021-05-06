@@ -10,7 +10,7 @@ spec:
       imagePullPolicy: IfNotPresent
       name: test-connections
       args:
-        - -timeout=120s
+        - -timeout=20m
         # Postgres
         - -wait=tcp://{{ include "database_host" .}}
         # RabbitMQ
