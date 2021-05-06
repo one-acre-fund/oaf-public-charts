@@ -1,0 +1,5 @@
+# Values file for CI testing
+mysql:
+  auth:
+    password: yyyy
+    rootPassword: xxxx
