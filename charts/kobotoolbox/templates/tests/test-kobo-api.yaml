@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-test-kobo-api
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": test-success
+    # "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+    - name: test-http
+      image: blacktop/httpie
+      imagePullPolicy: IfNotPresent
+      command:
+      - sh
+      - -ce
+      - |
+        http --ignore-stdin --check-status "http://{{ .Release.Name }}-kobo/api/v2/" Host:{{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}
+        http --ignore-stdin --check-status "http://{{ .Release.Name }}-kobo/api/v1/" Host:{{ .Values.kobocat.subdomain }}.{{ include "internal_domain" . }}
