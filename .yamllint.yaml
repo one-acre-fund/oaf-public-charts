@@ -7,3 +7,7 @@ rules:
   document-start: disable
   empty-lines:
     max: 1
+
+ignore: |
+  **/templates/**
+  index.yaml
