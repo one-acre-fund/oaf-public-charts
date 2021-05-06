@@ -15,6 +15,7 @@ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
 * [GeoNode](https://geonode.org/)
 * [KoboToolbox](https://www.kobotoolbox.org/)
 * [Flagsmith](https://flagsmith.com/)
+* [Fineract](https://fineract.apache.org/)
 
 ## How to contribute
 

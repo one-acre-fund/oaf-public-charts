@@ -25,6 +25,12 @@ $ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
 $ helm install --set mysql.auth.password=xxx --set mysql.auth.rootPassword=yyy my-release one-acre-fund/fineract
 ```
 
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://charts.bitnami.com/bitnami | mysql | ~8.4.1 |
+
 ## Values
 
 | Key | Type | Default | Description |
