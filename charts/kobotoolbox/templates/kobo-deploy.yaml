@@ -70,7 +70,7 @@ spec:
               mountPath: /srv/kpi_media
           readinessProbe:
             httpGet:
-              path: /api/v2/
+              path: /static/img/favicon.ico
               port: 80
               httpHeaders:
                 - name: Host
@@ -80,7 +80,7 @@ spec:
             failureThreshold: 15
           livenessProbe:
             httpGet:
-              path: /api/v2/
+              path: /static/img/favicon.ico
               port: 80
               httpHeaders:
                 - name: Host
