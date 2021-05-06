@@ -1,6 +1,8 @@
 name: Lint and Test Charts
 
-on: pull_request
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   lint-test:
@@ -26,7 +28,7 @@ jobs:
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
-          changed=$(ct list-changed)
+          changed=$(ct list-changed --config .github/ct.yaml)
           if [[ -n "$changed" ]]; then
             echo "::set-output name=changed::true"
           fi

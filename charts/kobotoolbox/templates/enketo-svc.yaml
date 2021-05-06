@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-enketo
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    org.kobotoolbox.instance: {{ .Release.Name }}-enketo
+  ports:
+    - targetPort: 8005
+      port: 8005
+      name: enketo
+  type: {{ .Values.general.serviceType }}

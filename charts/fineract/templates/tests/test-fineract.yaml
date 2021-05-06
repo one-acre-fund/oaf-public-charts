@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-test-fineract
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - image: jwilder/dockerize
+      imagePullPolicy: IfNotPresent
+      name: test-connections
+      args:
+        - -timeout=5m
+        # MySQL
+        - -wait=tcp://{{ include "mysql_host" . }}:3306
+        # API
+        - -wait=http://{{ .Release.Name }}-backend:8080/fineract-provider/actuator/health/liveness
+        # MIFOS UI
+        - -wait=http://{{ .Release.Name }}-ui/
+  restartPolicy: Never

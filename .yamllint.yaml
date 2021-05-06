@@ -5,3 +5,9 @@ rules:
     max: 500
     level: error
   document-start: disable
+  empty-lines:
+    max: 1
+
+ignore: |
+  **/templates/**
+  index.yaml

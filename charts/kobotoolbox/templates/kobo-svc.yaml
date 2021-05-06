@@ -1,0 +1,20 @@
+# Load-balancer for SGW
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-kobo
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    org.kobotoolbox.instance: {{ .Release.Name }}-kobo
+  ports:
+    - targetPort: 80
+      port: 80
+      name: www
+    - targetPort: 8003
+      port: 8003
+      name: kpi
+    - targetPort: 8001
+      port: 8001
+      name: kobocat
+  type: {{ .Values.general.serviceType }}

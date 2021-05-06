@@ -1,0 +1,9 @@
+# The Enketo conf needs to be a Secret because it includes passwords
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-enketo
+  namespace: {{ .Release.Namespace }}
+stringData:
+  config.json: |-
+    {{- tpl .Values.enketo.config . | nindent 4 -}}

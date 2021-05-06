@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-frontend
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    org.oneacrefund.instance: {{ .Release.Name }}-flagsmith-frontend
+  ports:
+  - targetPort: 8080
+    port: 8080
+    name: frontend
+  type: {{ .Values.general.serviceType }}

@@ -1,0 +1,15 @@
+# PVC for media uploads
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-kobo-media
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.general.mediaStorage.accessMode }}
+  {{- if coalesce .Values.general.mediaStorage.storageClass .Values.global.storageClass }}
+  storageClassName: {{ coalesce .Values.general.mediaStorage.storageClass .Values.global.storageClass | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.general.mediaStorage.size }}

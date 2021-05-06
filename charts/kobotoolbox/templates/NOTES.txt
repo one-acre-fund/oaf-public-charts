@@ -1,0 +1,7 @@
+Thank you for installing KoboToolbox!
+
+You can access the application using the following external URLs:
+- Home: {{ include "kpi_url" . }}
+- Kobocat (form API): {{ include "kobocat_url" . }}
+- Enketo (web form viewer): {{ include "enketo_url" . }}
+

@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-init
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    # "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+    - name: init
+      image: blacktop/httpie
+      imagePullPolicy: IfNotPresent
+      command:
+      - sh
+      - -c
+      - |
+        # Wait for API to be up
+        timeout -t 300 sh -c "until http --ignore-stdin --check-status "$API_HOME"; do echo Retrying; sleep 2; done; echo API up"
+
+      {{- if .Values.flagsmith.api.init.initAdminUser }}
+        echo Init users...
+        http --ignore-stdin --check-status "$API_HOME/users/init/"
+      {{- end }}
+
+      {{- if .Values.flagsmith.api.init.initialSetup.organizationName }}
+        echo Logging in...
+        TOKEN=$(http --ignore-stdin POST "$API_HOME/auth/login/" "email=$ADMIN_EMAIL" "password=$ADMIN_INITIAL_PASSWORD" | jq -r ".key")
+
+        if [ -z "$TOKEN" ]; then
+          echo Could not login - exiting
+          exit 1
+        else
+          echo Success
+        fi
+
+        ORG_NAME="{{ .Values.flagsmith.api.init.initialSetup.organizationName }}"
+        echo Looking up Organization $ORG_NAME...
+        ORG_ID=$(http --ignore-stdin "$API_HOME/organisations/" "authorization:Token $TOKEN" | jq ".results[] | select(.name == \"$ORG_NAME\") | .id" | head -n 1)
+
+        if [ -z "$ORG_ID" ]; then
+          echo Organization not found, creating it...
+          ORG_ID=$(http --ignore-stdin POST "$API_HOME/organisations/" "authorization:Token $TOKEN" "name=$ORG_NAME" | jq ".id")
+        fi
+
+        echo Organization $ORG_NAME: $ORG_ID
+
+      {{- if .Values.flagsmith.api.init.initialSetup.projectName }}
+        PROJECT_NAME="{{ .Values.flagsmith.api.init.initialSetup.projectName }}"
+        echo Looking up Project $PROJECT_NAME...
+        PROJECT_ID=$(http --ignore-stdin "$API_HOME/projects/" "authorization:Token $TOKEN" "organisation==$ORG_ID" | jq ".[] | select(.name == \"$PROJECT_NAME\") | .id" | head -n 1)
+
+        if [ -z "$PROJECT_ID" ]; then
+          echo Project not found, creating it...
+          PROJECT_ID=$(http --ignore-stdin POST "$API_HOME/projects/" "authorization:Token $TOKEN" "organisation:=$ORG_ID" "name=Flagsmith" | jq ".id")
+        fi
+
+        echo Project $PROJECT_NAME: $PROJECT_ID
+
+      {{- range .Values.flagsmith.api.init.initialSetup.environments }}
+        ENV_NAME='{{ . }}'
+        echo Looking up environment $ENV_NAME...
+        ENV_KEY=$(http --ignore-stdin "$API_HOME/environments/" "authorization:Token $TOKEN" "project==$PROJECT_ID" | jq -r ".results[] | select(.name == \"$ENV_NAME\") | .api_key" | head -n 1)
+
+        if [ -z "$ENV_KEY" ]; then
+          echo Creating environment $ENV_NAME
+          ENV_KEY=$(http --ignore-stdin POST "$API_HOME/environments/" "authorization:Token $TOKEN" "project:=$PROJECT_ID" "name=$ENV_NAME" | jq ".api_key")
+        fi
+
+        echo Environment $ENV_NAME: $ENV_KEY
+      {{- end }}
+
+      {{- range $key, $value := .Values.flagsmith.api.init.initialSetup.features }}
+        FEAT_NAME='{{ $key }}'
+        echo Looking up feature $FEAT_NAME...
+        FEAT_ID=$(http --ignore-stdin "$API_HOME/projects/$PROJECT_ID/features/" "authorization:Token $TOKEN" | jq ".results[] | select(.name == \"$FEAT_NAME\") | .id" | head -n 1)
+
+        if [ -z "$FEAT_ID" ]; then
+          echo Creating feature $FEAT_NAME
+          # This is evaluated as a template
+          FEAT_VALUE='{{ tpl $value $ }}'
+          # At this stage it's not secret, but after this step it could be
+          echo $FEAT_VALUE
+          # Substitute vars
+          [ "${FEAT_VALUE:0:1}" = '$' ] && FEAT_VALUE=$(eval "echo $FEAT_VALUE")
+          FEAT_ID=$(http --ignore-stdin POST "$API_HOME/projects/$PROJECT_ID/features/" "authorization:Token $TOKEN" "project:=$PROJECT_ID" "name=$FEAT_NAME" "initial_value=$FEAT_VALUE" | jq ".id")
+        fi
+
+        echo Feature $FEAT_NAME: $FEAT_ID
+      {{- end }}
+
+      {{- end }}
+      {{- end }}
+      env:
+      - name: API_HOME
+        value: "http://{{ include "apiHost" . }}:8000{{ .Values.flagsmith.externalURL.api.path }}"
+      - name: ADMIN_EMAIL
+        value: {{ .Values.flagsmith.admin.email | quote }}
+      envFrom:
+      - secretRef:
+          name: {{ .Release.Name }}-flagsmith
