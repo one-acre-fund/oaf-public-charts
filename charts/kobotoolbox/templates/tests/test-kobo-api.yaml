@@ -17,4 +17,4 @@ spec:
       - -ce
       - |
         http --ignore-stdin --check-status Host:{{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }} "http://{{ .Release.Name }}-kobo/api/v2/"
-        http --ignore-stdin --check-status Host:{{ .Values.kc.subdomain }}.{{ include "internal_domain" . }}  "http://{{ .Release.Name }}-kobo/api/v1/"
+        http --ignore-stdin --check-status Host:{{ .Values.kobocat.subdomain }}.{{ include "internal_domain" . }}  "http://{{ .Release.Name }}-kobo/api/v1/"
