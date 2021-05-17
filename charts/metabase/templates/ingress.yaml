@@ -1,0 +1,21 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-metabase
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- .Values.ingress.annotations | toYaml | nindent 4 }}
+spec:
+  rules:
+  - host: {{ .Values.ingress.domain }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Release.Name }}-metabase
+          servicePort: 3000
+        path: /
+        pathType: Prefix
+  tls:
+  {{ .Values.ingress.tls | toYaml | nindent 2 }}
+{{- end -}}

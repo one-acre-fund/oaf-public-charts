@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-metabase
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    org.metabase.instance: {{ .Release.Name }}-metabase
+  ports:
+  - targetPort: 3000
+    port: 3000
+    name: app
+  type: {{ .Values.general.serviceType }}

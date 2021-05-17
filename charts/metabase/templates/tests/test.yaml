@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-test
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": test-success
+    # "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+    - name: {{ .Release.Name }}-test-http
+      image: curlimages/curl
+      imagePullPolicy: IfNotPresent
+      # Test published services - change this to reflect your endpoints
+      command:
+      - sh
+      - -ce
+      - |
+        curl -sSfv http://{{ .Release.Name }}-metabase.{{ .Release.Namespace }}.svc:3000/
