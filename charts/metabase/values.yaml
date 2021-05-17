@@ -37,3 +37,11 @@ postgresql:
   service:
     # -- Postgres port
     port: 5432
+
+ingress:
+  # -- Install ingress?
+  enabled: false
+  # -- Dictionary of ingress annotations
+  annotations: {}
+  # -- Ingress TLS settings, passed directly to ingress definition
+  tls: {}

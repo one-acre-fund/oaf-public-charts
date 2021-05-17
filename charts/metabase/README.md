@@ -35,6 +35,9 @@ $ helm install my-release one-acre-fund/metabase
 |-----|------|---------|-------------|
 | general.serviceType | string | `"ClusterIP"` | Used for all published services |
 | global.storageClass | string | `"standard"` | This will be used on all pods for all PVCs, including dependencies (postgres) |
+| ingress.annotations | object | `{}` | Dictionary of ingress annotations |
+| ingress.enabled | bool | `false` | Install ingress? |
+| ingress.tls | object | `{}` | Ingress TLS settings, passed directly to ingress definition |
 | metabase | object | `{"extraPlugins":[],"image":{"name":"metabase/metabase","tag":"latest"},"replicas":1}` | See https://www.metabase.com/docs/latest/operations-guide/running-metabase-on-docker.html for more details |
 | metabase.extraPlugins | list | `[]` | Array of URLs to download extra plugins from (jar files) |
 | metabase.image.name | string | `"metabase/metabase"` | Metabase image name |
