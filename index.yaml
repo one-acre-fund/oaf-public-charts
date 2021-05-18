@@ -245,4 +245,28 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/kobotoolbox-0.1.1/kobotoolbox-0.1.1.tgz
     version: 0.1.1
-generated: "2021-05-06T20:43:31.009191206Z"
+  metabase:
+  - apiVersion: v2
+    created: "2021-05-18T08:40:44.579122328Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~10.1.2
+    description: Metabase with postgres persistence and plugins support
+    digest: 16c1d1f80093388c49adc6b09217098b98716ea2f657cf80fad47c768fd0e381
+    home: https://www.metabase.com/
+    icon: https://avatars.githubusercontent.com/u/10520629?s=400&v=4
+    keywords:
+    - bi
+    - analytics
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: metabase
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/metabase
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-05-18T08:40:44.579155528Z"
