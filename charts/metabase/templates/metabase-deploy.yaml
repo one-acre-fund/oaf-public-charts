@@ -39,7 +39,7 @@ spec:
         volumeMounts:
         - name: plugin-volume
           mountPath: /plugins
-      {{- end}}
+      {{- end }}
 
       # Wait for db
       - name: wait-db
