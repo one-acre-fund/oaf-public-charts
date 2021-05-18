@@ -38,12 +38,12 @@ $ helm install my-release one-acre-fund/metabase
 | ingress.annotations | object | `{}` | Dictionary of ingress annotations |
 | ingress.enabled | bool | `false` | Install ingress? |
 | ingress.tls | object | `{}` | Ingress TLS settings, passed directly to ingress definition |
-| metabase | object | `{"extraPlugins":[],"image":{"name":"metabase/metabase","tag":"latest"},"replicas":1}` | See https://www.metabase.com/docs/latest/operations-guide/running-metabase-on-docker.html for more details |
+| metabase | object | see `values.yaml` | See https://www.metabase.com/docs/latest/operations-guide/running-metabase-on-docker.html for more details |
 | metabase.extraPlugins | list | `[]` | Array of URLs to download extra plugins from (jar files) |
 | metabase.image.name | string | `"metabase/metabase"` | Metabase image name |
 | metabase.image.tag | string | `"latest"` | Metabase image tag |
 | metabase.replicas | int | `1` | Replica count |
-| postgresql | object | `{"enabled":true,"host":"","postgresqlDatabase":"metabase","postgresqlPassword":"ciJ8KfiMUK","postgresqlPostgresPassword":"H55Djpc7Vs","postgresqlUsername":"metabase","service":{"port":5432}}` | Postgres config See https://artifacthub.io/packages/helm/bitnami/postgresql for docs |
+| postgresql | object | see `values.yaml` | Postgres config See https://artifacthub.io/packages/helm/bitnami/postgresql for docs |
 | postgresql.enabled | bool | `true` | Install postgres? |
 | postgresql.postgresqlDatabase | string | `"metabase"` | Database to create and use |
 | postgresql.postgresqlPassword | string | `"ciJ8KfiMUK"` | Application password |
