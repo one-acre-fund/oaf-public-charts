@@ -10,11 +10,11 @@ spec:
   restartPolicy: Never
   containers:
     - name: {{ .Release.Name }}-test-http
-      image: curlimages/curl
-      imagePullPolicy: IfNotPresent
       # Test published services - change this to reflect your endpoints
+      image: blacktop/httpie
+      imagePullPolicy: IfNotPresent
       command:
       - sh
       - -ce
       - |
-        curl -sSfv http://{{ .Release.Name }}-metabase.{{ .Release.Namespace }}.svc:3000/
+        http --ignore-stdin --check-status --print hb "http://{{ .Release.Name }}-metabase.{{ .Release.Namespace }}.svc:3000/api/health"
