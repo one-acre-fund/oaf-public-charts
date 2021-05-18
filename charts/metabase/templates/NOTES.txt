@@ -1,0 +1,2 @@
+Thank you for installing Metabase as {{ .Release.Name }} in namespace {{ .Release.Namespace }}!
+

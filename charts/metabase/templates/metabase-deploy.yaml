@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-metabase
+  namespace: {{ .Release.Namespace }}
+  labels:
+    org.metabase.project: metabase
+    org.metabase.app: app
+    org.metabase.instance: {{ .Release.Name }}-metabase
+spec:
+  replicas: {{ .Values.metabase.replicas }}
+  selector:
+    matchLabels:
+      org.metabase.instance: {{ .Release.Name }}-metabase
+  template:
+    metadata:
+      annotations:
+        checksum/secrets: {{ include "secrets" . | sha256sum }}
+      labels:
+        org.metabase.project: metabase
+        org.metabase.app: app
+        org.metabase.instance: {{ .Release.Name }}-metabase
+    spec:
+      initContainers:
+      {{- if .Values.metabase.extraPlugins }}
+      # Install plugins. These will fail silently
+      - name: install-plugins
+        image: curlimages/curl
+        imagePullPolicy: IfNotPresent
+        command:
+        - sh
+        - -c
+        - |
+          cd /plugins
+          {{- range .Values.metabase.extraPlugins }}
+          echo Installing '{{ . }}'
+          curl -sSLfO '{{ . }}' && echo Success || echo Failed
+          {{- end }}
+        volumeMounts:
+        - name: plugin-volume
+          mountPath: /plugins
+      {{- end }}
+
+      # Wait for db
+      - name: wait-db
+        image: jwilder/dockerize:0.6.1
+        args:
+        - -wait
+        - tcp://{{ include "dbHost" . }}:{{ .Values.postgresql.service.port }}
+        - -timeout
+        - 300s
+
+      containers:
+      - name: app
+        image: "{{ .Values.metabase.image.name }}:{{.Values.metabase.image.tag }}"
+        # Mount custom plugin folder
+        volumeMounts:
+        - name: plugin-volume
+          mountPath: /plugins
+
+        env:
+        - name: MB_DB_TYPE
+          value: postgres
+        - name: MB_DB_DBNAME
+          value: {{ .Values.postgresql.postgresqlDatabase | quote }}
+        - name: MB_DB_PORT
+          value: {{ .Values.postgresql.service.port | quote }}
+        - name: MB_DB_USER
+          value: {{ .Values.postgresql.postgresqlUsername | quote }}
+        - name: MB_DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-metabase
+              key: db-password
+        - name: MB_DB_HOST
+          value: {{ include "dbHost" . | quote }}
+
+        ports:
+        - containerPort: 3000
+
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 15
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 60
+          periodSeconds: 5
+          failureThreshold: 5
+
+      volumes:
+      # Temp folder to host downloaded plugins
+      - name: plugin-volume
+        emptyDir: {}
