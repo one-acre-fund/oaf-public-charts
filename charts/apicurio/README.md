@@ -1,6 +1,6 @@
 # apicurio
 
-![Version: 1.0.3](https://img.shields.io/badge/Version-1.0.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.0.6](https://img.shields.io/badge/Version-1.0.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Apicurio Studio API designer
 
@@ -45,7 +45,6 @@ For more details, see [this ticket](https://github.com/Apicurio/apicurio-studio/
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | api.extraEnvVars | object | See `values.yaml` and the [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-api) | Dictionary of name/value environment var pairs Will be evaluated as templates |
-| api.extraEnvVars.APICURIO_DB_TYPE | string | `"postgres"` | Database type |
 | api.extraEnvVars.APICURIO_LOGGING_LEVEL | string | `"INFO"` | API logging level |
 | api.extraEnvVars.JAVA_TOOL_OPTIONS | string | `"-Djava.net.preferIPv4Stack=true"` | API JVM options |
 | api.extraSecretEnvVars | object | `{}` | Same as `envVars` but passed as secrets |

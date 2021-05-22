@@ -31,7 +31,7 @@ spec:
           args:
             - -timeout=300s
             - -wait=tcp://{{ include "dbHost" . }}:{{ .Values.postgresql.service.port }}
-        {{- end}}
+        {{- end }}
 
       containers:
         - name: api

@@ -24,8 +24,6 @@ api:
   extraEnvVars:
     # -- API logging level
     APICURIO_LOGGING_LEVEL: INFO
-    # -- Database type
-    APICURIO_DB_TYPE: postgres
     # -- API JVM options
     JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
   # -- Same as `envVars` but passed as secrets
