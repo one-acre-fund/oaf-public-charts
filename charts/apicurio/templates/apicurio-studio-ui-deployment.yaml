@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ui
+  namespace: {{ .Release.Namespace }}
+  labels:
+    org.apicurio.instance: {{ .Release.Name }}-ui
+spec:
+  replicas: {{ .Values.ui.replicas }}
+  selector:
+    matchLabels:
+      org.apicurio.instance: {{ .Release.Name }}-ui
+  template:
+    metadata:
+      labels:
+        org.apicurio.instance: {{ .Release.Name }}-ui
+      annotations:
+        # Force a pod restart if secret values change
+        checksum/secrets: {{ include "secrets_ui" . | sha256sum }}
+    spec:
+      securityContext:
+        {{- .Values.ui.securityContext | toYaml | nindent 8 }}
+      restartPolicy: Always
+      containers:
+        - name: api
+          image: "{{ .Values.ui.image.name }}:{{ .Values.ui.image.tag }}"
+          imagePullPolicy: {{ .Values.ui.imagePullPolicy }}
+          terminationMessagePolicy: FallbackToLogsOnError
+          env:
+            # UI Settings
+            - name: APICURIO_UI_FEATURE_SHARE_WITH_EVERYONE
+              value: {{ .Values.general.shareForEveryone | quote }}
+            - name: APICURIO_UI_HUB_API_URL
+              value: {{ coalesce .Values.ui.apiUrl (print "https://" .Values.ui.hostname "/studio-api") }}
+            - name: APICURIO_UI_EDITING_URL
+              value: {{ coalesce .Values.ui.editingUrl (print "wss://" .Values.ui.hostname "/ws") }}
+
+            # Microcks settings
+            - name: APICURIO_MICROCKS_API_URL
+              value: {{ .Values.microcks.api.url | quote }}
+            - name: APICURIO_MICROCKS_CLIENT_ID
+              value: {{ .Values.microcks.client.id | quote }}
+
+            # Keycloak settings
+            - name: APICURIO_KC_AUTH_URL
+              value: {{ .Values.keycloak.url | quote }}
+            - name: APICURIO_KC_REALM
+              value: {{ .Values.keycloak.realm | quote }}
+            - name: APICURIO_KC_CLIENT_ID
+              value: {{ .Values.keycloak.client.id | quote }}
+
+            {{- range $key, $value := .Values.ui.extraEnvVars }}
+            - name: {{ $key }}
+              value: |-
+                {{- tpl $value $ | nindent 16 }}
+            {{- end }}
+
+          envFrom:
+            - secretRef:
+                name: {{ .Release.Name }}-ui
+
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            {{- include "httpProbe" "/" | nindent 12 }}
+          livenessProbe:
+            {{- include "httpProbe" "/" | nindent 12 }}

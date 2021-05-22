@@ -1,0 +1,25 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+## TL;DR;
+
+This chart will install an Apicurio instance, with an optional dependent Postgres backing db.
+
+```console
+$ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
+$ helm install my-release one-acre-fund/apicurio
+```
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
