@@ -54,7 +54,8 @@ $ helm install my-release one-acre-fund/apicurio
 | general.serviceType | string | `"ClusterIP"` | Service type for all services |
 | general.shareForEveryone | bool | `true` | Enable Share to everyone feature? |
 | global.storageClass | string | `nil` | Storage class for all volumes created by this chart or subcharts |
-| ingress.enabled | bool | `false` |  |
+| ingress.enabled | bool | `false` | Enable ingresses? |
+| ingress.tls | list | `[]` | TLS settings |
 | keycloak.client.id | string | `"apicurio-studio"` | Keycloak Client ID |
 | keycloak.client.secret | string | `"apicuriokc"` | Keycloak Client Secret |
 | keycloak.realm | string | `"Apicurio"` | Keycloak Realm |

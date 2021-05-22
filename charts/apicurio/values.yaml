@@ -149,4 +149,7 @@ postgresql:
 # TODO: mysql subchart?
 
 ingress:
+  # -- Enable ingresses?
   enabled: false
+  # -- TLS settings
+  tls: []
