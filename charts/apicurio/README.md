@@ -1,6 +1,6 @@
 # apicurio
 
-![Version: 1.0.5](https://img.shields.io/badge/Version-1.0.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.0.6](https://img.shields.io/badge/Version-1.0.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Apicurio Studio API designer
 
@@ -26,6 +26,14 @@ $ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
 $ helm install my-release one-acre-fund/apicurio
 ```
 
+__WARNING__: The [Apicurio docs](https://www.apicur.io/studio/docs/setting-up-keycloak-for-use-with-apicurio) are wrong/incomplete about the Github integration. The documented instructions will let you login and link accounts, but NOT publish into your repository. To enable this, you will need to:
+
+* In the default roles of your realm, add the `broker` client role named `read-token`
+* Add this `read-token` `broker` role to already created users if needed
+* Use at least these scopes for your Github identity provider configuration: `read:org,repo,user`
+
+For more details, see [this ticket](https://github.com/Apicurio/apicurio-studio/issues/821).
+
 ## Requirements
 
 | Repository | Name | Version |
@@ -36,7 +44,7 @@ $ helm install my-release one-acre-fund/apicurio
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| api.extraEnvVars | object | `{"APICURIO_LOGGING_LEVEL":"INFO","JAVA_TOOL_OPTIONS":"-Djava.net.preferIPv4Stack=true"}` | Dictionary of name/value environment var pairs -- Will ve evaluated as templates @default See `values.yaml` and the [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-api) |
+| api.extraEnvVars | object | See `values.yaml` and the [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-api) | Dictionary of name/value environment var pairs Will be evaluated as templates |
 | api.extraEnvVars.APICURIO_LOGGING_LEVEL | string | `"INFO"` | API logging level |
 | api.extraEnvVars.JAVA_TOOL_OPTIONS | string | `"-Djava.net.preferIPv4Stack=true"` | API JVM options |
 | api.extraSecretEnvVars | object | `{}` | Same as `envVars` but passed as secrets |
@@ -70,7 +78,7 @@ $ helm install my-release one-acre-fund/apicurio
 | postgresql.service.port | int | `5432` | postgres port |
 | ui.apiUrl | string | `nil` | Override API URL - will default to `https://<.Values.general.hostname>/studio-api` |
 | ui.editingUrl | string | `nil` | Override Edit URL - will default to `wss://<.Values.general.hostname>/ws` |
-| ui.extraEnvVars | object | `{"APICURIO_LOGGING_LEVEL":"INFO","APICURIO_UI_FEATURE_MICROCKS":"false","APICURIO_UI_LOGOUT_REDIRECT_URI":"/","APICURIO_UI_VALIDATION_CHANNELNAME_REGEXP":"([^{}\\/]*(\\{[a-zA-Z_][0-9a-zA-Z_]*\\})?)+","JAVA_TOOL_OPTIONS":"-Djava.net.preferIPv4Stack=true"}` | Dictionary of name/value environment var pairs -- Will ve evaluated as templates @default See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ui/) |
+| ui.extraEnvVars | object | See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ui/) | Dictionary of name/value environment var pairs Will be evaluated as templates |
 | ui.extraEnvVars.APICURIO_LOGGING_LEVEL | string | `"INFO"` | UI logging level |
 | ui.extraEnvVars.APICURIO_UI_FEATURE_MICROCKS | string | `"false"` | Enable Microcks integration? |
 | ui.extraEnvVars.APICURIO_UI_LOGOUT_REDIRECT_URI | string | `"/"` | Redirect URI |
@@ -82,7 +90,7 @@ $ helm install my-release one-acre-fund/apicurio
 | ui.imagePullPolicy | string | `"IfNotPresent"` | UI Image pull policy |
 | ui.replicas | int | `1` | UI Replicas |
 | ui.securityContext | object | `{"runAsGroup":1000,"runAsUser":1000}` | Security context for UI container |
-| ws.extraEnvVars | object | `{"APICURIO_LOGGING_LEVEL":"INFO","JAVA_TOOL_OPTIONS":"-Djava.net.preferIPv4Stack=true"}` | Dictionary of name/value environment var pairs -- Will ve evaluated as templates @default See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ws/) |
+| ws.extraEnvVars | object | See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ws/) | Dictionary of name/value environment var pairs Will ve evaluated as templates |
 | ws.extraEnvVars.APICURIO_LOGGING_LEVEL | string | `"INFO"` | WS logging level |
 | ws.extraEnvVars.JAVA_TOOL_OPTIONS | string | `"-Djava.net.preferIPv4Stack=true"` | WS JVM options |
 | ws.extraSecretEnvVars | object | `{}` | Same as `envVars` but passed as secrets |

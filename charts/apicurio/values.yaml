@@ -19,8 +19,8 @@ api:
   # -- Wait for DB to be up?
   wait: true
   # -- Dictionary of name/value environment var pairs
-  # -- Will ve evaluated as templates
-  # @default See `values.yaml` and the [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-api)
+  # Will be evaluated as templates
+  # @default -- See `values.yaml` and the [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-api)
   extraEnvVars:
     # -- API logging level
     APICURIO_LOGGING_LEVEL: INFO
@@ -44,8 +44,8 @@ ui:
   # -- UI Image pull policy
   imagePullPolicy: IfNotPresent
   # -- Dictionary of name/value environment var pairs
-  # -- Will ve evaluated as templates
-  # @default See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ui/)
+  # Will be evaluated as templates
+  # @default -- See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ui/)
   extraEnvVars:
     # -- UI logging level
     APICURIO_LOGGING_LEVEL: INFO
@@ -79,8 +79,8 @@ ws:
   # -- WS Image pull policy
   imagePullPolicy: IfNotPresent
   # -- Dictionary of name/value environment var pairs
-  # -- Will ve evaluated as templates
-  # @default See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ws/)
+  # Will ve evaluated as templates
+  # @default -- See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ws/)
   extraEnvVars:
     # -- WS logging level
     APICURIO_LOGGING_LEVEL: INFO

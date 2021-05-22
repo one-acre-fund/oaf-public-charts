@@ -31,7 +31,7 @@ spec:
           args:
             - -timeout=300s
             - -wait=tcp://{{ include "dbHost" . }}:{{ .Values.postgresql.service.port }}
-        {{- end}}
+        {{- end }}
 
       containers:
         - name: api
@@ -83,6 +83,6 @@ spec:
             - containerPort: 8080
 
           readinessProbe:
-            {{- include "tcpProbe" . | nindent 12 }}
+            {{- include "httpProbe" "/system/ready" | nindent 12 }}
           livenessProbe:
-            {{- include "tcpProbe" . | nindent 12 }}
+            {{- include "httpProbe" "/system/ready" | nindent 12 }}
