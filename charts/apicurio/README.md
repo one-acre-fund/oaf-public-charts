@@ -1,6 +1,6 @@
 # apicurio
 
-![Version: 1.0.4](https://img.shields.io/badge/Version-1.0.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 1.0.5](https://img.shields.io/badge/Version-1.0.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Apicurio Studio API designer
 
@@ -36,8 +36,7 @@ $ helm install my-release one-acre-fund/apicurio
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| api.extraEnvVars | object | `{"APICURIO_DB_TYPE":"postgres","APICURIO_LOGGING_LEVEL":"INFO","JAVA_TOOL_OPTIONS":"-Djava.net.preferIPv4Stack=true"}` | Dictionary of name/value environment var pairs -- Will ve evaluated as templates @default See `values.yaml` and the [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-api) |
-| api.extraEnvVars.APICURIO_DB_TYPE | string | `"postgres"` | Database type |
+| api.extraEnvVars | object | `{"APICURIO_LOGGING_LEVEL":"INFO","JAVA_TOOL_OPTIONS":"-Djava.net.preferIPv4Stack=true"}` | Dictionary of name/value environment var pairs -- Will ve evaluated as templates @default See `values.yaml` and the [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-api) |
 | api.extraEnvVars.APICURIO_LOGGING_LEVEL | string | `"INFO"` | API logging level |
 | api.extraEnvVars.JAVA_TOOL_OPTIONS | string | `"-Djava.net.preferIPv4Stack=true"` | API JVM options |
 | api.extraSecretEnvVars | object | `{}` | Same as `envVars` but passed as secrets |
