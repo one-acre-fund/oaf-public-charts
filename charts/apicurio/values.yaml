@@ -109,7 +109,7 @@ microcks:
 # Configure keycloak application
 keycloak:
   # -- Public URL to Keycloak
-  url: https://studio-auth.apicur.io
+  url: https://www.example.com/auth
   # -- Keycloak Realm
   realm: Apicurio
   client:

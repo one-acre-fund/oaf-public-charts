@@ -58,7 +58,7 @@ $ helm install my-release one-acre-fund/apicurio
 | keycloak.client.id | string | `"apicurio-studio"` | Keycloak Client ID |
 | keycloak.client.secret | string | `"apicuriokc"` | Keycloak Client Secret |
 | keycloak.realm | string | `"Apicurio"` | Keycloak Realm |
-| keycloak.url | string | `"https://studio-auth.apicur.io"` | Public URL to Keycloak |
+| keycloak.url | string | `"https://www.example.com/auth"` | Public URL to Keycloak |
 | microcks.api.url | string | `"http://www.example.com/api"` | URL to mickrocks application |
 | microcks.client.id | string | `"microcks-serviceaccount"` | Microcks Client ID |
 | microcks.client.secret | string | `"apicuriomr"` | Microcks Client Secret |
