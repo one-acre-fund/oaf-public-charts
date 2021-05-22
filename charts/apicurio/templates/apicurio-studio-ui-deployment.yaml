@@ -62,6 +62,6 @@ spec:
           ports:
             - containerPort: 8080
           readinessProbe:
-            {{- include "httpProbe" "/" | nindent 12 }}
+            {{- include "httpProbe" "/ready" | nindent 12 }}
           livenessProbe:
-            {{- include "httpProbe" "/" | nindent 12 }}
+            {{- include "httpProbe" "/ready" | nindent 12 }}
