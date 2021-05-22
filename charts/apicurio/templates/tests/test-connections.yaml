@@ -15,9 +15,9 @@ spec:
         # Postgres
         - -wait=tcp://{{ include "dbHost" . }}:{{ .Values.postgresql.service.port }}
         # API
-        - -wait=tcp://{{ .Release.Name }}-api:8080
+        - -wait=http://{{ .Release.Name }}-api:8080/system/ready
         # UI
-        - -wait=tcp://{{ .Release.Name }}-ui:8080
+        - -wait=http://{{ .Release.Name }}-ui:8080/ready
         # WS
-        - -wait=tcp://{{ .Release.Name }}-ws:8080
+        - -wait=http://{{ .Release.Name }}-ws:8080/metrics
   restartPolicy: Never
