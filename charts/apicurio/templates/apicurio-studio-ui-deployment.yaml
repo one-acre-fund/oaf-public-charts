@@ -31,9 +31,9 @@ spec:
             - name: APICURIO_UI_FEATURE_SHARE_WITH_EVERYONE
               value: {{ .Values.general.shareForEveryone | quote }}
             - name: APICURIO_UI_HUB_API_URL
-              value: {{ coalesce .Values.ui.apiUrl (print "https://" .Values.ui.hostname "/studio-api") }}
+              value: {{ coalesce .Values.ui.apiUrl (print "https://" .Values.general.hostname "/studio-api") }}
             - name: APICURIO_UI_EDITING_URL
-              value: {{ coalesce .Values.ui.editingUrl (print "wss://" .Values.ui.hostname "/ws") }}
+              value: {{ coalesce .Values.ui.editingUrl (print "wss://" .Values.general.hostname "/ws") }}
 
             # Microcks settings
             - name: APICURIO_MICROCKS_API_URL
