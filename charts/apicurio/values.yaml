@@ -1,0 +1,155 @@
+general:
+  # -- Publicly reachable host name for the UI
+  hostname: www.example.com
+  # -- Enable Share to everyone feature?
+  shareForEveryone: true
+  # -- Service type for all services
+  serviceType: ClusterIP
+
+api:
+  image:
+    # -- Image name for API container
+    name: apicurio/apicurio-studio-api
+    # -- Image tag for API container
+    tag: latest
+  # -- API Replicas
+  replicas: 1
+  # -- API Image pull policy
+  imagePullPolicy: IfNotPresent
+  # -- Wait for DB to be up?
+  wait: true
+  # -- Dictionary of name/value environment var pairs
+  # -- Will ve evaluated as templates
+  # @default See `values.yaml` and the [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-api)
+  extraEnvVars:
+    # -- API logging level
+    APICURIO_LOGGING_LEVEL: INFO
+    # -- Database type
+    APICURIO_DB_TYPE: postgres
+    # -- API JVM options
+    JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
+  # -- Same as `envVars` but passed as secrets
+  extraSecretEnvVars: {}
+  # -- Security context for API container
+  securityContext:
+    runAsGroup: 1000
+    runAsUser: 1000
+
+ui:
+  image:
+    # -- Image name for UI container
+    name: apicurio/apicurio-studio-ui
+    # -- Image tag for UI container
+    tag: latest
+  # -- UI Replicas
+  replicas: 1
+  # -- UI Image pull policy
+  imagePullPolicy: IfNotPresent
+  # -- Dictionary of name/value environment var pairs
+  # -- Will ve evaluated as templates
+  # @default See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ui/)
+  extraEnvVars:
+    # -- UI logging level
+    APICURIO_LOGGING_LEVEL: INFO
+    # -- UI JVM options
+    JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
+    # -- Redirect URI
+    APICURIO_UI_LOGOUT_REDIRECT_URI: "/"
+    # -- Enable Microcks integration?
+    APICURIO_UI_FEATURE_MICROCKS: "false"
+    # -- Channel Regex
+    APICURIO_UI_VALIDATION_CHANNELNAME_REGEXP: ([^{}\/]*(\{[a-zA-Z_][0-9a-zA-Z_]*\})?)+
+  # -- Same as `envVars` but passed as secrets
+  extraSecretEnvVars: {}
+  # -- Security context for UI container
+  securityContext:
+    runAsGroup: 1000
+    runAsUser: 1000
+  # -- Override API URL - will default to `https://<.Values.general.hostname>/studio-api`
+  apiUrl: null
+  # -- Override Edit URL - will default to `wss://<.Values.general.hostname>/ws`
+  editingUrl: null
+
+ws:
+  image:
+    # -- Image name for WS container
+    name: apicurio/apicurio-studio-ws
+    # -- Image tag for WS container
+    tag: latest
+  # -- WS Replicas
+  replicas: 1
+  # -- WS Image pull policy
+  imagePullPolicy: IfNotPresent
+  # -- Dictionary of name/value environment var pairs
+  # -- Will ve evaluated as templates
+  # @default See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ws/)
+  extraEnvVars:
+    # -- WS logging level
+    APICURIO_LOGGING_LEVEL: INFO
+    # -- WS JVM options
+    JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
+  # -- Same as `envVars` but passed as secrets
+  extraSecretEnvVars: {}
+  # -- Security context for WS container
+  securityContext:
+    runAsGroup: 1000
+    runAsUser: 1000
+
+#Configure microcks application
+microcks:
+  api:
+    # -- URL to mickrocks application
+    url: http://www.example.com/api
+  client:
+    # -- Microcks Client ID
+    id: microcks-serviceaccount
+    # -- Microcks Client Secret
+    secret: apicuriomr
+
+# Configure keycloak application
+keycloak:
+  # -- Public URL to Keycloak
+  url: https://www.example.com/auth
+  # -- Keycloak Realm
+  realm: Apicurio
+  client:
+    # -- Keycloak Client ID
+    id: apicurio-studio
+    # -- Keycloak Client Secret
+    secret: apicuriokc
+
+database:
+  # -- Initialize DB?
+  initialize: true
+  # -- DB driver - `mysql` / `postgresql`
+  driver: postgresql
+  # -- DB type - `postgresql9` / `mysql5`
+  type: postgresql9
+
+global:
+  # -- Storage class for all volumes created by this chart or subcharts
+  storageClass: null
+
+# Postgres subchart settings
+postgresql:
+  # -- Install Postgres? See See https://artifacthub.io/packages/helm/bitnami/postgresql for docs on all Postgres values
+  enabled: true
+  # -- Custom db host name if not using the subchart
+  host: null
+  # -- Apicurio DB name
+  postgresqlDatabase: apicuriodb
+  # -- Apicurio DB user
+  postgresqlUsername: apicuriodb
+  # -- Apicurio DB user password
+  postgresqlPassword: vSX5RILHBk
+  service:
+    # -- postgres port
+    port: 5432
+
+# TODO: mysql subchart?
+
+ingress:
+  # -- Enable ingresses?
+  enabled: false
+  # -- TLS settings
+  tls: []
