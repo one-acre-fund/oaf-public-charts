@@ -31,7 +31,7 @@ APICURIO_DB_PASSWORD: {{ .Values.postgresql.postgresqlPassword | b64enc }}
 
 # TODO: support other db... for H2: "jdbc:h2:mem:apicuriodb"
 {{- define "dbUrl" -}}
-{{ printf "postgresql://%s:%s@%s:%s/%s" .Values.postgresql.postgresqlUsername .Values.postgresql.postgresqlPassword (include "dbHost" .) ( toString .Values.postgresql.service.port ) .Values.postgresql.postgresqlDatabase }}
+{{ printf "jdbc:postgresql://%s:%s@%s:%s/%s" .Values.postgresql.postgresqlUsername .Values.postgresql.postgresqlPassword (include "dbHost" .) ( toString .Values.postgresql.service.port ) .Values.postgresql.postgresqlDatabase }}
 {{- end -}}
 
 {{- define "tcpProbe" -}}
