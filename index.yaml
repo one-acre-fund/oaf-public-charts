@@ -170,6 +170,30 @@ entries:
     version: 0.1.0
   flagsmith:
   - apiVersion: v2
+    created: "2021-05-24T15:45:51.775029056Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~10.1.2
+    description: Flagsmith - a Feature flag and remote configuration solution
+    digest: 10d41fb6684fa14f2cd9e8d5f46e01789605cc17907f6c84d7bbd7dd1e8b8496
+    home: https://flagsmith.com/
+    icon: https://avatars.githubusercontent.com/u/58150233?s=400&v=4
+    keywords:
+    - feature-flags
+    - remote-config
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: flagsmith
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/flagsmith
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/flagsmith-0.1.3/flagsmith-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
     created: "2021-05-06T18:46:25.087383324Z"
     dependencies:
     - condition: postgresql.enabled
@@ -460,4 +484,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
     version: 0.1.0
-generated: "2021-05-24T15:43:18.064267103Z"
+generated: "2021-05-24T15:45:51.775063957Z"
