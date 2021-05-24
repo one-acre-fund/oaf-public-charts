@@ -1,6 +1,6 @@
 apiVersion: v2
 name: flagsmith
-version: 0.1.2
+version: 0.1.3
 description: Flagsmith - a Feature flag and remote configuration solution
 type: application
 icon: https://avatars.githubusercontent.com/u/58150233?s=400&v=4
