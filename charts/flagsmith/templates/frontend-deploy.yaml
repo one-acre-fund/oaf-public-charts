@@ -69,6 +69,11 @@ spec:
           ports:
             - containerPort: 8080
 
+          {{- if .Values.resources }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
+
           # This one is REALLY slow to start... give it plenty of time
           # For some reason this gives a 404 when hitting it over http, so using a TCP probe here
           readinessProbe:
@@ -83,10 +88,3 @@ spec:
             initialDelaySeconds: 600
             periodSeconds: 5
             failureThreshold: 5
-          resources:
-            requests:
-              memory: "600Mi"
-              cpu: "50m"
-            limits:
-              memory: "800Mi"
-              cpu: "100m" 
