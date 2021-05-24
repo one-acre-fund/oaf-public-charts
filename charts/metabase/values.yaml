@@ -47,3 +47,12 @@ ingress:
   annotations: {}
   # -- Ingress TLS settings, passed directly to ingress definition
   tls: {}
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 1Gi
+  limits:
+    cpu: 200m
+    memory: 2Gi
+
