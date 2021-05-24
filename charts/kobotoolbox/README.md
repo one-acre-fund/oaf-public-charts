@@ -2,7 +2,7 @@
 
 
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) 
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) 
 
 KoboToolbox field data collection solution
 
