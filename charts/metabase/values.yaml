@@ -26,7 +26,7 @@ postgresql:
   # -- Install postgres?
   enabled: true
   # Specify an external host here if desired - otherwise we will use the subchart dependency
-  host: ''
+  host: ""
 
   # -- Password for the `postgres` user
   postgresqlPostgresPassword: H55Djpc7Vs
@@ -48,6 +48,7 @@ ingress:
   # -- Ingress TLS settings, passed directly to ingress definition
   tls: {}
 
+# -- Resources
 resources:
   requests:
     cpu: 50m
@@ -55,4 +56,3 @@ resources:
   limits:
     cpu: 200m
     memory: 2Gi
-

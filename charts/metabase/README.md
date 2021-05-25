@@ -1,8 +1,6 @@
 # metabase
 
-
-
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) 
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square)
 
 Metabase with postgres persistence and plugins support
 
@@ -52,7 +50,4 @@ $ helm install my-release one-acre-fund/metabase
 | postgresql.postgresqlPostgresPassword | string | `"H55Djpc7Vs"` | Password for the `postgres` user |
 | postgresql.postgresqlUsername | string | `"metabase"` | Application username |
 | postgresql.service.port | int | `5432` | Postgres port |
-| resources.limits.cpu | string | `"200m"` |  |
-| resources.limits.memory | string | `"2Gi"` |  |
-| resources.requests.cpu | string | `"50m"` |  |
-| resources.requests.memory | string | `"1Gi"` |  |
+| resources | object | `{"limits":{"cpu":"200m","memory":"2Gi"},"requests":{"cpu":"50m","memory":"1Gi"}}` | Resources |
