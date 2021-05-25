@@ -120,13 +120,7 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 5
             failureThreshold: 5
-          resources:
-            requests:
-              memory: "600Mi"
-              cpu: "50m"
-            limits:
-              memory: "800Mi"
-              cpu: "100m" 
+
       volumes:
         # Temp folder to host cache files
         - name: cache-volume
