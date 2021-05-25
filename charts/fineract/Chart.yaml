@@ -17,7 +17,7 @@
 apiVersion: v2
 description: "Apache Fineract: A Platform for Microfinance"
 name: fineract
-version: 0.1.1
+version: 0.1.0
 home: https://github.com/apache/fineract
 icon: https://fineract.apache.org/images/apache-fineract-logo.png
 keywords:
