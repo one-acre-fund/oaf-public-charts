@@ -55,3 +55,5 @@ resources:
   limits:
     cpu: 200m
     memory: 2Gi
+
+javaOpts: "-Xmx2g"

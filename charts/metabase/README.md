@@ -1,6 +1,8 @@
 # metabase
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square)
+
+
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) 
 
 Metabase with postgres persistence and plugins support
 
@@ -38,6 +40,7 @@ $ helm install my-release one-acre-fund/metabase
 | ingress.annotations | object | `{}` | Dictionary of ingress annotations |
 | ingress.enabled | bool | `false` | Install ingress? |
 | ingress.tls | object | `{}` | Ingress TLS settings, passed directly to ingress definition |
+| javaOpts | string | `"-Xmx2g"` |  |
 | metabase | object | see `values.yaml` | See https://www.metabase.com/docs/latest/operations-guide/running-metabase-on-docker.html for more details |
 | metabase.extraPlugins | list | `[]` | Array of URLs to download extra plugins from (jar files) |
 | metabase.image.name | string | `"metabase/metabase"` | Metabase image name |
