@@ -74,10 +74,10 @@ spec:
               key: db-password
         - name: MB_DB_HOST
           value: {{ include "dbHost" . | quote }}
-          {{- if .Values.javaOpts }}
-          - name: JAVA_OPTS
-            value: {{ .Values.javaOpts |quote }}
-          {{- end }}
+        {{- if .Values.javaOpts }}
+        - name: JAVA_OPTS
+          value: {{ .Values.javaOpts |quote }}
+        {{- end }}
 
         ports:
         - containerPort: 3000
