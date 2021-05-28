@@ -1,6 +1,8 @@
 # metabase
 
-![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square)
+
+
+![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) 
 
 Metabase with postgres persistence and plugins support
 
@@ -38,7 +40,7 @@ $ helm install my-release one-acre-fund/metabase
 | ingress.annotations | object | `{}` | Dictionary of ingress annotations |
 | ingress.enabled | bool | `false` | Install ingress? |
 | ingress.tls | object | `{}` | Ingress TLS settings, passed directly to ingress definition |
-| javaOpts | string | `"-Xmx2g"` |  |
+| javaOpts | string | `"-Xmx1g"` |  |
 | metabase | object | see `values.yaml` | See https://www.metabase.com/docs/latest/operations-guide/running-metabase-on-docker.html for more details |
 | metabase.extraPlugins | list | `[]` | Array of URLs to download extra plugins from (jar files) |
 | metabase.image.name | string | `"metabase/metabase"` | Metabase image name |
@@ -51,7 +53,4 @@ $ helm install my-release one-acre-fund/metabase
 | postgresql.postgresqlPostgresPassword | string | `"H55Djpc7Vs"` | Password for the `postgres` user |
 | postgresql.postgresqlUsername | string | `"metabase"` | Application username |
 | postgresql.service.port | int | `5432` | Postgres port |
-| resources.limits.cpu | string | `"200m"` |  |
-| resources.limits.memory | string | `"2Gi"` |  |
-| resources.requests.cpu | string | `"50m"` |  |
-| resources.requests.memory | string | `"1Gi"` |  |
+| resources | object | `{}` |  |
