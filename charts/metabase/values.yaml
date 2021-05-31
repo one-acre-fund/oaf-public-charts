@@ -50,4 +50,4 @@ ingress:
 
 resources: {}
 
-javaOpts: "-Xmx1g"
+javaOpts: ""
