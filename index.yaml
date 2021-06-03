@@ -171,6 +171,28 @@ entries:
     version: 1.0.1
   fineract:
   - apiVersion: v2
+    created: "2021-06-03T15:47:54.678203364Z"
+    dependencies:
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~8.4.1
+    description: 'Apache Fineract: A Platform for Microfinance'
+    digest: 6989c5823e2a352ece3d08f8ad0b40f81d3c8c8aca227c03884c85c01a34c445
+    home: https://github.com/apache/fineract
+    icon: https://fineract.apache.org/images/apache-fineract-logo.png
+    keywords:
+    - microfinance
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: fineract
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/fineract
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/fineract-0.1.2/fineract-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     created: "2021-05-28T07:00:08.783222339Z"
     dependencies:
     - condition: mysql.enabled
@@ -667,4 +689,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
     version: 0.1.0
-generated: "2021-05-31T07:37:36.295930988Z"
+generated: "2021-06-03T15:47:54.678260964Z"
