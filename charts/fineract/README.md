@@ -1,8 +1,6 @@
 # fineract
 
-
-
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) 
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square)
 
 Apache Fineract: A Platform for Microfinance
 
@@ -43,6 +41,7 @@ $ helm install --set mysql.auth.password=xxx --set mysql.auth.rootPassword=yyy m
 | fineractServer.image.tag | string | `"latest"` | Fineract Docker image tag |
 | fineractServer.replicas | int | `1` | Number of backend pods |
 | fineractServer.resources | object | `{"limits":{"cpu":"1000m","memory":"1Gi"}}` | Resource settings for Backend pods |
+| fineractUI.enabled | bool | `true` | Deploy MIFOS UI? |
 | fineractUI.image.name | string | `"openmf/community-app"` | Frontend Docker image name |
 | fineractUI.image.tag | string | `"latest"` | Frontend Docker image tag |
 | fineractUI.replicas | int | `1` | Number of frontend pods |
@@ -53,6 +52,14 @@ $ helm install --set mysql.auth.password=xxx --set mysql.auth.rootPassword=yyy m
 | ingress.enabled | bool | `false` | Create Ingress? |
 | ingress.hosts | list | `[]` |  |
 | ingress.tls | list | `[]` | TLS settings |
+| mifosx.apiURL | string | `"https://www.example.com"` |  |
+| mifosx.enabled | bool | `false` | Deploy mifos-x UI? |
+| mifosx.image.name | string | `"oneacrefund/mifos-x"` | Frontend Docker image name |
+| mifosx.image.tag | string | `"latest"` | Frontend Docker image tag |
+| mifosx.replicas | int | `1` | Number of frontend pods |
+| mifosx.resources.limits.cpu | string | `"100m"` |  |
+| mifosx.resources.limits.memory | string | `"100Mi"` |  |
+| mifosx.tenant | string | `"default"` | Resource settings for Backend pods |
 | mysql | object | see `values.yaml` | MySQL settings - see https://artifacthub.io/packages/helm/bitnami/mysql |
 | mysql.auth.password | string | `""` | Please change these... |
 | mysql.auth.rootPassword | string | `""` | Please change these... |

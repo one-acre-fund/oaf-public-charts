@@ -42,7 +42,28 @@ fineractServer:
       cpu: "1000m"
       memory: "1Gi"
 
+mifosx:
+  # -- Deploy mifos-x UI?
+  enabled: false
+  # -- Number of frontend pods
+  replicas: 1
+  image:
+    # -- Frontend Docker image name
+    name: oneacrefund/mifos-x
+    # -- Frontend Docker image tag
+    tag: latest
+  # -- Resource settings for Backend pods
+  tenant: default
+  apiURL: https://www.example.com
+
+  resources:
+    limits:
+      cpu: "100m"
+      memory: "100Mi"
+
 fineractUI:
+  # -- Deploy MIFOS UI?
+  enabled: true
   # -- Number of frontend pods
   replicas: 1
   image:
@@ -70,12 +91,12 @@ mysql:
   enabled: true
   image:
     # -- _Warning_: Fineract db driver doesn't support mysql 8
-    tag: '5.7'
+    tag: "5.7"
   auth:
     # -- Please change these...
-    rootPassword: ''
+    rootPassword: ""
     # -- Please change these...
-    password: ''
+    password: ""
     # -- Fineract db user
     username: fineract
   # -- Dictionary of init scripts to run on initial MySQL setup __WARNING__! These db init scripts will only be executed on a brand new, uninitialized instance!
@@ -99,7 +120,8 @@ ingress:
   # -- Create Ingress?
   enabled: false
   # -- Ingress annotations
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   # -- List of domains to serve on

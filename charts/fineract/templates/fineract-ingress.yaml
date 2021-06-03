@@ -19,11 +19,18 @@ spec:
             backend:
               serviceName: {{ .Release.Name }}-backend
               servicePort: http
+          {{- if or .Values.mifosx.enabled .Values.ui.enabled }}
           - path: /
             pathType: Prefix
             backend:
+            {{- if .Values.mifosx.enabled }}
+              serviceName: {{ .Release.Name }}-mifosx
+              servicePort: http
+            {{- else }}
               serviceName: {{ .Release.Name }}-ui
               servicePort: 80
+            {{- end }}
+          {{- end }}
   {{- end }}
 {{- if .Values.ingress.tls }}
   tls:
