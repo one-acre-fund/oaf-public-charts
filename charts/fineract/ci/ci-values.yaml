@@ -3,3 +3,6 @@ mysql:
   auth:
     password: yyyy
     rootPassword: xxxx
+
+mifosx:
+  enabled: true

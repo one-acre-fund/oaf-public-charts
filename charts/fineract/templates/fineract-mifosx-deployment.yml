@@ -16,47 +16,52 @@
 # under the License.
 #
 
-{{ if .Values.fineractUI.enabled }}
+{{ if .Values.mifosx.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-ui
+  name: {{ .Release.Name }}-mifosx
   namespace: {{ .Release.Namespace }}
   labels:
     app: fineract
-    tier: ui
+    tier: mifosx
 spec:
-  replicas: {{ .Values.fineractUI.replicas }}
+  replicas: {{ .Values.mifosx.replicas }}
   selector:
     matchLabels:
       app: fineract
-      tier: ui
+      tier: mifosx
       instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
         app: fineract
-        tier: ui
+        tier: mifosx
         instance: {{ .Release.Name }}
     spec:
       containers:
-        - name: fineract-ui
-          image: "{{ .Values.fineractUI.image.name }}:{{ .Values.fineractUI.image.tag }}"
+        - name: fineract-mifosx
+          image: "{{ .Values.mifosx.image.name }}:{{ .Values.mifosx.image.tag }}"
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: http
+          env:
+            - name: TENANT_ID
+              value: {{ .Values.mifosx.tenant | quote }}
+            - name: SERVER_URL
+              value: {{ .Values.mifosx.apiURL | quote }}
           readinessProbe:
             httpGet:
-              path: /
-              port: 80
+              path: /robots.txt
+              port: 8080
             initialDelaySeconds: 5
             timeoutSeconds: 5
           livenessProbe:
             httpGet:
-              path: /
-              port: 80
+              path: /robots.txt
+              port: 8080
             initialDelaySeconds: 30
             timeoutSeconds: 10
           resources:
-            {{- .Values.fineractUI.resources | toYaml | nindent 12 }}
+            {{- .Values.mifosx.resources | toYaml | nindent 12 }}
 {{ end }}
