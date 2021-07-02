@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fineractrestUI.fullname" . }}
+  labels:
+    app: finearct-rest-ui
+spec:
+  selector:
+    matchLabels:
+      app: finearct-rest-ui
+      tier: frontend
+  replicas: {{ .Values.fineractrestUI.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: finearct-rest-ui
+        tier: frontend
+    spec:
+      containers:
+        - name: finearct-rest-ui
+          image: "{{ .Values.fineract_frontend.image.name }}:{{ .Values.fineract_frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy}}
+          ports:
+            - containerPort: 80
+              name: http
+            - containerPort: 443
+              name: https
+          env:
+          - name: FINERACT_DOMAIN
+            value: {{ .Values.commonconfig.FINERACT_REST_DOMAIN }}
+          - name: FINERACT_BASE_URL
+            value: {{ .Values.commonconfig.FINERACT_BASE_URL }}
+          - name: FINERACT_PROXY_URL
+            value: "https://{{ template "fineract.rest.fullname" . }}:8443"
+          - name: DOLLAR
+            value: $
+          args:
+            - /bin/bash
+            - -c
+            - envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+          resources:
+            {{- .Values.fineractrestUI.resources | toYaml | nindent 12 }}

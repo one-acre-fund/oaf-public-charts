@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fineract.job.fullname" . }}
+  labels:
+    app: fineract-job
+    tier: middle
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8443
+  selector:
+    app: fineract-job
+    tier: middle

@@ -1,0 +1,14 @@
+fineract_backend:
+  image:
+    name: ""
+    tag: ""
+
+fineract_frontend:
+  image:
+    name: ""
+    tag: ""
+
+fineract_db:
+  HOSTNAME: ""
+  USERNAME: ""
+  PASSWORD: ""

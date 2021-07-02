@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "fineract.report.fullname" . }}
+  labels:
+    app: fineract-report
+spec:
+  selector:
+    matchLabels:
+      app: fineract-report
+      tier: middle
+  replicas: {{ .Values.fineractreport.replicaCount }}
+  serviceName: fineract-report
+  template:
+    metadata:
+      labels:
+        app: fineract-report
+        tier: middle
+    spec:
+      containers:
+        - name: fineract-report
+          image: "{{ .Values.fineract_backend.image.name }}:{{ .Values.fineract_backend.image.tag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy}}
+          ports:
+            - name: job-port
+              containerPort: 8443
+          env:
+            - name: FINERACT_DEFAULT_TENANTDB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: "FINERACT_DEFAULT_TENANTDB_HOSTNAME"
+            - name: FINERACT_DEFAULT_TENANTDB_UID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: "FINERACT_DEFAULT_TENANTDB_UID"
+            - name: FINERACT_DEFAULT_TENANTDB_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: "FINERACT_DEFAULT_TENANTDB_PWD"
+            - name: fineract_tenants_uid
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: "FINERACT_DEFAULT_TENANTDB_UID"
+            - name: fineract_tenants_pwd
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secret
+                  key: "FINERACT_DEFAULT_TENANTDB_PWD"
+            - name: fineract_tenants_url
+              value: "jdbc:mysql://$(FINERACT_DEFAULT_TENANTDB_HOSTNAME):3306/{{ .Values.fineract_db.FINERACT_DEFAULT_TENANTDB_NAME }}"
+            - name: FINERACT_DEFAULT_TENANTDB_PORT
+              value: "{{ .Values.commonconfig.FINERACT_DEFAULT_TENANTDB_PORT }}"
+            - name: fineract.allowJobs
+              value: "false"
+            - name: brokerUrl
+              value: {{ .Values.commonconfig.brokerUrl }}
+          args:
+            - sh
+            - -c
+            - java -Xmx2048m -Djava.security.egd=file:/dev/./urandom -Djava.net.preferIPv4Stack=true --illegal-access=permit --add-exports=java.base/jdk.internal.misc=ALL-UNNAMED --add-exports=java.base/sun.nio.ch=ALL-UNNAMED -jar fineract-provider.jar --spring.profiles.active=basicauth,activeMqEnabled
+          livenessProbe:
+            tcpSocket:
+              port: job-port
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+          readinessProbe:
+            tcpSocket:
+              port: job-port
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 3
+          volumeMounts:
+            - name: fineract-report
+              mountPath: /opt/fineract/logs
+          resources:
+            {{- .Values.fineractreport.resources | toYaml | nindent 12 }}
+      volumes:
+        - name: fineract-report
+          persistentVolumeClaim:
+            claimName: fineract-report-pvc

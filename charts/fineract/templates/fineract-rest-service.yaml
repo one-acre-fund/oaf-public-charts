@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fineract.rest.fullname" . }}
+  labels:
+    app: fineract-rest
+    tier: middle
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8443
+  selector:
+    app: fineract-rest
+    tier: middle
