@@ -64,6 +64,7 @@ Apache Fineract: A Platform for Microfinance
 | fineractrestUI.resources.limits.cpu | string | `"100m"` |  |
 | fineractrestUI.resources.limits.memory | string | `"100Mi"` |  |
 | imagePullPolicy | string | `"Always"` |  |
+| ingress.enabled | bool | `false` |  |
 | storageClassName | string | `"aws-efs"` |  |
 
 ----------------------------------------------

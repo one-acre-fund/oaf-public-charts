@@ -113,3 +113,6 @@ fineractactivemqconfig:
 # StorageClass name for PVC
 storageClassName: aws-efs
 imagePullPolicy: "Always"
+
+ingress:
+  enabled: false
