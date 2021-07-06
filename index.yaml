@@ -2,6 +2,30 @@ apiVersion: v1
 entries:
   apicurio:
   - apiVersion: v2
+    created: "2021-07-06T07:39:57.742718636Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~10.1.2
+    description: Apicurio Studio API designer
+    digest: b3b5215db435e46efe4437ed4254ebbe5856877ae9a3c8d0b93ede29c042d884
+    home: http://www.apicur.io/
+    icon: https://avatars.githubusercontent.com/u/28107283?s=400&v=4
+    keywords:
+    - api
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: apicurio
+    sources:
+    - https://github.com/Apicurio/apicurio-studio
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/apicurio
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/apicurio-1.0.8/apicurio-1.0.8.tgz
+    version: 1.0.8
+  - apiVersion: v2
     created: "2021-05-28T07:00:08.638551667Z"
     dependencies:
     - condition: postgresql.enabled
@@ -170,6 +194,23 @@ entries:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/apicurio-1.0.1/apicurio-1.0.1.tgz
     version: 1.0.1
   fineract:
+  - apiVersion: v2
+    created: "2021-07-06T07:39:57.953719754Z"
+    description: 'Apache Fineract: A Platform for Microfinance'
+    digest: 99511373a1a9b761eb89875de34dfc54142af821ce7e0989be4515faf2afefd1
+    home: https://github.com/apache/fineract
+    icon: https://fineract.apache.org/images/apache-fineract-logo.png
+    keywords:
+    - microfinance
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: fineract
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/fineract
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/fineract-0.1.4/fineract-0.1.4.tgz
+    version: 0.1.4
   - apiVersion: v2
     created: "2021-06-03T15:47:54.678203364Z"
     dependencies:
@@ -689,4 +730,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
     version: 0.1.0
-generated: "2021-06-03T15:47:54.678260964Z"
+generated: "2021-07-06T07:39:57.953795354Z"
