@@ -1,5 +1,5 @@
 name: fineract
 description: Custom helm chart for 1AF
-version: 0.0.2
+version: 0.0.3
 apiVersion: v2
 appVersion: "1.0"
