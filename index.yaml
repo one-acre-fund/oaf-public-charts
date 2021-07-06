@@ -195,6 +195,23 @@ entries:
     version: 1.0.1
   fineract:
   - apiVersion: v2
+    created: "2021-07-06T15:27:20.528461944Z"
+    description: 'Apache Fineract: A Platform for Microfinance'
+    digest: 3da1e677aa8ff545dd4f40e60f9a328f4ff51c4ada27d6c9ec23749f07557390
+    home: https://github.com/apache/fineract
+    icon: https://fineract.apache.org/images/apache-fineract-logo.png
+    keywords:
+    - microfinance
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: fineract
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/fineract
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/fineract-0.1.6/fineract-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
     created: "2021-07-06T15:05:39.014797573Z"
     description: 'Apache Fineract: A Platform for Microfinance'
     digest: f757be19c39f4766dce8bb6e97709a49ee16ecf1197ce3924844f8b7e251a03a
@@ -747,4 +764,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
     version: 0.1.0
-generated: "2021-07-06T15:05:39.014870275Z"
+generated: "2021-07-06T15:27:20.528528444Z"
