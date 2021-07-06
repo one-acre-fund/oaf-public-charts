@@ -1,133 +1,118 @@
-#
-# Licensed to the Apache Software Foundation (ASF) under one or more
-# contributor license agreements.  See the NOTICE file distributed with
-# this work for additional information regarding copyright ownership.
-# The ASF licenses this file to You under the Apache License, Version 2.0
-# (the "License"); you may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
-# TODO: add option to install ActiveMQ?
-
-fineractServer:
-  # -- Number of backend pods
-  replicas: 1
+fineract_backend:
   image:
-    # -- Fineract Docker image name
-    name: apache/fineract
-    # -- Fineract Docker image tag
-    tag: latest
-  # -- Dictionary of key/value pairs to pass as environment variables to the backend pods
-  # They will be evaluated as Helm templates
-  # @default -- See `values.yaml`
-  extraEnv:
-    DRIVERCLASS_NAME: org.drizzle.jdbc.DrizzleDriver
-    PROTOCOL: jdbc
-    SUB_PROTOCOL: mysql:thin
-    fineract_tenants_driver: org.drizzle.jdbc.DrizzleDriver
-    FINERACT_DEFAULT_TENANTDB_PORT: "3306"
-  # -- Same as `extraEnv` but passed as secrets
-  extraSecretEnv: {}
-  # -- Resource settings for Backend pods
+    # Fineract backend image name
+    name: ""
+    # Fineract backend image tag
+    tag: ""
+
+# Settings for Fineract job backend microservice
+fineractjob:
+  name: fineractjob
+  # Number of Fineract job pods
+  replicaCount: 1
+  # Resource settings for Fineract job backend pods
   resources:
     limits:
       cpu: "1000m"
-      memory: "1Gi"
+      memory: "2Gi"
 
-mifosx:
-  # -- Deploy mifos-x UI?
-  enabled: false
-  # -- Number of frontend pods
-  replicas: 1
+# Settings for Fineract report backend microservice
+fineractreport:
+  name: fineractreport
+  # Number of Fineract report pods
+  replicaCount: 1
+  # Resource settings for Fineract report backend pods
+  resources:
+    limits:
+      cpu: "1000m"
+      memory: "2Gi"
+
+# Settings for Fineract rest backend microservice
+fineractrest:
+  name: fineractrest
+  # Number of Fineract rest pods
+  replicaCount: 1
+  # Resource settings for Fineract rest backend pods
+  resources:
+    limits:
+      cpu: "1000m"
+      memory: "2Gi"
+
+fineract_frontend:
   image:
-    # -- Frontend Docker image name
-    name: oneacrefund/mifos-x
-    # -- Frontend Docker image tag
-    tag: latest
-  # -- Resource settings for Backend pods
-  tenant: default
-  apiURL: https://www.example.com
+    # Fineract frontend image name
+    name: ""
+    # Fineract frontend image tag
+    tag: ""
 
+# Settings for Fineract rest frontend microservice
+fineractrestUI:
+  name: fineractrestui
+  # Number of Fineract rest UI pods
+  replicaCount: 1
+  # Resource settings for Fineract rest UI pods
   resources:
     limits:
       cpu: "100m"
       memory: "100Mi"
 
-fineractUI:
-  # -- Deploy MIFOS UI?
-  enabled: true
-  # -- Number of frontend pods
-  replicas: 1
-  image:
-    # -- Frontend Docker image name
-    name: openmf/community-app
-    # -- Frontend Docker image tag
-    tag: latest
-  # -- Resource settings for Backend pods
+# Settings for Fineract job frontend microservice
+fineractjobUI:
+  name: fineractjobui
+  # Number of Fineract job UI pods
+  replicaCount: 1
+  # Resource settings for Fineract job UI pods
   resources:
     limits:
       cpu: "100m"
       memory: "100Mi"
 
-global:
-  db:
-    # -- DB name for tenants db
-    tenantsDb: fineract_tenants
-    # -- DB name for defaults db
-    defaultDb: fineract_default
+# Settings for Fineract report frontend microservice
+fineractreportUI:
+  name: fineractreportui
+  # Number of Fineract report UI pods
+  replicaCount: 1
+  # Resource settings for Fineract report UI pods
+  resources:
+    limits:
+      cpu: "100m"
+      memory: "100Mi"
 
-# -- MySQL settings - see https://artifacthub.io/packages/helm/bitnami/mysql
-# @default -- see `values.yaml`
-mysql:
-  # -- Install MySQL?
-  enabled: true
-  image:
-    # -- _Warning_: Fineract db driver doesn't support mysql 8
-    tag: "5.7"
-  auth:
-    # -- Please change these...
-    rootPassword: ""
-    # -- Please change these...
-    password: ""
-    # -- Fineract db user
-    username: fineract
-  # -- Dictionary of init scripts to run on initial MySQL setup __WARNING__! These db init scripts will only be executed on a brand new, uninitialized instance!
-  # Further changes will be ignored after the first init, unless you wipe the underlying PV/PVC volumes
-  # @default -- see `values.yaml`
-  initdbScripts:
-    create_db.sql: |
-      # create databases
-      CREATE DATABASE IF NOT EXISTS `{{ .Values.global.db.tenantsDb }}`;
-      CREATE DATABASE IF NOT EXISTS `{{ .Values.global.db.defaultDb }}`;
+commonconfig:
+  brokerUrl: tcp://fineract-activemq-svc:61616
+  FINERACT_BASE_URL: /fineract-provider/api/v1
+  # Domain name for Fineract rest UI
+  FINERACT_REST_DOMAIN: fineract-rest.oneacrefund.org
+  # Domain name for Fineract job UI
+  FINERACT_JOB_DOMAIN: fineract-job.oneacrefund.org
+  # Domain name for Fineract report UI
+  FINERACT_REPORT_DOMAIN: fineract-report.oneacrefund.org
 
-      # create root user and grant rights
-      GRANT ALL ON {{ .Values.global.db.tenantsDb }}.* TO '{{ .Values.auth.username | default "root" }}'@'%';
-      GRANT ALL ON {{ .Values.global.db.defaultDb }}.* TO '{{ .Values.auth.username | default "root" }}'@'%';
+fineract_db:
+  #  DB hostname
+  HOSTNAME: ""
+  #  DB username
+  USERNAME: ""
+  #  DB password
+  PASSWORD: ""
+  #  DB name for tenants db
+  FINERACT_DEFAULT_TENANTDB_NAME: fineract_tenants
+  FINERACT_DEFAULT_TENANTDB_PORT: 3306
 
-service:
-  # -- Service type for Fineract and UI services
-  type: ClusterIP
+fineractactivemq:
+  name: activemq
+  # Activemq image
+  image: "webcenter/activemq:5.14.3"
+  # Number of activemq pods
+  replicaCount: 1
+
+fineractactivemqconfig:
+  ACTIVEMQ_MIN_MEMORY: "512"
+  ACTIVEMQ_MAX_MEMORY: "1024"
+
+# StorageClass name for PVC
+storageClassName: aws-efs
+imagePullPolicy: "Always"
 
 ingress:
-  # -- Create Ingress?
   enabled: false
-  # -- Ingress annotations
-  annotations:
-    {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  # -- List of domains to serve on
-  hosts: []
-  # -- TLS settings
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local

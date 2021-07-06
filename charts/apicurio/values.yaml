@@ -93,7 +93,7 @@ ws:
     runAsGroup: 1000
     runAsUser: 1000
 
-#Configure microcks application
+# Configure microcks application
 microcks:
   api:
     # -- URL to mickrocks application

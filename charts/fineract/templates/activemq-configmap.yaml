@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fineract-activemq-configmap
+data:
+  ACTIVEMQ_MIN_MEMORY: "{{ .Values.fineractactivemqconfig.ACTIVEMQ_MIN_MEMORY }}"
+  ACTIVEMQ_MAX_MEMORY: "{{ .Values.fineractactivemqconfig.ACTIVEMQ_MAX_MEMORY }}"

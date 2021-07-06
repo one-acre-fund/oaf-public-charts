@@ -1,0 +1,22 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: fineract-report-ingress
+  annotations:
+    kubernetes.io/ingress.class: "kong"
+    konghq.com/strip-path: "true"
+spec:
+  rules:
+    - host: {{ .Values.commonconfig.FINERACT_REPORT_DOMAIN }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ template "fineractreportUI.fullname" . }}
+              servicePort: 443
+  tls:
+    - hosts:
+        - "*.oneacrefund.org"
+      secretName: oaf-tls
+{{- end -}}

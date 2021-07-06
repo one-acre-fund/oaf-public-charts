@@ -1,6 +1,6 @@
 # fineract
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square)
+![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square)
 
 Apache Fineract: A Platform for Microfinance
 
@@ -16,55 +16,56 @@ Apache Fineract: A Platform for Microfinance
 
 * <https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/fineract>
 
-## TL;DR;
-
-__NOTE__: Providing values for at least `mysql.auth.password` and `mysql.auth.rootPassword` is mandatory at installation time
-
-```console
-$ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
-$ helm install --set mysql.auth.password=xxx --set mysql.auth.rootPassword=yyy my-release one-acre-fund/fineract
-```
-
-## Requirements
-
-| Repository | Name | Version |
-|------------|------|---------|
-| https://charts.bitnami.com/bitnami | mysql | ~8.4.1 |
-
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| fineractServer.extraEnv | object | See `values.yaml` | Dictionary of key/value pairs to pass as environment variables to the backend pods They will be evaluated as Helm templates |
-| fineractServer.extraSecretEnv | object | `{}` | Same as `extraEnv` but passed as secrets |
-| fineractServer.image.name | string | `"apache/fineract"` | Fineract Docker image name |
-| fineractServer.image.tag | string | `"latest"` | Fineract Docker image tag |
-| fineractServer.replicas | int | `1` | Number of backend pods |
-| fineractServer.resources | object | `{"limits":{"cpu":"1000m","memory":"1Gi"}}` | Resource settings for Backend pods |
-| fineractUI.enabled | bool | `true` | Deploy MIFOS UI? |
-| fineractUI.image.name | string | `"openmf/community-app"` | Frontend Docker image name |
-| fineractUI.image.tag | string | `"latest"` | Frontend Docker image tag |
-| fineractUI.replicas | int | `1` | Number of frontend pods |
-| fineractUI.resources | object | `{"limits":{"cpu":"100m","memory":"100Mi"}}` | Resource settings for Backend pods |
-| global.db.defaultDb | string | `"fineract_default"` | DB name for defaults db |
-| global.db.tenantsDb | string | `"fineract_tenants"` | DB name for tenants db |
-| ingress.annotations | object | `{}` | Ingress annotations |
-| ingress.enabled | bool | `false` | Create Ingress? |
-| ingress.hosts | list | `[]` |  |
-| ingress.tls | list | `[]` | TLS settings |
-| mifosx.apiURL | string | `"https://www.example.com"` |  |
-| mifosx.enabled | bool | `false` | Deploy mifos-x UI? |
-| mifosx.image.name | string | `"oneacrefund/mifos-x"` | Frontend Docker image name |
-| mifosx.image.tag | string | `"latest"` | Frontend Docker image tag |
-| mifosx.replicas | int | `1` | Number of frontend pods |
-| mifosx.resources.limits.cpu | string | `"100m"` |  |
-| mifosx.resources.limits.memory | string | `"100Mi"` |  |
-| mifosx.tenant | string | `"default"` | Resource settings for Backend pods |
-| mysql | object | see `values.yaml` | MySQL settings - see https://artifacthub.io/packages/helm/bitnami/mysql |
-| mysql.auth.password | string | `""` | Please change these... |
-| mysql.auth.rootPassword | string | `""` | Please change these... |
-| mysql.auth.username | string | `"fineract"` | Fineract db user |
-| mysql.enabled | bool | `true` | Install MySQL? |
-| mysql.image.tag | string | `"5.7"` | _Warning_: Fineract db driver doesn't support mysql 8 |
-| mysql.initdbScripts | object | see `values.yaml` | Dictionary of init scripts to run on initial MySQL setup __WARNING__! These db init scripts will only be executed on a brand new, uninitialized instance! Further changes will be ignored after the first init, unless you wipe the underlying PV/PVC volumes |
-| service.type | string | `"ClusterIP"` | Service type for Fineract and UI services |
+| commonconfig.FINERACT_BASE_URL | string | `"/fineract-provider/api/v1"` |  |
+| commonconfig.FINERACT_JOB_DOMAIN | string | `"fineract-job.oneacrefund.org"` |  |
+| commonconfig.FINERACT_REPORT_DOMAIN | string | `"fineract-report.oneacrefund.org"` |  |
+| commonconfig.FINERACT_REST_DOMAIN | string | `"fineract-rest.oneacrefund.org"` |  |
+| commonconfig.brokerUrl | string | `"tcp://fineract-activemq-svc:61616"` |  |
+| fineract_backend.image.name | string | `""` |  |
+| fineract_backend.image.tag | string | `""` |  |
+| fineract_db.FINERACT_DEFAULT_TENANTDB_NAME | string | `"fineract_tenants"` |  |
+| fineract_db.FINERACT_DEFAULT_TENANTDB_PORT | int | `3306` |  |
+| fineract_db.HOSTNAME | string | `""` |  |
+| fineract_db.PASSWORD | string | `""` |  |
+| fineract_db.USERNAME | string | `""` |  |
+| fineract_frontend.image.name | string | `""` |  |
+| fineract_frontend.image.tag | string | `""` |  |
+| fineractactivemq.image | string | `"webcenter/activemq:5.14.3"` |  |
+| fineractactivemq.name | string | `"activemq"` |  |
+| fineractactivemq.replicaCount | int | `1` |  |
+| fineractactivemqconfig.ACTIVEMQ_MAX_MEMORY | string | `"1024"` |  |
+| fineractactivemqconfig.ACTIVEMQ_MIN_MEMORY | string | `"512"` |  |
+| fineractjob.name | string | `"fineractjob"` |  |
+| fineractjob.replicaCount | int | `1` |  |
+| fineractjob.resources.limits.cpu | string | `"1000m"` |  |
+| fineractjob.resources.limits.memory | string | `"2Gi"` |  |
+| fineractjobUI.name | string | `"fineractjobui"` |  |
+| fineractjobUI.replicaCount | int | `1` |  |
+| fineractjobUI.resources.limits.cpu | string | `"100m"` |  |
+| fineractjobUI.resources.limits.memory | string | `"100Mi"` |  |
+| fineractreport.name | string | `"fineractreport"` |  |
+| fineractreport.replicaCount | int | `1` |  |
+| fineractreport.resources.limits.cpu | string | `"1000m"` |  |
+| fineractreport.resources.limits.memory | string | `"2Gi"` |  |
+| fineractreportUI.name | string | `"fineractreportui"` |  |
+| fineractreportUI.replicaCount | int | `1` |  |
+| fineractreportUI.resources.limits.cpu | string | `"100m"` |  |
+| fineractreportUI.resources.limits.memory | string | `"100Mi"` |  |
+| fineractrest.name | string | `"fineractrest"` |  |
+| fineractrest.replicaCount | int | `1` |  |
+| fineractrest.resources.limits.cpu | string | `"1000m"` |  |
+| fineractrest.resources.limits.memory | string | `"2Gi"` |  |
+| fineractrestUI.name | string | `"fineractrestui"` |  |
+| fineractrestUI.replicaCount | int | `1` |  |
+| fineractrestUI.resources.limits.cpu | string | `"100m"` |  |
+| fineractrestUI.resources.limits.memory | string | `"100Mi"` |  |
+| imagePullPolicy | string | `"Always"` |  |
+| ingress.enabled | bool | `false` |  |
+| storageClassName | string | `"aws-efs"` |  |
+
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.5.0](https://github.com/norwoodj/helm-docs/releases/v1.5.0)
