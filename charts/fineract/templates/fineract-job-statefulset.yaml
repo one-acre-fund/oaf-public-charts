@@ -26,32 +26,17 @@ spec:
               containerPort: 8443
           env:
             - name: FINERACT_DEFAULT_TENANTDB_HOSTNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-secret
-                  key: "FINERACT_DEFAULT_TENANTDB_HOSTNAME"
+              value: {{ include "mysql_host" . }}
             - name: FINERACT_DEFAULT_TENANTDB_UID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-secret
-                  key: "FINERACT_DEFAULT_TENANTDB_UID"
+              value: {{ include "mysql_user" . }}
             - name: FINERACT_DEFAULT_TENANTDB_PWD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-secret
-                  key: "FINERACT_DEFAULT_TENANTDB_PWD"
+              value: {{ .Values.mysql.auth.password }}
             - name: fineract_tenants_uid
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-secret
-                  key: "FINERACT_DEFAULT_TENANTDB_UID"
+              value: {{ include "mysql_user" . }}
             - name: fineract_tenants_pwd
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-secret
-                  key: "FINERACT_DEFAULT_TENANTDB_PWD"
+              value: {{ .Values.mysql.auth.password }}
             - name: fineract_tenants_url
-              value: "jdbc:mysql://$(FINERACT_DEFAULT_TENANTDB_HOSTNAME):3306/{{ .Values.fineract_db.FINERACT_DEFAULT_TENANTDB_NAME }}"
+              value: "jdbc:mysql://{{ include "mysql_host" . }}:3306/{{ .Values.global.db.tenantsDb }}"
             - name: FINERACT_DEFAULT_TENANTDB_PORT
               value: "{{ .Values.commonconfig.FINERACT_DEFAULT_TENANTDB_PORT }}"
             - name: fineract.allowJobs

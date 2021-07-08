@@ -12,3 +12,8 @@ fineract_db:
   HOSTNAME: ""
   USERNAME: ""
   PASSWORD: ""
+
+mysql:
+  auth:
+    password: ""
+    rootPassword: ""

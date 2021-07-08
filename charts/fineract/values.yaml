@@ -110,6 +110,42 @@ fineractactivemqconfig:
   ACTIVEMQ_MIN_MEMORY: "512"
   ACTIVEMQ_MAX_MEMORY: "1024"
 
+global:
+  db:
+    # DB name for tenants db
+    tenantsDb: fineract_tenants
+    # DB name for defaults db
+    defaultDb: fineract_default
+
+mysql:
+  # Install MySQL?
+  enabled: true
+  image:
+    # _Warning_: Fineract db driver doesn't support mysql 8
+    tag: "5.7"
+    # enable to pass storageclass
+  # persistence:
+  #   storageClass: ""
+  auth:
+    # Please change these...
+    rootPassword: ""
+    # Please change these...
+    password: ""
+    # Fineract db user
+    username: fineract
+  # Dictionary of init scripts to run on initial MySQL setup __WARNING__! These db init scripts will only be executed on a brand new, uninitialized instance!
+  # Further changes will be ignored after the first init, unless you wipe the underlying PV/PVC volumes
+  # @default -- see `values.yaml`
+  initdbScripts:
+    create_db.sql: |
+      # create databases
+      CREATE DATABASE IF NOT EXISTS `{{ .Values.global.db.tenantsDb }}`;
+      CREATE DATABASE IF NOT EXISTS `{{ .Values.global.db.defaultDb }}`;
+
+      # create root user and grant rights
+      GRANT ALL ON {{ .Values.global.db.tenantsDb }}.* TO '{{ .Values.auth.username | default "root" }}'@'%';
+      GRANT ALL ON {{ .Values.global.db.defaultDb }}.* TO '{{ .Values.auth.username | default "root" }}'@'%';
+
 # StorageClass name for PVC
 storageClassName: aws-efs
 imagePullPolicy: "Always"

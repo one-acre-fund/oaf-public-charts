@@ -90,3 +90,11 @@
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "mysql_host" -}}
+{{ .Release.Name }}-mysql.{{ .Release.Namespace }}
+{{- end -}}
+
+{{- define "mysql_user" -}}
+{{ .Values.mysql.auth.username | default "root" }}
+{{- end -}}

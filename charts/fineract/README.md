@@ -1,6 +1,6 @@
 # fineract
 
-![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square)
+![Version: 0.1.7](https://img.shields.io/badge/Version-0.1.7-informational?style=flat-square)
 
 Apache Fineract: A Platform for Microfinance
 
@@ -15,6 +15,12 @@ Apache Fineract: A Platform for Microfinance
 ## Source Code
 
 * <https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/fineract>
+
+## Requirements
+
+| Repository | Name | Version |
+|------------|------|---------|
+| https://charts.bitnami.com/bitnami | mysql | ~8.4.1 |
 
 ## Values
 
@@ -63,8 +69,16 @@ Apache Fineract: A Platform for Microfinance
 | fineractrestUI.replicaCount | int | `1` |  |
 | fineractrestUI.resources.limits.cpu | string | `"100m"` |  |
 | fineractrestUI.resources.limits.memory | string | `"100Mi"` |  |
+| global.db.defaultDb | string | `"fineract_default"` |  |
+| global.db.tenantsDb | string | `"fineract_tenants"` |  |
 | imagePullPolicy | string | `"Always"` |  |
 | ingress.enabled | bool | `false` |  |
+| mysql.auth.password | string | `""` |  |
+| mysql.auth.rootPassword | string | `""` |  |
+| mysql.auth.username | string | `"fineract"` |  |
+| mysql.enabled | bool | `true` |  |
+| mysql.image.tag | string | `"5.7"` |  |
+| mysql.initdbScripts."create_db.sql" | string | `"# create databases\nCREATE DATABASE IF NOT EXISTS `{{ .Values.global.db.tenantsDb }}`;\nCREATE DATABASE IF NOT EXISTS `{{ .Values.global.db.defaultDb }}`;\n\n# create root user and grant rights\nGRANT ALL ON {{ .Values.global.db.tenantsDb }}.* TO '{{ .Values.auth.username | default \"root\" }}'@'%';\nGRANT ALL ON {{ .Values.global.db.defaultDb }}.* TO '{{ .Values.auth.username | default \"root\" }}'@'%';\n"` |  |
 | storageClassName | string | `"aws-efs"` |  |
 
 ----------------------------------------------
