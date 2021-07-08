@@ -27,3 +27,8 @@ sources:
 maintainers:
   - name: Yann-J
     email: yann.jouanique@gmail.com
+dependencies:
+  - name: mysql
+    version: ~8.4.1
+    repository: https://charts.bitnami.com/bitnami
+    condition: mysql.enabled
