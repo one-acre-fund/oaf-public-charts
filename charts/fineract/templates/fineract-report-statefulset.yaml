@@ -1,22 +1,35 @@
+{{ if .Values.fineractreport.enabled }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "fineract.report.fullname" . }}
   labels:
     app: fineract-report
+    tier: backend
 spec:
   selector:
     matchLabels:
       app: fineract-report
-      tier: middle
+      tier: backend
+      instance: {{ .Release.Name }}
   replicas: {{ .Values.fineractreport.replicaCount }}
   serviceName: fineract-report
   template:
     metadata:
       labels:
         app: fineract-report
-        tier: middle
+        tier: backend
+        instance: {{ .Release.Name }}
     spec:
+      initContainers:
+        - name: wait-db
+          image: jwilder/dockerize
+          imagePullPolicy: IfNotPresent
+          args:
+          - -wait
+          - tcp://{{ include "mysql_host" . }}:3306
+          - -timeout
+          - 300s
       containers:
         - name: fineract-report
           image: "{{ .Values.fineract_backend.image.name }}:{{ .Values.fineract_backend.image.tag }}"
@@ -24,41 +37,41 @@ spec:
           ports:
             - name: job-port
               containerPort: 8443
+            - name: http
+              containerPort: 8080
           env:
             - name: FINERACT_DEFAULT_TENANTDB_HOSTNAME
               value: {{ include "mysql_host" . }}
             - name: FINERACT_DEFAULT_TENANTDB_UID
               value: {{ include "mysql_user" . }}
             - name: FINERACT_DEFAULT_TENANTDB_PWD
-              value: {{ .Values.mysql.auth.password }}
+              value: {{ .Values.mysql.auth.password | quote }}
             - name: fineract_tenants_uid
               value: {{ include "mysql_user" . }}
             - name: fineract_tenants_pwd
-              value: {{ .Values.mysql.auth.password }}
+              value: {{ .Values.mysql.auth.password | quote }}
             - name: fineract_tenants_url
               value: "jdbc:mysql://{{ include "mysql_host" . }}:3306/{{ .Values.global.db.tenantsDb }}"
             - name: FINERACT_DEFAULT_TENANTDB_PORT
-              value: "{{ .Values.commonconfig.FINERACT_DEFAULT_TENANTDB_PORT }}"
+              value: "{{ .Values.global.db.FINERACT_DEFAULT_TENANTDB_PORT }}"
             - name: fineract.allowJobs
               value: "false"
-            - name: brokerUrl
-              value: {{ .Values.commonconfig.brokerUrl }}
           args:
             - sh
             - -c
-            - java -Xmx2048m -Djava.security.egd=file:/dev/./urandom -Djava.net.preferIPv4Stack=true --illegal-access=permit --add-exports=java.base/jdk.internal.misc=ALL-UNNAMED --add-exports=java.base/sun.nio.ch=ALL-UNNAMED -jar fineract-provider.jar --spring.profiles.active=basicauth,activeMqEnabled
-          livenessProbe:
-            tcpSocket:
-              port: job-port
-            initialDelaySeconds: 20
-            periodSeconds: 10
-            timeoutSeconds: 3
+            - java -Xmx2048m -Djava.security.egd=file:/dev/./urandom -Djava.net.preferIPv4Stack=true --illegal-access=permit --add-exports=java.base/jdk.internal.misc=ALL-UNNAMED --add-exports=java.base/sun.nio.ch=ALL-UNNAMED -jar fineract-provider.jar --spring.profiles.active=basicauth
           readinessProbe:
-            tcpSocket:
-              port: job-port
-            initialDelaySeconds: 30
-            periodSeconds: 20
-            timeoutSeconds: 3
+            httpGet:
+              path: /fineract-provider/actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 90
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /fineract-provider/actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 90
+            timeoutSeconds: 10
           volumeMounts:
             - name: fineract-report
               mountPath: /opt/fineract/logs
@@ -68,3 +81,4 @@ spec:
         - name: fineract-report
           persistentVolumeClaim:
             claimName: fineract-report-pvc
+{{- end -}}

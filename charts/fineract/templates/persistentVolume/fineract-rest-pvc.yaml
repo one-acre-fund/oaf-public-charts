@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: fineract-rest-pvc
 spec:
-  storageClassName: {{ .Values.storageClassName }}
+  storageClassName: {{ .Values.storageClassName | quote }}
   accessModes:
-    - ReadWriteMany
+    - {{ .Values.accessModes | quote }}
   resources:
     requests:
       storage: 5Gi

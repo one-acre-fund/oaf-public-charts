@@ -1,23 +1,27 @@
+{{ if .Values.fineractreport.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "fineractreportUI.fullname" . }}
   labels:
-    app: finearct-report-ui
+    app: fineract-report-ui
+    tier: frontend
 spec:
   selector:
     matchLabels:
-      app: finearct-report-ui
+      app: fineract-report-ui
       tier: frontend
+      instance: {{ .Release.Name }}
   replicas: {{ .Values.fineractreportUI.replicaCount }}
   template:
     metadata:
       labels:
-        app: finearct-report-ui
+        app: fineract-report-ui
         tier: frontend
+        instance: {{ .Release.Name }}
     spec:
       containers:
-        - name: finearct-report-ui
+        - name: fineract-report-ui
           image: "{{ .Values.fineract_frontend.image.name }}:{{ .Values.fineract_frontend.image.tag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy}}
           ports:
@@ -27,9 +31,9 @@ spec:
               name: https
           env:
           - name: FINERACT_DOMAIN
-            value: {{ .Values.commonconfig.FINERACT_REPORT_DOMAIN }}
+            value: {{ .Values.commonconfig.FINERACT_REPORT_DOMAIN | quote }}
           - name: FINERACT_BASE_URL
-            value: {{ .Values.commonconfig.FINERACT_BASE_URL }}
+            value: {{ .Values.commonconfig.FINERACT_BASE_URL | quote }}
           - name: FINERACT_PROXY_URL
             value: "https://{{ template "fineract.report.fullname" . }}:8443"
           - name: DOLLAR
@@ -52,3 +56,4 @@ spec:
             timeoutSeconds: 10
           resources:
             {{- .Values.fineractreportUI.resources | toYaml | nindent 12 }}
+{{- end -}}

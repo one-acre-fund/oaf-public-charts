@@ -1,22 +1,29 @@
-{{- if .Values.ingress.enabled -}}
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: fineract-job-ingress
-  annotations:
-    kubernetes.io/ingress.class: "kong"
-    konghq.com/strip-path: "true"
-spec:
-  rules:
-    - host: {{ .Values.commonconfig.FINERACT_JOB_DOMAIN }}
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: {{ template "fineractjobUI.fullname" . }}
-              servicePort: 443
-  tls:
-    - hosts:
-        - "*.oneacrefund.org"
-      secretName: oaf-tls
-{{- end -}}
+# {{- if and .Values.fineractjob.enabled .Values.ingress.enabled -}}
+# kind: Ingress
+# apiVersion: extensions/v1beta1
+# metadata:
+#   name: fineract-job-ingress
+#   namespace: {{ .Release.Namespace }}
+#   annotations:
+#     kubernetes.io/ingress.class: "kong"
+#     konghq.com/strip-path: "true"
+# spec:
+#   rules:
+#     - host: {{ .Values.commonconfig.FINERACT_JOB_DOMAIN | quote }}
+#       http:
+#         paths:
+#           - path: /fineract-provider
+#             pathType: Prefix
+#             backend:
+#               serviceName: {{ template "fineract.job.fullname" . }}
+#               servicePort: 8443
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               serviceName: {{ template "fineractjobUI.fullname" . }}
+#               servicePort: 443
+#   tls:
+#     - hosts:
+#         - "*.oneacrefund.org"
+#       secretName: oaf-tls
+# {{- end -}}

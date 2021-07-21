@@ -1,19 +1,30 @@
 fineract_backend:
   image:
-    name: ""
-    tag: ""
+    name: "oaftech.azurecr.io/fineract-be"
+    tag: "oneacrefund"
 
 fineract_frontend:
   image:
-    name: ""
-    tag: ""
-
-fineract_db:
-  HOSTNAME: ""
-  USERNAME: ""
-  PASSWORD: ""
+    name: "oaftech.azurecr.io/fineract-fe"
+    tag: "oneacrefund"
 
 mysql:
   auth:
     password: ""
     rootPassword: ""
+
+commonconfig:
+    FINERACT_REST_DOMAIN: ""
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "kong"
+    konghq.com/strip-path: "true"
+  tls:
+    - hosts:
+        - "*.oneacrefund.org"
+      secretName: oaf-tls
+
+storageClassName: ""
+accessModes: ""

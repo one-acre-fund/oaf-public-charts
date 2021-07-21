@@ -1,14 +1,18 @@
+{{ if .Values.fineractreport.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "fineract.report.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: fineract-report
-    tier: middle
+    tier: backend
 spec:
   type: ClusterIP
   ports:
   - port: 8443
   selector:
     app: fineract-report
-    tier: middle
+    tier: backend
+    instance: {{ .Release.Name }}
+{{- end -}}

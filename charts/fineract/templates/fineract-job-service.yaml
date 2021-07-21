@@ -1,14 +1,19 @@
+{{ if .Values.fineractjob.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "fineract.job.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: fineract-job
-    tier: middle
+    tier: backend
 spec:
   type: ClusterIP
   ports:
   - port: 8443
   selector:
     app: fineract-job
-    tier: middle
+    tier: backend
+    instance: {{ .Release.Name }}
+{{- end -}}
+

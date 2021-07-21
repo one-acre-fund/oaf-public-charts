@@ -7,6 +7,7 @@ fineract_backend:
 
 # Settings for Fineract job backend microservice
 fineractjob:
+  enabled: false
   name: fineractjob
   # Number of Fineract job pods
   replicaCount: 1
@@ -18,6 +19,7 @@ fineractjob:
 
 # Settings for Fineract report backend microservice
 fineractreport:
+  enabled: false
   name: fineractreport
   # Number of Fineract report pods
   replicaCount: 1
@@ -29,6 +31,7 @@ fineractreport:
 
 # Settings for Fineract rest backend microservice
 fineractrest:
+  enabled: true
   name: fineractrest
   # Number of Fineract rest pods
   replicaCount: 1
@@ -79,36 +82,13 @@ fineractreportUI:
       memory: "100Mi"
 
 commonconfig:
-  brokerUrl: tcp://fineract-activemq-svc:61616
   FINERACT_BASE_URL: /fineract-provider/api/v1
   # Domain name for Fineract rest UI
-  FINERACT_REST_DOMAIN: fineract-rest.oneacrefund.org
+  FINERACT_REST_DOMAIN: ""
   # Domain name for Fineract job UI
-  FINERACT_JOB_DOMAIN: fineract-job.oneacrefund.org
+  FINERACT_JOB_DOMAIN: ""
   # Domain name for Fineract report UI
-  FINERACT_REPORT_DOMAIN: fineract-report.oneacrefund.org
-
-fineract_db:
-  #  DB hostname
-  HOSTNAME: ""
-  #  DB username
-  USERNAME: ""
-  #  DB password
-  PASSWORD: ""
-  #  DB name for tenants db
-  FINERACT_DEFAULT_TENANTDB_NAME: fineract_tenants
-  FINERACT_DEFAULT_TENANTDB_PORT: 3306
-
-fineractactivemq:
-  name: activemq
-  # Activemq image
-  image: "webcenter/activemq:5.14.3"
-  # Number of activemq pods
-  replicaCount: 1
-
-fineractactivemqconfig:
-  ACTIVEMQ_MIN_MEMORY: "512"
-  ACTIVEMQ_MAX_MEMORY: "1024"
+  FINERACT_REPORT_DOMAIN: ""
 
 global:
   db:
@@ -116,6 +96,7 @@ global:
     tenantsDb: fineract_tenants
     # DB name for defaults db
     defaultDb: fineract_default
+    FINERACT_DEFAULT_TENANTDB_PORT: "3306"
 
 mysql:
   # Install MySQL?
@@ -147,8 +128,11 @@ mysql:
       GRANT ALL ON {{ .Values.global.db.defaultDb }}.* TO '{{ .Values.auth.username | default "root" }}'@'%';
 
 # StorageClass name for PVC
-storageClassName: aws-efs
+storageClassName: ""
+# Access Modes for PVC
+accessModes: ""
 imagePullPolicy: "Always"
 
 ingress:
+  # -- Create Ingress?
   enabled: false
