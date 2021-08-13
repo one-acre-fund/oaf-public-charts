@@ -497,6 +497,11 @@ server {
   listen      80;
   server_name {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }} {{ .Values.kpi.subdomain }}.docker.internal {{ .Values.kpi.subdomain }}.{{ .Values.general.externalDomain }};
 
+  # Allow 100M upload
+  client_max_body_size 100M;
+  # Support bigger headers. Useful for huge cookies
+  large_client_header_buffers 8 16k;
+
   location ~ ^/forms/(.*) {
     return 301 /$1;
   }
