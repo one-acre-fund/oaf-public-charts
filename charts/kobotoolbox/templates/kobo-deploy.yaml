@@ -95,9 +95,7 @@ spec:
           # command:
           # - sh
           # - -c
-          # - cat
-          # tty: true
-          # TODO: wait for KPI container?
+          # - sleep infinity
           ports:
             - containerPort: 8001
           env:
@@ -121,11 +119,11 @@ spec:
           volumeMounts:
             # Replace redundant init scripts with empty files
             - name: config
-              mountPath: /etc/my_init.d/01_wait_for_mongo.bash
+              mountPath: /srv/init/wait_for_mongo.bash
               subPath: empty_script
               readOnly: true
             - name: config
-              mountPath: /etc/my_init.d/02_wait_for_postgres.bash
+              mountPath: /srv/init/wait_for_postgres.bash
               subPath: empty_script
               readOnly: true
             # Config

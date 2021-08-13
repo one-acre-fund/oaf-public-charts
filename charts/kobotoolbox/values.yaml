@@ -4,7 +4,7 @@ kobocat:
     name: kobotoolbox/kobocat
     # -- KoboCat docker image tag
     # see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags
-    tag: "2.021.09"
+    tag: "2.021.24b"
   # -- DNS subdomain name to serve the form server from
   subdomain: kc
   # -- Dictionary of env variables to pass
@@ -16,7 +16,7 @@ kpi:
     # See https://hub.docker.com/r/kobotoolbox/kpi for list of tags
     name: kobotoolbox/kpi
     # -- kpi docker image tag
-    tag: "2.021.12b"
+    tag: "2.021.24b"
   # -- DNS subdomain to serve the main UI from
   subdomain: kobo
   # -- Dictionary of env variables to pass

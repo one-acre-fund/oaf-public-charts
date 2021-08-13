@@ -261,8 +261,8 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
 - name: USE_X_FORWARDED_HOST
   value: 'False'
 
-- name: DJANGO_SETTINGS_MODULE
-  value: onadata.settings.kc_environ
+# - name: DJANGO_SETTINGS_MODULE
+#   value: onadata.settings.kc_environ
 - name: ENKETO_VERSION
   value: Express
 
@@ -415,10 +415,10 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
   value: '120'
 - name: {{ . }}_UWSGI_WORKER_RELOAD_MERCY
   value: '120'
-- name: UWSGI_GROUP
-  value: wsgi
-- name: UWSGI_USER
-  value: wsgi
+# - name: UWSGI_GROUP
+#   value: wsgi
+# - name: UWSGI_USER
+#   value: wsgi
 {{- end -}}
 
 
