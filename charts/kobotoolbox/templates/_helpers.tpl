@@ -356,7 +356,7 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
 - name: ENKETO_URL
   value: {{ include "enketo_url" . | quote }}
 - name: ENKETO_INTERNAL_URL
-  value: "http://localhost:8005"
+  value: "http://{{ .Release.Name }}-enketo:8005"
 - name: KOBOCAT_URL
   value: {{ include "kobocat_url" . | quote }}
 - name: KOBOCAT_INTERNAL_URL
