@@ -334,8 +334,6 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
 - name: KPI_MONGO_HOST
   value: {{ .Release.Name }}-mongodb
 
-- name: DJANGO_LANGUAGE_CODES
-  value: en fr es ar zh-hans hi ku
 - name: DKOBO_PREFIX
   value: 'False'
 - name: KOBO_SURVEY_PREVIEW_EXPIRATION
@@ -348,8 +346,6 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
   value: '30'
 - name: KPI_UWSGI_PROCESS_COUNT
   value: '2'
-- name: KOBO_SUPPORT_URL
-  value: http://support.kobotoolbox.org/
 
 - name: KOBOFORM_URL
   value: {{ include "kpi_url" . | quote }}

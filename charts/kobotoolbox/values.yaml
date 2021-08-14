@@ -20,7 +20,9 @@ kpi:
   # -- DNS subdomain to serve the main UI from
   subdomain: kobo
   # -- Dictionary of env variables to pass
-  extraEnv: {}
+  extraEnv:
+    DJANGO_LANGUAGE_CODES: en fr es ar zh-hans hi ku
+    KOBO_SUPPORT_URL: http://support.kobotoolbox.org/
 
 enketo:
   image:

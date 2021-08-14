@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square)
+![Version: 0.1.7](https://img.shields.io/badge/Version-0.1.7-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -72,7 +72,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | kobocat.image.name | string | `"kobotoolbox/kobocat"` | KoboCat docker image name |
 | kobocat.image.tag | string | `"2.021.24b"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
 | kobocat.subdomain | string | `"kc"` | DNS subdomain name to serve the form server from |
-| kpi.extraEnv | object | `{}` | Dictionary of env variables to pass |
+| kpi.extraEnv | object | `{"DJANGO_LANGUAGE_CODES":"en fr es ar zh-hans hi ku","KOBO_SUPPORT_URL":"http://support.kobotoolbox.org/"}` | Dictionary of env variables to pass |
 | kpi.image.name | string | `"kobotoolbox/kpi"` | kpi docker image name See https://hub.docker.com/r/kobotoolbox/kpi for list of tags |
 | kpi.image.tag | string | `"2.021.24b"` | kpi docker image tag |
 | kpi.subdomain | string | `"kobo"` | DNS subdomain to serve the main UI from |
