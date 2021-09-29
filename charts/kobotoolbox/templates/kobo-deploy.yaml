@@ -16,6 +16,7 @@ spec:
         # TODO: better checksum?
         checksum/config: {{ .Values | toString | sha256sum }}
         checksum/nginx_conf: {{ include "nginx_conf" . | sha256sum }}
+        co.elastic.logs/enabled: "true"
       labels:
         org.kobotoolbox.instance: {{ .Release.Name }}-kobo
     spec:
@@ -76,7 +77,7 @@ spec:
                 - name: Host
                   value: {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}
             initialDelaySeconds: 10
-            periodSeconds: 20
+            periodSeconds: 60
             failureThreshold: 15
           livenessProbe:
             httpGet:
@@ -86,7 +87,7 @@ spec:
                 - name: Host
                   value: {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}
             initialDelaySeconds: 60
-            periodSeconds: 20
+            periodSeconds: 30
 
         # Kobocat is the forms API server that Enketo / Collect will connect to
         - name: kobocat
