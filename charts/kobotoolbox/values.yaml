@@ -16,7 +16,7 @@ kpi:
     # See https://hub.docker.com/r/kobotoolbox/kpi for list of tags
     name: kobotoolbox/kpi
     # -- kpi docker image tag
-    tag: "2.021.24b"
+    tag: "2.021.41"
   # -- DNS subdomain to serve the main UI from
   subdomain: kobo
   # -- Dictionary of env variables to pass
@@ -72,7 +72,7 @@ enketo:
         "rank",
         "likert",
         "range",
-        "columns",
+        "columns",`
         "image-view",
         "comment",
         "image-map",

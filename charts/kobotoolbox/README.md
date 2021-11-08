@@ -2,7 +2,7 @@
 
 
 
-![Version: 0.1.9](https://img.shields.io/badge/Version-0.1.9-informational?style=flat-square) 
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) 
 
 KoboToolbox field data collection solution
 
@@ -76,7 +76,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | kobocat.subdomain | string | `"kc"` | DNS subdomain name to serve the form server from |
 | kpi.extraEnv | object | `{"DJANGO_LANGUAGE_CODES":"en fr es ar zh-hans hi ku","KOBO_SUPPORT_URL":"http://support.kobotoolbox.org/"}` | Dictionary of env variables to pass |
 | kpi.image.name | string | `"kobotoolbox/kpi"` | kpi docker image name See https://hub.docker.com/r/kobotoolbox/kpi for list of tags |
-| kpi.image.tag | string | `"2.021.24b"` | kpi docker image tag |
+| kpi.image.tag | string | `"2.021.41"` | kpi docker image tag |
 | kpi.subdomain | string | `"kobo"` | DNS subdomain to serve the main UI from |
 | mongodb | object | see `values.yaml` | Standard MongoDB values See https://artifacthub.io/packages/helm/bitnami/mongodb for doc |
 | mongodb.enabled | bool | `true` | Install MongoDB? |
