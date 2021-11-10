@@ -27,10 +27,10 @@ kpi:
 enketo:
   image:
     # -- Enketo image name - the web-based form preview and filling UI
-    name: kobotoolbox/enketo-express-extra-widgets
+    name: enketo/enketo-express
     # -- Enketo image tag
     # See https://hub.docker.com/r/kobotoolbox/enketo-express-extra-widgets
-    tag: "2.6.1"
+    tag: "3.0.4"
   # -- DNS subdomain to serve Enketo from
   subdomain: ee
   # -- Number of Enketo pods
@@ -72,7 +72,7 @@ enketo:
         "rank",
         "likert",
         "range",
-        "columns",`
+        "columns",
         "image-view",
         "comment",
         "image-map",
@@ -82,9 +82,7 @@ enketo:
         "text-max",
         "text-print",
         "rating",
-        "thousands-sep",
-        "../../../node_modules/enketo-image-customization-widget/image-customization",
-        "../../../node_modules/enketo-literacy-test-widget/literacywidget"
+        "thousands-sep"
       ],
       "redis": {
         "cache": {

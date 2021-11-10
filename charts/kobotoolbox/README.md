@@ -1,8 +1,6 @@
 # kobotoolbox
 
-
-
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) 
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -41,8 +39,8 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | enketo.apiKey | string | `"WEHQJCXHJ2XOBXGOGMXCUJYXQP9ZZFVY4FHLCSKJIWAWPTCMGMECGNBCHXVBFCFT1H5TQTQCKB0J7DF2X23WC7EHOCCVQ7K8CY6QO9C8NMERACUM6S2QQEER"` | Random API key |
 | enketo.config | string | see `values.yaml` | Enketo configuration - will be evaluated as a template |
 | enketo.encryptionKey | string | `"w0RkyuQSB33md8cZB5Xx"` | Random API key |
-| enketo.image.name | string | `"kobotoolbox/enketo-express-extra-widgets"` | Enketo image name - the web-based form preview and filling UI |
-| enketo.image.tag | string | `"2.6.1"` | Enketo image tag See https://hub.docker.com/r/kobotoolbox/enketo-express-extra-widgets |
+| enketo.image.name | string | `"enketo/enketo-express"` | Enketo image name - the web-based form preview and filling UI |
+| enketo.image.tag | string | `"3.0.4"` | Enketo image tag See https://hub.docker.com/r/kobotoolbox/enketo-express-extra-widgets |
 | enketo.lessSecureEncryptionKey | string | `"wUNQWPwA3bDVzckKKtS4"` | Random API key |
 | enketo.replicas | int | `1` | Number of Enketo pods |
 | enketo.subdomain | string | `"ee"` | DNS subdomain to serve Enketo from |
