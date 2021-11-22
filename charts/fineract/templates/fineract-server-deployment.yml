@@ -54,6 +54,7 @@ spec:
       containers:
         - name: fineract-backend
           image: "{{ .Values.fineractServer.image.name }}:{{ .Values.fineractServer.image.tag }}"
+          imagePullPolicy: {{ .Values.fineractServer.image.imagePullPolicy }}
           envFrom:
             - secretRef:
                 name: {{ .Release.Name | quote }}

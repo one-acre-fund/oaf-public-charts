@@ -25,6 +25,8 @@ fineractServer:
     name: apache/fineract
     # -- Fineract Docker image tag
     tag: latest
+    # -- Only pull the image if not present
+    imagePullPolicy: IfNotPresent
   # -- Dictionary of key/value pairs to pass as environment variables to the backend pods
   # They will be evaluated as Helm templates
   # @default -- See `values.yaml`
