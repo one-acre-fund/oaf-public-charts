@@ -47,6 +47,15 @@ geonode:
   # For base maps available in MapStore, see https://github.com/geosolutions-it/MapStore2/blob/master/web/client/utils/ConfigProvider.js
   # @default -- Some standard base layers
   extraConf: |
+    import ast
+    import os
+    try:  # python2
+        from urlparse import urlparse, urlunparse, urlsplit, urljoin
+    except ImportError:
+        # Python 3 fallback
+        from urllib.parse import urlparse, urlunparse, urlsplit, urljoin
+    from geonode.settings import *
+
     EXTRA_BASE_LAYERS = [
       {
         "type": "tileprovider",

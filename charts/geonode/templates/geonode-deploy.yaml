@@ -95,9 +95,6 @@ spec:
         - bash
         - -c
         - |
-          # Add config overrides
-          cat /usr/src/geonode/geonode/local_settings.py >> /usr/src/geonode/geonode/settings.py
-
           # Run
           /usr/src/geonode/entrypoint.sh uwsgi --ini /usr/src/geonode/uwsgi.ini --logto /dev/stdout
         ports:
@@ -156,9 +153,6 @@ spec:
         - bash
         - -c
         - |
-          # Add config overrides
-          cat /usr/src/geonode/geonode/local_settings.py >> /usr/src/geonode/geonode/settings.py
-
           # Run celery
           /usr/src/geonode/entrypoint.sh celery-cmd
         volumeMounts:

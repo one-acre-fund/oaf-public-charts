@@ -60,7 +60,7 @@ amqp://{{ .Values.rabbitmq.auth.username }}:{{ .Values.rabbitmq.auth.password }}
   value: production
 
 - name: DJANGO_SETTINGS_MODULE
-  value: geonode.settings
+  value: geonode.local_settings
 - name: GEONODE_INSTANCE_NAME
   value: geonode
 - name: GEONODE_LB_HOST_IP
