@@ -110,12 +110,12 @@ spec:
           cat /usr/src/geonode/geonode/local_settings.py >> /usr/src/geonode/geonode/settings.py
 
           # Setup
-          touch /usr/src/app/invoke.log
-          dockerize -stdout /usr/src/app/invoke.log /usr/src/app/entrypoint.sh
+          touch /usr/src/geonode/invoke.log
+          dockerize -stdout /usr/src/geonode/invoke.log /usr/src/geonode/entrypoint.sh
 
           # Run web server
           touch /var/log/geonode.log
-          dockerize -stdout /var/log/geonode.log /usr/local/bin/uwsgi --ini /usr/src/app/uwsgi.ini
+          dockerize -stdout /var/log/geonode.log /usr/local/bin/uwsgi --ini /usr/src/geonode/uwsgi.ini
         # - /usr/src/geonode/entrypoint.sh
         # - uwsgi
         # - --ini
@@ -187,8 +187,8 @@ spec:
           export HOSTALIASES=/etc/host.aliases
 
           # Setup
-          touch /usr/src/app/invoke.log
-          dockerize -stdout /usr/src/app/invoke.log /usr/src/app/entrypoint.sh
+          touch /usr/src/geonode/invoke.log
+          dockerize -stdout /usr/src/geonode/invoke.log /usr/src/geonode/entrypoint.sh
 
           # Run celery
           celery -A geonode.celery_app:app worker -B -E --statedb=/mnt/volumes/statics/worker.state -s /mnt/volumes/statics/celerybeat-schedule --loglevel=INFO --concurrency=10 -n worker1@%h
