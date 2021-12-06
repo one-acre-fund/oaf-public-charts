@@ -156,6 +156,9 @@ spec:
           # Run celery
           /usr/src/geonode/entrypoint.sh celery-cmd
         volumeMounts:
+        - name: geonode-conf
+          mountPath: /usr/src/geonode/geonode/local_settings.py
+          subPath: local_settings.py
         - name: persistence
           mountPath: /mnt/volumes/statics
           subPath: statics
