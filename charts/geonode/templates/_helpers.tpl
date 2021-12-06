@@ -47,6 +47,12 @@ amqp://{{ .Values.rabbitmq.auth.username }}:{{ .Values.rabbitmq.auth.password }}
       key: {{ $key | quote }}
 {{- end }}
 
+- name: INVOKE_LOG_STDOUT
+  value: "True"
+
+- name: DATABASE_HOST
+  value: {{ .Release.Name }}-postgresql
+
 - name: DEBUG
   value: {{ include "boolean2str" .Values.general.debug | quote }}
 

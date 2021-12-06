@@ -91,36 +91,15 @@ spec:
         {{ include "env_general" . | nindent 8 }}
         - name: IS_CELERY
           value: 'False'
-        - name: DOCKERIZE_VERSION
-          value: v0.6.1
         command:
         - bash
         - -c
         - |
-          # install dockerize...
-          wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-            && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-            && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-          
-          # Add host alias since the scripts hardcode the db host as 'db' @##@?
-          echo "db {{ .Release.Name }}-postgresql" > /etc/host.aliases
-          export HOSTALIASES=/etc/host.aliases
-
           # Add config overrides
           cat /usr/src/geonode/geonode/local_settings.py >> /usr/src/geonode/geonode/settings.py
 
-          # Setup
-          touch /usr/src/geonode/invoke.log
-          dockerize -stdout /usr/src/geonode/invoke.log /usr/src/geonode/entrypoint.sh
-
-          # Run web server
-          touch /var/log/geonode.log
-          dockerize -stdout /var/log/geonode.log /usr/local/bin/uwsgi --ini /usr/src/geonode/uwsgi.ini
-        # - /usr/src/geonode/entrypoint.sh
-        # - uwsgi
-        # - --ini
-        # - /usr/src/geonode/uwsgi.ini
-        # tty: true
+          # Run
+          /usr/src/geonode/entrypoint.sh uwsgi --ini /usr/src/geonode/uwsgi.ini --logto /dev/stdout
         ports:
         - containerPort: 8000
         volumeMounts:
@@ -171,32 +150,17 @@ spec:
         {{ include "env_general" . | nindent 8 }}
         - name: IS_CELERY
           value: 'True'
-        - name: DOCKERIZE_VERSION
-          value: v0.6.1
+        - name: CELERY__LOG_FILE
+          value: /dev/stdout
         command:
         - bash
         - -c
         - |
-          # install dockerize...
-          wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-            && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-            && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-          
-          # Add host alias since the scripts hardcode the db host as 'db' @##@?
-          echo "db {{ .Release.Name }}-postgresql" > /etc/host.aliases
-          export HOSTALIASES=/etc/host.aliases
-
-          # Setup
-          touch /usr/src/geonode/invoke.log
-          dockerize -stdout /usr/src/geonode/invoke.log /usr/src/geonode/entrypoint.sh
+          # Add config overrides
+          cat /usr/src/geonode/geonode/local_settings.py >> /usr/src/geonode/geonode/settings.py
 
           # Run celery
-          celery -A geonode.celery_app:app worker -B -E --statedb=/mnt/volumes/statics/worker.state -s /mnt/volumes/statics/celerybeat-schedule --loglevel=INFO --concurrency=10 -n worker1@%h
-        # - /usr/src/geonode/entrypoint.sh
-        # - uwsgi
-        # - --ini
-        # - /usr/src/geonode/uwsgi.ini
-        # tty: true
+          /usr/src/geonode/entrypoint.sh celery-cmd
         volumeMounts:
         - name: persistence
           mountPath: /mnt/volumes/statics
@@ -306,7 +270,7 @@ spec:
           failureThreshold: 15
         resources:
           requests:
-            memory: 2Gi
+            memory: 1Gi
             cpu: 100m
           limits:
             memory: 4Gi
