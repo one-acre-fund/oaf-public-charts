@@ -95,8 +95,10 @@ spec:
         - bash
         - -c
         - |
+          # Disable file logging if any
+          sed -i 's/^logto/#logto/ig' /usr/src/geonode/uwsgi.ini
           # Run
-          /usr/src/geonode/entrypoint.sh uwsgi --ini /usr/src/geonode/uwsgi.ini --logto /dev/stdout
+          /usr/src/geonode/entrypoint.sh uwsgi --ini /usr/src/geonode/uwsgi.ini
         ports:
         - containerPort: 8000
         volumeMounts:
