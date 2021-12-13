@@ -155,15 +155,15 @@ spec:
           image: "{{ .Values.kpi.image.name }}:{{ .Values.kpi.image.tag }}"
           terminationMessagePolicy: FallbackToLogsOnError
           # Override entrypoint to redirect logs to stdout
-          command:
-            - sh
-            - -c
-            - |
-              # Init log files so we can pipe them
-              touch /srv/logs/celery_beat.log && touch /srv/logs/celery.log && touch /srv/logs/celery_sync_kobocat_xforms.log
+          # command:
+          #   - sh
+          #   - -c
+          #   - |
+          #     # Init log files so we can pipe them
+          #     touch /srv/logs/celery_beat.log && touch /srv/logs/celery.log && touch /srv/logs/celery_sync_kobocat_xforms.log
 
-              # Run with dockerize
-              dockerize -stdout /srv/logs/celery_beat.log -stdout /srv/logs/celery.log -stdout /srv/logs/celery_sync_kobocat_xforms.log /srv/src/kpi/docker/init.bash
+          #     # Run with dockerize
+          #     dockerize -stdout /srv/logs/celery_beat.log -stdout /srv/logs/celery.log -stdout /srv/logs/celery_sync_kobocat_xforms.log /srv/src/kpi/docker/init.bash
           # - cat
           # tty: true
           env:
