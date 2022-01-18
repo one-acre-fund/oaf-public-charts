@@ -227,7 +227,7 @@ redis:
     enabled: true
     size: "2Gi"
 
-postgres:
+postgresql:
   enabled: true
   postgresqlPostgresPassword: "changeme"
   postgresqlUsername: n8n

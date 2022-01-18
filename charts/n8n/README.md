@@ -1,6 +1,6 @@
 # n8n
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -14,7 +14,7 @@ A Helm chart for Kubernetes
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | postgres | ~10.16.1 |
+| https://charts.bitnami.com/bitnami | postgresql | ~10.16.1 |
 | https://charts.bitnami.com/bitnami | redis | ~15.7.5 |
 
 ## Values
@@ -49,12 +49,12 @@ A Helm chart for Kubernetes
 | persistence.type | string | `"emptyDir"` |  |
 | podAnnotations | object | `{}` |  |
 | podSecurityContext | object | `{}` |  |
-| postgres.enabled | bool | `true` |  |
-| postgres.persistence.size | string | `"200Gi"` |  |
-| postgres.postgresqlDatabase | string | `"n8n"` |  |
-| postgres.postgresqlPassword | string | `"changeme"` |  |
-| postgres.postgresqlPostgresPassword | string | `"changeme"` |  |
-| postgres.postgresqlUsername | string | `"n8n"` |  |
+| postgresql.enabled | bool | `true` |  |
+| postgresql.persistence.size | string | `"200Gi"` |  |
+| postgresql.postgresqlDatabase | string | `"n8n"` |  |
+| postgresql.postgresqlPassword | string | `"changeme"` |  |
+| postgresql.postgresqlPostgresPassword | string | `"changeme"` |  |
+| postgresql.postgresqlUsername | string | `"n8n"` |  |
 | redis.architecture | string | `"standalone"` |  |
 | redis.auth.enabled | bool | `false` |  |
 | redis.enabled | bool | `true` |  |
