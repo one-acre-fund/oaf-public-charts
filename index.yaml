@@ -1224,4 +1224,27 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
     version: 0.1.0
-generated: "2021-12-13T18:34:10.088026929Z"
+  n8n:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-01-18T05:54:23.014183585Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~15.7.5
+    - condition: postgres.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~10.16.1
+    description: A Helm chart for Kubernetes
+    digest: 4df2558a27607211d6b83bf3c0f59833000fc38c63bb82ea2d5f253ef3884491
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: n8n
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/n8n-0.1.1/n8n-0.1.1.tgz
+    version: 0.1.1
+generated: "2022-01-18T05:54:23.014314584Z"
