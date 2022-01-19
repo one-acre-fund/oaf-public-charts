@@ -52,7 +52,6 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 
 {{- define "n8n-worker.labels" -}}
 app.kubernetes.io/role: "n8n-worker"
-{{ include "n8n.labels" . }}
 {{- end }}
 
 {{/*
@@ -64,8 +63,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "n8n-worker.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "n8n.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/role: "n8n-worker"
 {{- end }}
 
