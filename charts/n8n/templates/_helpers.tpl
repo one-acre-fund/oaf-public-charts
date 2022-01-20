@@ -48,6 +48,7 @@ helm.sh/chart: {{ include "n8n.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/role: "n8n-master"
 {{- end }}
 
 {{- define "n8n-worker.labels" -}}
@@ -60,6 +61,7 @@ Selector labels
 {{- define "n8n.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "n8n.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/role: "n8n-master"
 {{- end }}
 
 {{- define "n8n-worker.selectorLabels" -}}
