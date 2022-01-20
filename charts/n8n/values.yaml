@@ -136,7 +136,6 @@ persistence:
   # existingClaim:
 
 replicaCount: 1
-workerReplicaCount: 1
 
 deploymentStrategy:
   type: "Recreate"

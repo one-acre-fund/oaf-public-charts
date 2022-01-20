@@ -6,7 +6,7 @@ metadata:
     {{- include "n8n-worker.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.workerReplicaCount }}
+  replicas: {{ .Values.replicaCount }}
   {{- end }}
   strategy:
     type: {{ .Values.deploymentStrategy.type }}
@@ -56,23 +56,9 @@ spec:
             - name: "N8N_CONFIG_FILES"
               value: {{ include "n8n.configFiles" . | quote }}
             {{ end }}
-          ports:
-            - name: http
-              containerPort: {{ get .Values.config "port" | default 5678 }}
-              protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /healthz
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /healthz
-          #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - name: data
-              mountPath: /root/.n8n
             {{- if .Values.config }}
             - name: config-volume
               mountPath: /n8n-config
@@ -94,8 +80,6 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: "data"
-          {{ include "n8n.pvc" . }}
         {{- if .Values.config }}
         - name: config-volume
           configMap:
