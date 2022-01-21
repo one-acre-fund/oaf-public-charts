@@ -2,7 +2,7 @@
 
 
 
-![Version: 0.1.9](https://img.shields.io/badge/Version-0.1.9-informational?style=flat-square) 
+![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) 
 
 KoboToolbox field data collection solution
 
@@ -41,8 +41,8 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | enketo.apiKey | string | `"WEHQJCXHJ2XOBXGOGMXCUJYXQP9ZZFVY4FHLCSKJIWAWPTCMGMECGNBCHXVBFCFT1H5TQTQCKB0J7DF2X23WC7EHOCCVQ7K8CY6QO9C8NMERACUM6S2QQEER"` | Random API key |
 | enketo.config | string | see `values.yaml` | Enketo configuration - will be evaluated as a template |
 | enketo.encryptionKey | string | `"w0RkyuQSB33md8cZB5Xx"` | Random API key |
-| enketo.image.name | string | `"kobotoolbox/enketo-express-extra-widgets"` | Enketo image name - the web-based form preview and filling UI |
-| enketo.image.tag | string | `"2.6.1"` | Enketo image tag See https://hub.docker.com/r/kobotoolbox/enketo-express-extra-widgets |
+| enketo.image.name | string | `"enketo/enketo-express"` | Enketo image name - the web-based form preview and filling UI |
+| enketo.image.tag | string | `"3.0.4"` | Enketo image tag See https://hub.docker.com/r/kobotoolbox/enketo-express-extra-widgets |
 | enketo.lessSecureEncryptionKey | string | `"wUNQWPwA3bDVzckKKtS4"` | Random API key |
 | enketo.replicas | int | `1` | Number of Enketo pods |
 | enketo.subdomain | string | `"ee"` | DNS subdomain to serve Enketo from |
@@ -76,7 +76,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | kobocat.subdomain | string | `"kc"` | DNS subdomain name to serve the form server from |
 | kpi.extraEnv | object | `{"DJANGO_LANGUAGE_CODES":"en fr es ar zh-hans hi ku","KOBO_SUPPORT_URL":"http://support.kobotoolbox.org/"}` | Dictionary of env variables to pass |
 | kpi.image.name | string | `"kobotoolbox/kpi"` | kpi docker image name See https://hub.docker.com/r/kobotoolbox/kpi for list of tags |
-| kpi.image.tag | string | `"2.021.24b"` | kpi docker image tag |
+| kpi.image.tag | string | `"2.021.41"` | kpi docker image tag |
 | kpi.subdomain | string | `"kobo"` | DNS subdomain to serve the main UI from |
 | mongodb | object | see `values.yaml` | Standard MongoDB values See https://artifacthub.io/packages/helm/bitnami/mongodb for doc |
 | mongodb.enabled | bool | `true` | Install MongoDB? |
