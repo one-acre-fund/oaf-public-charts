@@ -52,7 +52,7 @@ spec:
               value: {{ .Values.proxy.upstreamUrl | quote}}
             - name: "PROXY_RESOURCES"
               value: {{ .Values.proxy.resources | quote}}
-            - name: "CLIENT_SECRET"
+            - name: "PROXY_CLIENT_SECRET"
               valueFrom:
                 secretKeyRef:
                   key:  PROXY_CLIENT_SECRET
