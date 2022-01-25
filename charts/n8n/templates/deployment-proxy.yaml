@@ -44,7 +44,7 @@ spec:
               value: {{ .Values.proxy.enableRefreshTokens | quote}}
             - name: "PROXY_REDIRECTION_URL"
               value: "{{ include "n8n.fullname" . }}:{{ .Values.service.port }}"
-            - name: "PROXY_SECURE_COOKIE"
+            - name: "SECURE_COOKIE"
               value: {{ .Values.proxy.secureCookie | quote}}
             - name: "PROX_DEBUG"
               value: {{ .Values.proxy.debug | quote}}
@@ -54,10 +54,10 @@ spec:
               value: {{ .Values.proxy.upstreamUrl | quote}}
             - name: "PROXY_RESOURCES"
               value: {{ .Values.proxy.resources | quote}}
-            - name: "PROXY_SECURE_COOKIE"
+            - name: "CLIENT_SECRET"
               valueFrom:
                 secretKeyRef:
-                  key:  PROXY_SECURE_COOKIE
+                  key:  CLIENT_SECRET
                   name: {{ include "n8n.fullname" . }}
             - name: "PROXY_ENCRYPTION_KEY"
               valueFrom:
