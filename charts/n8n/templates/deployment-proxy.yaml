@@ -37,23 +37,23 @@ spec:
           imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
           env:
             - name: "PROXY_DISCOVERY_URL"
-              value: {{ .Values.proxy.discoveryUrl }}
+              value: {{ .Values.proxy.discoveryUrl | quote}}
             - name: "PROXY_CLIENT_ID"
-              value: {{ .Values.proxy.clientId }}
+              value: {{ .Values.proxy.clientId | quote}}
             - name: "PROXY_ENABLE_REFRESH_TOKENS"
-              value: {{ .Values.proxy.enableRefreshTokens }}
+              value: {{ .Values.proxy.enableRefreshTokens | quote}}
             - name: "PROXY_REDIRECTION_URL"
               value: "{{ include "n8n.fullname" . }}:{{ .Values.service.port }}"
             - name: "PROXY_SECURE_COOKIE"
-              value: {{ .Values.proxy.secureCookie }}
+              value: {{ .Values.proxy.secureCookie | quote}}
             - name: "PROX_DEBUG"
-              value: {{ .Values.proxy.debug }}
+              value: {{ .Values.proxy.debug | quote}}
             - name: "PROXY_ENABLE_REFRESH_TOKEN"
-              value: {{ .Values.proxy.enableRefreshTokens }}
+              value: {{ .Values.proxy.enableRefreshTokens | quote }}
             - name: "PROXY_UPSTREAM_URL"
-              value: {{ .Values.proxy.upstreamUrl }}
+              value: {{ .Values.proxy.upstreamUrl | quote}}
             - name: "PROXY_RESOURCES"
-              value: {{ .Values.proxy.resources }}
+              value: {{ .Values.proxy.resources | quote}}
             - name: "PROXY_SECURE_COOKIE"
               valueFrom:
                 secretKeyRef:
