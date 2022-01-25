@@ -245,7 +245,6 @@ proxy:
   clientId: "n8n"
   debug: true
   enableRefreshTokens: true
-  listen: 8080
   secureCookie: false
   upstreamUrl: http://upstream:8080
   resources: "uri=/*"
