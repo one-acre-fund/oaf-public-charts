@@ -1,0 +1,66 @@
+{{- if .Values.proxy.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "n8n-proxy.fullname" . }}
+  labels:
+    {{- include "n8n-proxy.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: {{ .Values.deploymentStrategy.type }}
+  selector:
+    matchLabels:
+      {{- include "n8n-proxy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ print .Values | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "n8n-proxy.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "n8n.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: "{{ .Chart.Name }}-proxy"
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.proxy.image.repository }}:{{ .Values.proxy.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
+          env:
+            - name: "TARGET_URL"
+              value: "{{ include "n8n.fullname" . }}:{{ .Values.service.port }}"
+            - name: "HTTP_PORT"
+              value: {{ .Values.proxy.httpPort }}
+            - name: "BASE_PATH"
+              value: {{ .Values.proxy.basePath }}
+            - name: "REALM"
+              value: {{ .Values.proxy.realm }}
+            - name: "REALM_PUBLIC_KEY"
+              value: {{ .Values.proxy.realmPublicKey }}
+            - name: "AUTH_SERVER_URL"
+              value: {{ .Values.proxy.authServerUrl }}
+            - name: "RESOURCE"
+              value: {{ .Values.proxy.resource }}
+            - name: "CONSTRAINT_PATH"
+              value: {{ .Values.proxy.constraintPath }}
+            - name: "SECRET"
+              valueFrom:
+                secretKeyRef:
+                  key:  CLIENT_SECRET
+                  name: {{ include "n8n.fullname" . }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.proxy.resources | nindent 12 }}
+{{- end }}
