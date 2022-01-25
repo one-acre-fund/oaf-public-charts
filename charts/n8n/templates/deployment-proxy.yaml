@@ -46,7 +46,7 @@ spec:
               value: "{{ include "n8n.fullname" . }}:{{ .Values.service.port }}"
             - name: "PROXY_SECURE_COOKIE"
               value: {{ .Values.proxy.secureCookie | quote}}
-            - name: "PROX_DEBUG"
+            - name: "PROXY_DEBUG"
               value: {{ .Values.proxy.debug | quote}}
             - name: "PROXY_UPSTREAM_URL"
               value: {{ .Values.proxy.upstreamUrl | quote}}
