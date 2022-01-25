@@ -1,6 +1,6 @@
 # n8n
 
-![Version: 0.1.29](https://img.shields.io/badge/Version-0.1.29-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.159.1](https://img.shields.io/badge/AppVersion-0.159.1-informational?style=flat-square)
+![Version: 0.1.30](https://img.shields.io/badge/Version-0.1.30-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.159.1](https://img.shields.io/badge/AppVersion-0.159.1-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -65,6 +65,7 @@ A Helm chart for Kubernetes
 | proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
 | proxy.image.repository | string | `"8gears/keycloak-auth-proxy"` |  |
 | proxy.image.tag | string | `"2.1.1"` |  |
+| proxy.redirectionUrl | string | `"http://upstream:8080/callback"` |  |
 | proxy.resources | string | `"uri=/*"` |  |
 | proxy.secureCookie | string | `"false"` |  |
 | proxy.upstreamUrl | string | `"http://upstream:8080"` |  |
