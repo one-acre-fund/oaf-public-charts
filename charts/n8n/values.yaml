@@ -243,9 +243,9 @@ proxy:
     pullPolicy: IfNotPresent
   discoveryUrl: "http://keycloak/auth/realm/<realm_name>"
   clientId: "n8n"
-  debug: true
-  enableRefreshTokens: true
-  secureCookie: false
+  debug: "true"
+  enableRefreshTokens: "true"
+  secureCookie: "false"
   upstreamUrl: http://upstream:8080
   resources: "uri=/*"
   encryptionKey: "changeme"
