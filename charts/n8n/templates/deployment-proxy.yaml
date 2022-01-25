@@ -43,7 +43,7 @@ spec:
             - name: "PROXY_ENABLE_REFRESH_TOKENS"
               value: {{ .Values.proxy.enableRefreshTokens | quote}}
             - name: "PROXY_REDIRECTION_URL"
-              value: "{{ include "n8n.fullname" . }}:{{ .Values.service.port }}"
+              value: {{ .Values.proxy.redirectionUrl | quote}}
             - name: "PROXY_SECURE_COOKIE"
               value: {{ .Values.proxy.secureCookie | quote}}
             - name: "PROXY_DEBUG"

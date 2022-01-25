@@ -250,3 +250,4 @@ proxy:
   resources: "uri=/*"
   encryptionKey: "changeme"
   clientSecret: "changeme"
+  redirectionUrl: "http://upstream:8080/callback"
