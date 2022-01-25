@@ -40,8 +40,6 @@ spec:
               value: {{ .Values.proxy.discoveryUrl }}
             - name: "PROXY_CLIENT_ID"
               value: {{ .Values.proxy.clientId }}
-            - name: "PROXY_LISTEN"
-              value: {{ .Values.proxy.listen }}
             - name: "PROXY_ENABLE_REFRESH_TOKENS"
               value: {{ .Values.proxy.enableRefreshTokens }}
             - name: "PROXY_REDIRECTION_URL"
