@@ -236,7 +236,7 @@ postgresql:
     size: "200Gi"
 
 proxy:
-  enable: true
+  enabled: true
   image:
     repository: 8gears/keycloak-auth-proxy
     tag: latest
