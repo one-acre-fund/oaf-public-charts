@@ -38,8 +38,6 @@ spec:
           env:
             - name: "TARGET_URL"
               value: "{{ include "n8n.fullname" . }}:{{ .Values.service.port }}"
-            - name: "HTTP_PORT"
-              value: {{ .Values.proxy.httpPort }}
             - name: "BASE_PATH"
               value: {{ .Values.proxy.basePath }}
             - name: "REALM"

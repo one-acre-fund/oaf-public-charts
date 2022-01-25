@@ -236,12 +236,11 @@ postgresql:
     size: "200Gi"
 
 proxy:
-  enable: true
+  enabled: true
   image:
     repository: 8gears/keycloak-auth-proxy
     tag: latest
     pullPolicy: IfNotPresent
-  httpPort: "8080"
   basePath: "/"
   realm: "realm"
   realmPublicKey: ""
