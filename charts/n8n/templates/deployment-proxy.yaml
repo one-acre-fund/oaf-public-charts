@@ -55,7 +55,7 @@ spec:
             - name: "CLIENT_SECRET"
               valueFrom:
                 secretKeyRef:
-                  key:  CLIENT_SECRET
+                  key:  PROXY_CLIENT_SECRET
                   name: {{ include "n8n.fullname" . }}
             - name: "PROXY_ENCRYPTION_KEY"
               valueFrom:
