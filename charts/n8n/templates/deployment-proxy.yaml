@@ -36,24 +36,35 @@ spec:
           image: "{{ .Values.proxy.image.repository }}:{{ .Values.proxy.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
           env:
-            - name: "TARGET_URL"
+            - name: "PROXY_DISCOVERY_URL"
+              value: {{ .Values.proxy.discoveryUrl }}
+            - name: "PROXY_CLIENT_ID"
+              value: {{ .Values.proxy.clientId }}
+            - name: "PROXY_LISTEN"
+              value: {{ .Values.proxy.listen }}
+            - name: "PROXY_ENABLE_REFRESH_TOKENS"
+              value: {{ .Values.proxy.enableRefreshTokens }}
+            - name: "PROXY_REDIRECTION_URL"
               value: "{{ include "n8n.fullname" . }}:{{ .Values.service.port }}"
-            - name: "BASE_PATH"
-              value: {{ .Values.proxy.basePath }}
-            - name: "REALM"
-              value: {{ .Values.proxy.realm }}
-            - name: "REALM_PUBLIC_KEY"
-              value: {{ .Values.proxy.realmPublicKey }}
-            - name: "AUTH_SERVER_URL"
-              value: {{ .Values.proxy.authServerUrl }}
-            - name: "RESOURCE"
-              value: {{ .Values.proxy.resource }}
-            - name: "CONSTRAINT_PATH"
-              value: {{ .Values.proxy.constraintPath }}
-            - name: "SECRET"
+            - name: "PROXY_SECURE_COOKIE"
+              value: {{ .Values.proxy.secureCookie }}
+            - name: "PROX_DEBUG"
+              value: {{ .Values.proxy.debug }}
+            - name: "PROXY_ENABLE_REFRESH_TOKEN"
+              value: {{ .Values.proxy.enableRefreshTokens }}
+            - name: "PROXY_UPSTREAM_URL"
+              value: {{ .Values.proxy.upstreamUrl }}
+            - name: "PROXY_RESOURCES"
+              value: {{ .Values.proxy.resources }}
+            - name: "PROXY_SECURE_COOKIE"
               valueFrom:
                 secretKeyRef:
-                  key:  CLIENT_SECRET
+                  key:  PROXY_SECURE_COOKIE
+                  name: {{ include "n8n.fullname" . }}
+            - name: "PROXY_ENCRYPTION_KEY"
+              valueFrom:
+                secretKeyRef:
+                  key:  PROXY_ENCRYPTION_KEY
                   name: {{ include "n8n.fullname" . }}
           ports:
             - name: http
