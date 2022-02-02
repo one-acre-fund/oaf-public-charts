@@ -451,6 +451,36 @@ entries:
     version: 0.1.1
   geonode:
   - apiVersion: v2
+    created: "2022-02-02T09:59:42.559027764Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~10.1.2
+    - condition: rabbitmq.enabled
+      name: rabbitmq
+      repository: https://charts.bitnami.com/bitnami
+      version: ~8.6.0
+    description: Geonode - a CMS for Geospatial data
+    digest: 049a68df3fdaaed5320a7daca47ff387d048a230cf5a44d2c5ca46a559b93bd1
+    home: https://geonode.org/
+    icon: https://pbs.twimg.com/profile_images/1221883359/geonode_400x400.png
+    keywords:
+    - geospatial
+    - gis
+    - cms
+    - maps
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: geonode
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/geonode
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/geonode-0.1.12/geonode-0.1.12.tgz
+    version: 0.1.12
+  - apiVersion: v2
     created: "2022-02-02T09:52:26.409064424Z"
     dependencies:
     - condition: postgresql.enabled
@@ -1761,4 +1791,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/n8n-0.1.1/n8n-0.1.1.tgz
     version: 0.1.1
-generated: "2022-02-02T09:52:26.409418328Z"
+generated: "2022-02-02T09:59:42.559435061Z"
