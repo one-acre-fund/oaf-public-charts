@@ -1,6 +1,6 @@
 # n8n
 
-![Version: 0.1.30](https://img.shields.io/badge/Version-0.1.30-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.159.1](https://img.shields.io/badge/AppVersion-0.159.1-informational?style=flat-square)
+![Version: 0.1.32](https://img.shields.io/badge/Version-0.1.32-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.159.1](https://img.shields.io/badge/AppVersion-0.159.1-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -16,6 +16,7 @@ A Helm chart for Kubernetes
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | postgresql | ~10.16.1 |
 | https://charts.bitnami.com/bitnami | redis | ~15.7.5 |
+| https://gogatekeeper.github.io/helm-gogatekeeper | gatekeeper | ~0.1.14 |
 
 ## Values
 
@@ -31,6 +32,8 @@ A Helm chart for Kubernetes
 | deploymentStrategy.type | string | `"Recreate"` |  |
 | extraEnv | object | `{}` |  |
 | fullnameOverride | string | `""` |  |
+| gatekeeper.config | string | `nil` |  |
+| gatekeeper.enabled | bool | `true` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"n8nio/n8n"` |  |
 | image.tag | string | `""` |  |
@@ -55,20 +58,6 @@ A Helm chart for Kubernetes
 | postgresql.postgresqlPassword | string | `"changeme"` |  |
 | postgresql.postgresqlPostgresPassword | string | `"changeme"` |  |
 | postgresql.postgresqlUsername | string | `"n8n"` |  |
-| proxy.clientId | string | `"n8n"` |  |
-| proxy.clientSecret | string | `"changeme"` |  |
-| proxy.debug | string | `"true"` |  |
-| proxy.discoveryUrl | string | `"http://keycloak/auth/realm/<realm_name>"` |  |
-| proxy.enableRefreshTokens | string | `"true"` |  |
-| proxy.enabled | bool | `true` |  |
-| proxy.encryptionKey | string | `"changeme"` |  |
-| proxy.image.pullPolicy | string | `"IfNotPresent"` |  |
-| proxy.image.repository | string | `"8gears/keycloak-auth-proxy"` |  |
-| proxy.image.tag | string | `"2.1.1"` |  |
-| proxy.redirectionUrl | string | `"http://upstream:8080/callback"` |  |
-| proxy.resources | string | `"uri=/*"` |  |
-| proxy.secureCookie | string | `"false"` |  |
-| proxy.upstreamUrl | string | `"http://upstream:8080"` |  |
 | redis.architecture | string | `"standalone"` |  |
 | redis.auth.enabled | bool | `false` |  |
 | redis.enabled | bool | `true` |  |
