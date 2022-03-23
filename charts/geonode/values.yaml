@@ -39,6 +39,7 @@ geonode:
 
     IS_FIRST_START: "True"
     FORCE_REINIT: "False"
+    ASYNC_SIGNALS: "True"
 
   # -- Same as `extraEnvs` but passed as a secret
   extraSecretEnvs: {}

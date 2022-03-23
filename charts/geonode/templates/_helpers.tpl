@@ -114,8 +114,6 @@ amqp://{{ .Values.rabbitmq.auth.username }}:{{ .Values.rabbitmq.auth.password }}
     secretKeyRef:
       name: {{ .Release.Name }}-secrets
       key: BROKER_URL
-- name: ASYNC_SIGNALS
-  value: 'True'
 
 - name: SITEURL
   value: "{{ include "public_url" . }}/"
