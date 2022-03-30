@@ -17,6 +17,7 @@ spec:
                 port:
                   name: api
             path: /studio-api/?(.*)
+            pathType: Prefix
   {{ if .Values.ingress.tls }}
   tls:
     {{- .Values.ingress.tls | toYaml | nindent 4 }}
@@ -39,6 +40,7 @@ spec:
                 port:
                   name: ui
             path: /
+            pathType: Prefix
   {{ if .Values.ingress.tls }}
   tls:
     {{- .Values.ingress.tls | toYaml | nindent 4 }}
@@ -69,6 +71,7 @@ spec:
                 port:
                   name: ws
             path: /ws/?(.*)
+            pathType: Prefix
   {{ if .Values.ingress.tls }}
   tls:
     {{- .Values.ingress.tls | toYaml | nindent 4 }}
