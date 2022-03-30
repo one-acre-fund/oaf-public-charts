@@ -2,6 +2,30 @@ apiVersion: v1
 entries:
   apicurio:
   - apiVersion: v2
+    created: "2022-03-30T17:37:50.519637396Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~10.1.2
+    description: Apicurio Studio API designer
+    digest: c9c808855d4fef71d9c64c63860d581aba8f1a6cd30f4a6ffb4187632d7c5b03
+    home: http://www.apicur.io/
+    icon: https://avatars.githubusercontent.com/u/28107283?s=400&v=4
+    keywords:
+    - api
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: apicurio
+    sources:
+    - https://github.com/Apicurio/apicurio-studio
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/apicurio
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/apicurio-1.0.10/apicurio-1.0.10.tgz
+    version: 1.0.10
+  - apiVersion: v2
     created: "2022-03-30T14:31:27.329924975Z"
     dependencies:
     - condition: postgresql.enabled
@@ -1816,4 +1840,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2022-03-30T14:31:27.330178979Z"
+generated: "2022-03-30T17:37:50.519923201Z"
