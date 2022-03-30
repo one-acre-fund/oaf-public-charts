@@ -1,6 +1,6 @@
 apiVersion: v2
 name: apicurio
-version: 1.0.9
+version: 1.0.10
 description: Apicurio Studio API designer
 icon: https://avatars.githubusercontent.com/u/28107283?s=400&v=4
 type: application
