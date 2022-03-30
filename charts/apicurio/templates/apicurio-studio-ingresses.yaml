@@ -1,6 +1,6 @@
 {{ if .Values.ingress.enabled }}
 kind: Ingress
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 metadata:
   name: {{ .Release.Name }}-api
   annotations:
@@ -12,8 +12,10 @@ spec:
       http:
         paths:
           - backend:
-              serviceName: {{ .Release.Name }}-api
-              servicePort: api
+              service:
+                name: {{ .Release.Name }}-api
+                port:
+                  name: api
             path: /studio-api/?(.*)
   {{ if .Values.ingress.tls }}
   tls:
@@ -21,19 +23,21 @@ spec:
   {{ end }}
 ---
 kind: Ingress
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 metadata:
   name: {{ .Release.Name }}-ui
   annotations:
-  #    ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: nginx
 spec:
   rules:
     - host: {{ .Values.general.hostname }}
       http:
         paths:
           - backend:
-              serviceName: {{ .Release.Name }}-ui
-              servicePort: ui
+              service:
+                name: {{ .Release.Name }}-ui
+                port:
+                  name: ui
             path: /
   {{ if .Values.ingress.tls }}
   tls:
@@ -41,10 +45,11 @@ spec:
   {{ end }}
 ---
 kind: Ingress
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 metadata:
   name: {{ .Release.Name }}-ws
   annotations:
+    kubernetes.io/ingress.class: nginx
     ingress.kubernetes.io/proxy-connect-timeout: "3600"
     ingress.kubernetes.io/proxy-read-timeout: "3600"
     ingress.kubernetes.io/proxy-send-timeout: "3600"
@@ -59,8 +64,10 @@ spec:
       http:
         paths:
           - backend:
-              serviceName: {{ .Release.Name }}-ws
-              servicePort: ws
+              service:
+                name: {{ .Release.Name }}-ws
+                port:
+                  name: ws
             path: /ws/?(.*)
   {{ if .Values.ingress.tls }}
   tls:
