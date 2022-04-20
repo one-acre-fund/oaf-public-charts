@@ -97,6 +97,8 @@ secret: {}
 extraEnv: {}
 # Set this if running behind a reverse proxy and the external port is different from the port n8n runs on
 #   WEBHOOK_TUNNEL_URL: "https://n8n.myhost.com/
+extraSecretEnv: {}
+# Same as `extraEnv` but passed as secret instead
 
 ##
 ##
