@@ -9,7 +9,7 @@ A Helm chart for Kubernetes
 | Name | Email | Url |
 | ---- | ------ | --- |
 | bisonlou | bisonlou@gmail.com |  |
-| Yann Jouanique | yann.jouanique@gmail.com |  |
+| Yann-J | yann.jouanique@gmail.com |  |
 
 ## Requirements
 
