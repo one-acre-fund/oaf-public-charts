@@ -1,5 +1,6 @@
 chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami
+  - gatekeeper=https://gogatekeeper.github.io/helm-gogatekeeper
 helm-extra-args: --timeout 15m
 debug: true
 target-branch: main
