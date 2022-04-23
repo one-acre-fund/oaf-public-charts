@@ -1,8 +1,6 @@
 # geonode
 
-
-
-![Version: 0.1.13](https://img.shields.io/badge/Version-0.1.13-informational?style=flat-square) 
+![Version: 0.1.14](https://img.shields.io/badge/Version-0.1.14-informational?style=flat-square)
 
 Geonode - a CMS for Geospatial data
 
@@ -48,7 +46,7 @@ $ helm install my-release one-acre-fund/geonode
 | geonode.extraConf | string | Some standard base layers | Configuration to append to `settings.py` Can be used to configure new base maps or any other setting from https://github.com/GeoNode/geonode/blob/master/geonode/settings.py For base maps available in MapStore, see https://github.com/geosolutions-it/MapStore2/blob/master/web/client/utils/ConfigProvider.js |
 | geonode.extraConf2 | string | Some OAuth settings | Same as `extraConf` but can be overridden separately |
 | geonode.extraEnvs | object | Various default values, see `values.yaml` | Use this to pass any env to `geonode` container See https://docs.geonode.org/en/master/basic/settings/index.html |
-| geonode.extraSecretEnvs | object | `{}` | Same as `extraEnvs` but passed as a secret |
+| geonode.extraSecretEnvs | object | `{"DJANGO_EMAIL_HOST_PASSWORD":"changeme"}` | Same as `extraEnvs` but passed as a secret |
 | geonode.image.name | string | `"geonode/geonode"` | Geonode image name |
 | geonode.image.tag | string | `"3.1"` | Geonode image tag |
 | geoserver.customEPSGs | list | Various useful ESPGs | List of custom ESPG definitions to add to Geoserver configuration - see https://docs.geoserver.org/stable/en/user/configuration/crshandling/customcrs.html |
@@ -68,9 +66,3 @@ $ helm install my-release one-acre-fund/geonode
 | postgresql.password | string | `"Uxu3UhxFmK"` | Application password for both geonodeDb and geodataDb users |
 | postgresql.postgresqlPassword | string | `"admin"` |  |
 | rabbitmq | object | `{"auth":{"erlangCookie":"jixYBsiZ9RivaLXC02pTwGjvIo0nHtVu","password":"3asgDlgwN7","username":"user"}}` | RbbitMQ Settings - see https://artifacthub.io/packages/helm/bitnami/rabbitmq |
-| smtp.from | string | `nil` | SMTP "from" address |
-| smtp.host | string | `"smtp.gmail.com"` | SMTP host name |
-| smtp.password | string | `"changeme"` | SMTP password |
-| smtp.port | string | `"587"` | SMTP port |
-| smtp.tls | bool | `true` | Use TLS? |
-| smtp.user | string | `nil` | SMTP user |

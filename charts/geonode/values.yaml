@@ -35,14 +35,90 @@ geonode:
 
     # GeoNode APIs
     API_LOCKDOWN: "False"
-    TASTYPIE_APIKEY:
+    TASTYPIE_APIKEY: ''
 
     IS_FIRST_START: "True"
     FORCE_REINIT: "False"
     ASYNC_SIGNALS: "True"
+    CELERY_BEAT_SCHEDULER: celery.beat:PersistentScheduler
+
+    INVOKE_LOG_STDOUT: "True"
+    DOCKER_ENV: production
+    ALLOWED_HOSTS: "['django', '*', '{{ .Values.general.externalDomain }}']"
+
+    # EMAIL Notifications
+    EMAIL_ENABLE: 'False'
+    DJANGO_EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
+    DJANGO_EMAIL_HOST: localhost
+    DJANGO_EMAIL_PORT: '25'
+    DJANGO_EMAIL_HOST_USER: 'user@example.com'
+    DJANGO_EMAIL_USE_TLS: 'False'
+    DJANGO_EMAIL_USE_SSL: 'False'
+    DEFAULT_FROM_EMAIL: 'GeoNode <no-reply@geonode.org>'
+
+    DJANGO_SETTINGS_MODULE: geonode.local_settings
+    GEONODE_INSTANCE_NAME: geonode
+    GEONODE_DB_CONN_MAX_AGE: '0'
+    GEONODE_DB_CONN_TOUT: '5'
+    DEFAULT_BACKEND_DATASTORE: datastore
+
+    # Data Uploader
+    DEFAULT_BACKEND_UPLOADER: geonode.importer
+    TIME_ENABLED: 'True'
+    MOSAIC_ENABLED: 'False'
+    HAYSTACK_SEARCH: 'False'
+    HAYSTACK_ENGINE_URL: http://elasticsearch:9200/
+    HAYSTACK_ENGINE_INDEX_NAME: haystack
+    HAYSTACK_SEARCH_RESULTS_PER_PAGE: '200'
+
+    CACHE_BUSTING_STATIC_ENABLED: 'False'
+    CACHE_BUSTING_MEDIA_ENABLED: 'False'
+
+    MEMCACHED_ENABLED: 'False'
+    MEMCACHED_BACKEND: django.core.cache.backends.memcached.MemcachedCache
+    MEMCACHED_LOCATION: '127.0.0.1:11211'
+    MEMCACHED_LOCK_EXPIRE: '3600'
+    MEMCACHED_LOCK_TIMEOUT: '10'
+
+    MAX_DOCUMENT_SIZE: '2'
+    API_LIMIT_PER_PAGE: '1000'
+
+    # Geoserver
+    OGC_REQUEST_TIMEOUT: '30'
+    OGC_REQUEST_MAX_RETRIES: '1'
+    OGC_REQUEST_BACKOFF_FACTOR: '0.3'
+    OGC_REQUEST_POOL_MAXSIZE: '10'
+    OGC_REQUEST_POOL_CONNECTIONS: '10'
+    ENABLE_JSONP: 'true'
+    outFormat: text/javascript
+    GEOSERVER_JAVA_OPTS: "-Djava.awt.headless=true -Xms2G -Xmx4G -XX:+UnlockDiagnosticVMOptions -XX:+LogVMOutput -XX:LogFile=/var/log/jvm.log -XX:PerfDataSamplingInterval=500 -XX:SoftRefLRUPolicyMSPerMB=36000 -XX:-UseGCOverheadLimit -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:ParallelGCThreads=4 -Dfile.encoding=UTF8 -Djavax.servlet.request.encoding=UTF-8 -Djavax.servlet.response.encoding=UTF-8 -Duser.timezone=GMT -Dorg.geotools.shapefile.datetime=false -DGEOSERVER_CSRF_DISABLED=true -DPRINT_BASE_URL=http://geoserver:8080/geoserver/pdf -DALLOW_ENV_PARAMETRIZATION=true -Xbootclasspath/a:/usr/local/tomcat/webapps/geoserver/WEB-INF/lib/marlin-0.9.3-Unsafe.jar -Dsun.java2d.renderer=org.marlin.pisces.MarlinRenderingEngine"
+
+    # Monitoring
+    MONITORING_ENABLED: 'False'
+    MONITORING_DATA_TTL: '365'
+    USER_ANALYTICS_ENABLED: 'True'
+    USER_ANALYTICS_GZIP: 'True'
+    CENTRALIZED_DASHBOARD_ENABLED: 'False'
+    MONITORING_SERVICE_NAME: local-geonode
+    MONITORING_HOST_NAME: geonode
+
+    # Other Options/Contribs
+    MODIFY_TOPICCATEGORY: 'True'
+    AVATAR_GRAVATAR_SSL: 'True'
+    AVATAR_DEFAULT_URL: /geonode/img/avatar.png
+
+    EXIF_ENABLED: 'True'
+    CREATE_LAYER: 'True'
+    FAVORITE_ENABLED: 'True'
+
+    # GIS Client
+    GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY: mapstore
+    DEBUG: 'False'
 
   # -- Same as `extraEnvs` but passed as a secret
-  extraSecretEnvs: {}
+  extraSecretEnvs:
+    DJANGO_EMAIL_HOST_PASSWORD: changeme
+
   # -- Configuration to append to `settings.py`
   # Can be used to configure new base maps or any other setting from https://github.com/GeoNode/geonode/blob/master/geonode/settings.py
   # For base maps available in MapStore, see https://github.com/geosolutions-it/MapStore2/blob/master/web/client/utils/ConfigProvider.js
@@ -156,20 +232,6 @@ general:
   storageSize: 10Gi
   # -- `ClusterIP` / `LoadBalancer` / `NodePort`
   serviceType: ClusterIP
-
-smtp:
-  # -- SMTP host name
-  host: smtp.gmail.com
-  # -- Use TLS?
-  tls: true
-  # -- SMTP port
-  port: "587"
-  # -- SMTP user
-  user:
-  # -- SMTP password
-  password: "changeme"
-  # -- SMTP "from" address
-  from:
 
 global:
   # -- Will be used by this and all subcharts for all volumes
