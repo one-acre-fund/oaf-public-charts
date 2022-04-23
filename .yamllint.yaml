@@ -2,7 +2,7 @@ extends: default
 
 rules:
   line-length:
-    max: 500
+    max: 800
     level: error
   document-start: disable
   empty-lines:

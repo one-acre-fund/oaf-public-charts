@@ -1,0 +1,80 @@
+# global:
+#   storageClass: 'oaf-storage'
+
+general:
+  externalDomain: 'maps.oneacrefund.org'
+  superUser:
+    password: 'toto'
+    email: 'yann.jouanique@oneacrefund.org'
+  supportEmail: 'yann.jouanique@oneacrefund.org'
+  debug: true
+
+geonode:
+  image:
+    name: 'oneacrefund/geonode'
+    tag: 'latest'
+  extraSecretEnvs:
+    MAPBOX_ACCESS_TOKEN: 'toto'
+    BING_API_KEY: 'toto'
+    OAUTH2_CLIENT_ID: 'Jrchz2oPY3akmzndmgUTYrs9gczlgoV20YPSvqaV'
+    OAUTH2_CLIENT_SECRET: 'rCnp5txobUo83EpQEblM8fVj3QT5zb5qRfxNsuPzCqZaiRyIoxM4jdgMiZKFfePBHYXCLd7B8NlkfDBY9HKeIQPcy5Cp08KQNpRHQbjpLItDHv12GvkSeXp6OxaUETv3'
+    DJANGO_EMAIL_HOST_PASSWORD: 'smrelpilzazevbfy'
+  extraEnvs:
+    AUTH_DOMAIN: 'oneacrefund.org'
+    EMAIL_ENABLE: 'True'
+    DJANGO_EMAIL_HOST: smtp.gmail.com
+    DJANGO_EMAIL_PORT: '587'
+    DJANGO_EMAIL_HOST_USER: 'yann.jouanique@gmail.com'
+    DJANGO_EMAIL_USE_TLS: 'True'
+    DJANGO_EMAIL_USE_SSL: 'False'
+    DEFAULT_FROM_EMAIL: 'GeoNode <yann.jouanique@gmail.com>'
+    DEBUG: 'True'
+
+  extraConf2: |
+    if MAPBOX_ACCESS_TOKEN:
+      MAPSTORE_BASELAYERS = MAPSTORE_BASELAYERS + [
+        {
+          "type": "tileprovider",
+          "title": "MapBox Satellite",
+          "provider": "MapBoxStyle",
+          "name": "MapBox Satellite",
+          "accessToken": f"{MAPBOX_ACCESS_TOKEN}",
+          "source": "satellite-streets-v11",
+          "thumbURL": f"https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/256/6/33/23?access_token={MAPBOX_ACCESS_TOKEN}",
+          "group": "background",
+          "visibility": True
+        },
+        {
+          "type": "tileprovider",
+          "title": "MapBox Outdoors",
+          "provider": "MapBoxStyle",
+          "name": "MapBox Outdoors",
+          "accessToken": f"{MAPBOX_ACCESS_TOKEN}",
+          "source": "outdoors-v11",
+          "thumbURL": f"https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/256/6/33/23?access_token={MAPBOX_ACCESS_TOKEN}",
+          "group": "background",
+          "visibility": True
+        }
+      ]
+
+    # Add Google provider
+    SOCIALACCOUNT_PROVIDERS['google'] = {
+      'SCOPE': [
+        'profile',
+        'email',
+      ],
+      'AUTH_PARAMS': {
+        'access_type': 'online',
+      }
+    }
+
+    if os.getenv('AUTH_DOMAIN'):
+      SOCIALACCOUNT_PROVIDERS['google']['AUTH_PARAMS']['hd'] = os.getenv('AUTH_DOMAIN')
+
+    INSTALLED_APPS += ('allauth.socialaccount.providers.google',)
+    SOCIALACCOUNT_PROFILE_EXTRACTORS['google'] = "geonode.people.profileextractors.OpenIDExtractor"
+    SOCIALACCOUNT_LOGIN_ON_GET = True
+
+geoserver:
+  image:
+    tag: '2.19.x'
