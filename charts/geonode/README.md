@@ -1,6 +1,6 @@
 # geonode
 
-![Version: 0.1.14](https://img.shields.io/badge/Version-0.1.14-informational?style=flat-square)
+![Version: 0.1.15](https://img.shields.io/badge/Version-0.1.15-informational?style=flat-square)
 
 Geonode - a CMS for Geospatial data
 

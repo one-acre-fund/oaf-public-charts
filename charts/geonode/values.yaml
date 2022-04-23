@@ -149,15 +149,6 @@ geonode:
       },
       {
         "type": "tileprovider",
-        "title": "OpenStreetMap B&W",
-        "thumbURL": "https://tiles.wmflabs.org/bw-mapnik/0/0/0.png",
-        "provider": "OpenStreetMap.BlackAndWhite",
-        "name": "osmbw",
-        "group": "background",
-        "visibility": False
-      },
-      {
-        "type": "tileprovider",
         "title": "CartoDB Light",
         "thumbURL": "https://a.basemaps.cartocdn.com/light_all/0/0/0.png",
         "provider": "CartoDB.Positron",
