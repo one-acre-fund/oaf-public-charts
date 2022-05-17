@@ -69,7 +69,7 @@ spec:
             - name: media
               subPath: kpi_media
               mountPath: /srv/kpi_media
-        {{- if .Values.probes.enabled }}
+          {{- if .Values.probes.enabled }}
           readinessProbe:
             httpGet:
               path: /api/v2/
@@ -89,7 +89,7 @@ spec:
                   value: {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}
             initialDelaySeconds: 60
             periodSeconds: 30
-        {{- end }}
+          {{- end }}
         # Kobocat is the forms API server that Enketo / Collect will connect to
         - name: kobocat
           image: "{{ .Values.kobocat.image.name }}:{{ .Values.kobocat.image.tag }}"
@@ -140,7 +140,7 @@ spec:
             - name: cache-volume
               subPath: static/kobocat
               mountPath: /srv/static
-        {{- if .Values.probes.enabled }}
+          {{- if .Values.probes.enabled }}
           readinessProbe:
             tcpSocket:
               port: 8001
