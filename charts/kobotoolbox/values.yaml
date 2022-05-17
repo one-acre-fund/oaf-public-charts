@@ -1,3 +1,6 @@
+probes:
+  enabled: true
+
 kobocat:
   image:
     # -- KoboCat docker image name

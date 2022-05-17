@@ -1,8 +1,6 @@
 # kobotoolbox
 
-
-
-![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) 
+![Version: 0.2.5](https://img.shields.io/badge/Version-0.2.5-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -12,7 +10,7 @@ KoboToolbox field data collection solution
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Yann-J | yann.jouanique@gmail.com |  |
+| Yann-J | <yann.jouanique@gmail.com> |  |
 
 ## Source Code
 
@@ -69,7 +67,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | global.storageClass | string | `"standard"` | Will be used by this and all subcharts |
 | ingress.annotations | object | `{}` | Ingress annotations |
 | ingress.enabled | bool | `false` | Install ingress? |
-| ingress.tls | object | `{}` |  |
+| ingress.tls | object | `{}` | Ingress TLS settings |
 | kobocat.extraEnv | object | `{}` | Dictionary of env variables to pass |
 | kobocat.image.name | string | `"kobotoolbox/kobocat"` | KoboCat docker image name |
 | kobocat.image.tag | string | `"2.021.24b"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
@@ -84,6 +82,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | postgresql.enabled | bool | `true` | Install Postgres? |
 | postgresql.kobocatDatabase | string | `"kobocat"` | DB name for the form server |
 | postgresql.kpiDatabase | string | `"koboform"` | DN name for the main Kobo UI |
+| probes.enabled | bool | `true` |  |
 | rediscache.cluster.enabled | bool | `false` |  |
 | rediscache.cluster.slaveCount | int | `1` |  |
 | rediscache.enabled | bool | `true` |  |

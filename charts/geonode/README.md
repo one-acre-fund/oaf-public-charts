@@ -10,7 +10,7 @@ Geonode - a CMS for Geospatial data
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Yann-J | yann.jouanique@gmail.com |  |
+| Yann-J | <yann.jouanique@gmail.com> |  |
 
 ## Source Code
 
@@ -56,13 +56,12 @@ $ helm install my-release one-acre-fund/geonode
 | global.storageClass | string | `"standard"` | Will be used by this and all subcharts for all volumes |
 | ingress.annotations | object | `{}` | Ingress annotations table |
 | ingress.enabled | bool | `false` | Ingress enabled? |
-| ingress.hosts[0].host | string | `"chart-example.local"` |  |
-| ingress.hosts[0].paths | list | `[]` |  |
+| ingress.hosts | list | `[{"host":"chart-example.local","paths":[]}]` | Ingress hosts/paths list |
 | ingress.tls | list | `[]` | Ingress tls settings |
 | postgresql.enabled | bool | `true` | Install Postgres? See See https://artifacthub.io/packages/helm/bitnami/postgresql for docs on all Postgres values |
 | postgresql.geodataDb | string | `"geonode_data"` | Postgres database AND user name for geoserver |
 | postgresql.geonodeDb | string | `"geonode"` | Postgres database AND user name for geonode |
 | postgresql.initdbScriptsSecret | string | `"{{ .Release.Name }}-postgres-init"` | Name of secret containing Postgres init script - will only be run on first deployment! Will be evaluated as a template |
 | postgresql.password | string | `"Uxu3UhxFmK"` | Application password for both geonodeDb and geodataDb users |
-| postgresql.postgresqlPassword | string | `"admin"` |  |
+| postgresql.postgresqlPassword | string | `"admin"` | Password for 'postgres' user |
 | rabbitmq | object | `{"auth":{"erlangCookie":"jixYBsiZ9RivaLXC02pTwGjvIo0nHtVu","password":"3asgDlgwN7","username":"user"}}` | RbbitMQ Settings - see https://artifacthub.io/packages/helm/bitnami/rabbitmq |
