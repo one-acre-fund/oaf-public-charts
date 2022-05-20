@@ -264,8 +264,10 @@ postgresql:
 
   # TODO: support external db
   # For now we only support a db installed with a subchart
+  initdbScriptsConfigMap: "{{ .Release.Name }}-postgres-init-scripts"
+  initdbUser: postgres
+  initdbPassword:  ${postgresqlPostgresPassword}
 
   postgresqlPostgresPassword: admin
   postgresqlUsername: postgres
   postgresqlPassword: kobo
-  initdbScriptsConfigMap: "{{ .Release.Name }}-postgres-init"
