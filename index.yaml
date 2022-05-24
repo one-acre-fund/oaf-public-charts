@@ -1987,6 +1987,24 @@ entries:
   nocodb:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-05-24T09:05:34.014340264Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~10.16.1
+    description: A Helm chart for Kubernetes
+    digest: 1aaa31a8ba5c40fbfe01f0c8719f26516e4cc8a11a8bc1486532a60ba20e50fb
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: nocodb
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.7/nocodb-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-03-24T07:41:12.384615751Z"
     dependencies:
     - condition: postgresql.enabled
@@ -2057,4 +2075,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2022-05-17T15:28:50.657787367Z"
+generated: "2022-05-24T09:05:34.014659176Z"
