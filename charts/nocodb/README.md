@@ -1,6 +1,6 @@
 # nocodb
 
-![Version: 0.1.8](https://img.shields.io/badge/Version-0.1.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.9](https://img.shields.io/badge/Version-0.1.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -26,9 +26,9 @@ A Helm chart for Kubernetes
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | extraEnvs.NC_CONNECT_TO_EXTERNAL_DB_DISABLED | bool | `false` |  |
-| extraEnvs.NC_DB | string | `"pg://root_db:5432?u=postgres&p=password&d=root_db"` |  |
 | extraEnvs.NC_PUBLIC_URL | string | `"https:/nocodb.local.org"` |  |
 | extraSecretEnvs.NC_AUTH_JWT_SECRET | string | `"secretString"` |  |
+| extraSecretEnvs.NC_DB | string | `"pg://root_db:5432?u=postgres&p=password&d=root_db"` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"nocodb/nocodb"` |  |
