@@ -93,3 +93,15 @@ postgresql:
   postgresqlDatabase: nocodb
   persistence:
     size: "8Gi"
+
+keel:
+  # keel policy (all/major/minor/patch/force)
+  policy: all
+  # trigger type, defaults to events such as pubsub, webhooks
+  trigger: poll
+  # polling schedule
+  pollSchedule: "@every 60m"
+  # images to track and update
+  images:
+    - repository: image.repository
+      tag: image.tag
