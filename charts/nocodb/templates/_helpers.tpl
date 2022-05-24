@@ -60,3 +60,19 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{- define "postgresHost" -}}
+{{- .Values.env.postgresqlHost }}
+{{- end }}
+
+{{- define "postgresDatabase" -}}
+{{- .Values.env.postgresqlDatabase }}
+{{- end }}
+
+{{- define "postgresUsername" -}}
+{{- .Values.env.postgresqlUsername }}
+{{- end }}
+
+{{- define "databaseUri" -}}
+{{- printf "pg://%s:5432?u=%s&p=%s&d=%s" .Values.env.postgresqlHost .Values.env.postgresqlUsername .Values.env.postgresqlPassword .Values.env.postgresqlDatabase }}
+{{- end }}
