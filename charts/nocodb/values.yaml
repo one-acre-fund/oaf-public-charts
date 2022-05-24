@@ -78,8 +78,13 @@ tolerations: []
 
 affinity: {}
 
-env:
-  databaseUri: pg://root_db:5432?u=postgres&p=password&d=root_db
+extraEnvs:
+  NC_DB: pg://root_db:5432?u=postgres&p=password&d=root_db
+  NC_CONNECT_TO_EXTERNAL_DB_DISABLED: false
+  NC_PUBLIC_URL: https:/nocodb.local.org
+
+extraSecretEnvs:
+  NC_AUTH_JWT_SECRET: secretString
 
 storage:
   size: 3Gi

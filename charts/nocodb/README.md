@@ -25,7 +25,10 @@ A Helm chart for Kubernetes
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
-| env.databaseUri | string | `"pg://root_db:5432?u=postgres&p=password&d=root_db"` |  |
+| extraEnvs.NC_CONNECT_TO_EXTERNAL_DB_DISABLED | bool | `false` |  |
+| extraEnvs.NC_DB | string | `"pg://root_db:5432?u=postgres&p=password&d=root_db"` |  |
+| extraEnvs.NC_PUBLIC_URL | string | `"https:/nocodb.local.org"` |  |
+| extraSecretEnvs.NC_AUTH_JWT_SECRET | string | `"secretString"` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"nocodb/nocodb"` |  |

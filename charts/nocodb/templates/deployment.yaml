@@ -36,9 +36,11 @@ spec:
           volumeMounts:
             - name: nc-data
               mountPath: /usr/app/data
-          env:
-            - name: NC_DB
-              value: {{ .Values.env.databaseUri | toString }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "nocodb.fullname" . }}
+            - secretRef:
+                name: {{ include "nocodb.fullname" . }}
           ports:
             - name: http
               containerPort: 8080
