@@ -84,7 +84,6 @@ env:
   postgresqlPassword: secretPass
 
 extraEnvs:
-  NC_CONNECT_TO_EXTERNAL_DB_DISABLED: false
   NC_PUBLIC_URL: https:/nocodb.local.org
 
 extraSecretEnvs:
