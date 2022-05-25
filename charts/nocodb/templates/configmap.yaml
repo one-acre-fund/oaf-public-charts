@@ -8,6 +8,6 @@ metadata:
 data:
 {{- range $key, $value := .Values.extraEnvs }}
   {{ $key }}: |
-    {{- $value | | nindent 4 }}
+    {{- $value | nindent 4 }}
 {{- end }}
 {{- end }}
