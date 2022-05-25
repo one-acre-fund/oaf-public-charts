@@ -80,7 +80,6 @@ affinity: {}
 
 env:
   postgresqlDatabase: root_db
-  postgresqlHost: root_db
   postgresqlUsername: postgres
   postgresqlPassword: secretPass
 
