@@ -34,7 +34,38 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            {{- toYaml .Values.env | nindent 10 }}
+            - name: NODE_ENV
+              value: {{ .Values.growthbook.nodeEnv }}
+            - name: MONGODB_URI
+              value: {{ .Values.growthbook.mongodbUri }}
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: jwt-secret
+                  name: growthbook-secrets
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: encryption-key
+                  name: growthbook-secrets
+            - name: APP_ORIGIN
+              value: {{ .Values.growthbook.appOrigin }}
+            - name: API_HOST
+              value: {{ .Values.growthbook.apiHost }}
+            - name: EMAIL_ENABLED 
+              value: "{{ .Values.growthbook.email.enabled }}"
+            {{ if .Values.growthbook.email.enabled }}
+            - name: EMAIL_HOST
+              value: {{ .Values.growthbook.email.host }}
+            - name: EMAIL_PORT
+              value: {{ .Values.growthbook.email.port }}
+            - name: EMAIL_HOST_USER
+              value: {{ .Values.growthbook.email.hostUser }}
+            - name: EMAIL_HOST_PASSWORD
+              value: {{ .Values.growthbook.email.hostPassword }}
+            - name: EMAIL_FROM
+              value: {{ .Values.growthbook.email.sender }}
+            {{ end }}
           volumeMounts:
             - name: {{ .Values.volume.name }}
               mountPath: {{ .Values.volume.mountPath }}
