@@ -41,9 +41,9 @@ nodeSelector: {}
 
 # Specify your storage class spec for persisting upload images to external file system
 pvc:
- claimName: growthbook-claim
- storageClassName: standard
- storage: 1Gi
+  claimName: growthbook-claim
+  storageClassName: standard
+  storage: 5Gi
 
 volume:
   name: uploads-persistent-storage

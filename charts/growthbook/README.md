@@ -61,3 +61,6 @@ $ helm install my-release one-acre-fund/growthbook
 | serviceAccount.create | bool | `true` | Create a ServiceAccount? |
 | serviceAccount.annotations | object | `{}` | ServiceAccount annotations |
 | serviceAccount.name | string | `80` | The name of the service account to use |
+| pvc.claimName | string | `"growthbook-claim"` | Persistent volume claim name |
+| pvc.storageClassName | string | `"standard"` | Persistent volume claim storage class name |
+| pvc.storage | string | `5Gi` | Persistent volume claim storage size |
