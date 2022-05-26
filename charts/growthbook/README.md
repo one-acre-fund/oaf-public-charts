@@ -14,7 +14,7 @@ GrowthBook - an open source solution for feature flagging and experimentation pl
 | ---- | ------ | --- |
 | bisonlou | bisonlou@gmail.com |  |
 | Yann-J | yann.jouanique@gmail.com |  |
-| Nzeugaa | jean-pierre.poutcheu@gmail.com |  |
+| Nzeugaa | jean.poutcheu@gmail.com |  |
 
 ## Source Code
 
