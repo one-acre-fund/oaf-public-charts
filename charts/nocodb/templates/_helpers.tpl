@@ -62,7 +62,7 @@ Create the name of the service account to use
 {{- end }}
 
 {{- define "postgresHost" -}}
-{{- .Values.env.postgresqlHost }}
+{{- printf "%s-postgresql" .Release.Name }}
 {{- end }}
 
 {{- define "postgresDatabase" -}}
@@ -73,6 +73,10 @@ Create the name of the service account to use
 {{- .Values.env.postgresqlUsername }}
 {{- end }}
 
+{{- define "postgresPassword" -}}
+{{- .Values.env.postgresqlPassword }}
+{{- end }}
+
 {{- define "databaseUri" -}}
-{{- printf "pg://%s:5432?u=%s&p=%s&d=%s" .Values.env.postgresqlHost .Values.env.postgresqlUsername .Values.env.postgresqlPassword .Values.env.postgresqlDatabase }}
+{{- printf "pg://%s:5432?u=%s&p=%s&d=%s" (include "postgresHost" .) (include "postgresUsername" .) (include "postgresPassword" .) (include "postgresDatabase" .) }}
 {{- end }}

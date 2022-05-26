@@ -80,12 +80,10 @@ affinity: {}
 
 env:
   postgresqlDatabase: root_db
-  postgresqlHost: root_db
   postgresqlUsername: postgres
   postgresqlPassword: secretPass
 
 extraEnvs:
-  NC_CONNECT_TO_EXTERNAL_DB_DISABLED: false
   NC_PUBLIC_URL: https:/nocodb.local.org
 
 extraSecretEnvs:
