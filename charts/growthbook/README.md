@@ -50,7 +50,7 @@ $ helm install my-release one-acre-fund/growthbook
 | ingress.enabled | bool | `false` | Install ingress? |
 | ingress.appOriginName | string | `"my-app-origin.io"` | Frontend App Origin Host |
 | ingress.apiHostName| string | `"my-api-host.io"` | Backend API Host |
-| replicaCount | int | `1` |  |
+| replicaCount | int | `1` | Replica count  |
 | mongodb.auth.rootUser  | string | `"user"` | MongoDB root user |
 | mongodb.auth.rootPassword | string | `"password"` | MongoDB root password  |
 | autoscaling.enabled | bool | `false` | Enable Autoscaling?  |
@@ -60,7 +60,9 @@ $ helm install my-release one-acre-fund/growthbook
 | autoscaling.targetMemoryUtilizationPercentage | int | `80` | Autoscaling Target Memory Utilization Percentage |
 | serviceAccount.create | bool | `true` | Create a ServiceAccount? |
 | serviceAccount.annotations | object | `{}` | ServiceAccount annotations |
-| serviceAccount.name | string | `80` | The name of the service account to use |
-| pvc.claimName | string | `"growthbook-claim"` | Persistent volume claim name |
-| pvc.storageClassName | string | `"standard"` | Persistent volume claim storage class name |
-| pvc.storage | string | `5Gi` | Persistent volume claim storage size |
+| serviceAccount.name | string | `""` | The name of the service account to use |
+| persistence.enabled | bool | `false` | Enable persistence? |
+| persistence.type | string | `emptyDir` | Persistent volume type, possible options are [existing, emptyDir, dynamic] |
+| persistence.storageClassName | string | `""` | Persistent volume storage class name |
+| persistence.storage | string | `3Gi` | Persistent volume claim storage size |
+| persistence.existingClaim | string | `""` | Existing Persistent volume claim to use |

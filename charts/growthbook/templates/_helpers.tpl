@@ -60,3 +60,16 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/* PVC existing, emptyDir, Dynamic */}}
+{{- define "growthbook.pvc" -}}
+{{- if or (not .Values.persistence.enabled) (eq .Values.persistence.type "emptyDir") -}}
+          emptyDir: {}
+{{- else if and .Values.persistence.enabled .Values.persistence.existingClaim -}}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim }}
+{{- else if and .Values.persistence.enabled (eq .Values.persistence.type "dynamic")  -}}
+          persistentVolumeClaim:
+            claimName: {{ include "growthbook.fullname" . }}
+{{- end }}
+{{- end }}

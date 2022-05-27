@@ -1,11 +1,18 @@
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.pvc.claimName}}
+  name: {{ include "growthbook.fullname" . }}
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: {{ .Values.pvc.storageClassName }}
+  {{- if eq "-" .Values.persistence.storageClassName }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: {{ .Values.persistence.storageClassName }}
+  {{- end }}
+  volumeMode: Filesystem
   resources:
     requests:
-      storage: {{ .Values.pvc.storage }}
+      storage: {{ .Values.persistence.storage }}
+{{- end }}

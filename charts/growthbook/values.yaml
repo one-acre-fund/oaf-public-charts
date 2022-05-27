@@ -39,11 +39,20 @@ growthbook:
 # Set your nodeSelector setting
 nodeSelector: {}
 
-# Specify your storage class spec for persisting upload images to external file system
-pvc:
-  claimName: growthbook-claim
-  storageClassName: standard
-  storage: 5Gi
+persistence:
+  enabled: false
+  type: emptyDir # what type volume, possible options are [existing, emptyDir, dynamic] dynamic for Dynamic Volume Provisioning, existing for using an existing Claim
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  storageClassName: "-"
+  storage: 3Gi
+  ## Use an existing PVC
+  ##
+  #existingClaim:
 
 volume:
   name: uploads-persistent-storage
