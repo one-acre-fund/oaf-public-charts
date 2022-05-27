@@ -49,6 +49,12 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   storageClassName: "-"
+  ## Persistent Volume Access Mode
+  ##
+  accessModes:
+    - ReadWriteMany
+  ## Persistent Volume size
+  ##
   storage: 3Gi
   ## Use an existing PVC
   ##

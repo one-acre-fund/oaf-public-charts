@@ -5,7 +5,9 @@ metadata:
   name: {{ include "growthbook.fullname" . }}
 spec:
   accessModes:
-    - ReadWriteMany
+    {{- range .Values.persistence.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
   {{- if eq "-" .Values.persistence.storageClassName }}
   storageClassName: ""
   {{- else }}
