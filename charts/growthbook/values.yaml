@@ -41,7 +41,8 @@ nodeSelector: {}
 
 persistence:
   enabled: false
-  type: emptyDir # what type volume, possible options are [existing, emptyDir, dynamic] dynamic for Dynamic Volume Provisioning, existing for using an existing Claim
+  ## what type volume, possible options are [existing, emptyDir, dynamic] dynamic for Dynamic Volume Provisioning, existing for using an existing
+  type: emptyDir
   ## Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -58,7 +59,7 @@ persistence:
   storage: 3Gi
   ## Use an existing PVC
   ##
-  #existingClaim:
+  # existingClaim:
 
 volume:
   name: uploads-persistent-storage
