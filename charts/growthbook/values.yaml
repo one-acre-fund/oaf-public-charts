@@ -35,35 +35,38 @@ growthbook:
     hostUser: user
     hostPassword: password
     sender: sender@example.com
+  persistence:
+    enabled: false
+    ## what type volume, possible options are [existing, emptyDir, dynamic] dynamic for Dynamic Volume Provisioning, existing for using an existing
+    type: emptyDir
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    storageClassName: "-"
+    ## Persistent Volume Access Mode
+    ##
+    accessModes:
+      - ReadWriteMany
+    ## Persistent Volume size
+    ##
+    storage: 3Gi
+    ## Use an existing PVC
+    ##
+    # existingClaim:
+
+tolerations: []
+
+affinity: {}
 
 # Set your nodeSelector setting
 nodeSelector: {}
 
-persistence:
-  enabled: false
-  ## what type volume, possible options are [existing, emptyDir, dynamic] dynamic for Dynamic Volume Provisioning, existing for using an existing
-  type: emptyDir
-  ## Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  storageClassName: "-"
-  ## Persistent Volume Access Mode
-  ##
-  accessModes:
-    - ReadWriteMany
-  ## Persistent Volume size
-  ##
-  storage: 3Gi
-  ## Use an existing PVC
-  ##
-  # existingClaim:
-
 volume:
   name: uploads-persistent-storage
-  mountPath: /usr/local/src/app/packages/back-endf/uploads
+  mountPath: /usr/local/src/app/packages/back-end/uploads
 
 service:
   type: ClusterIP

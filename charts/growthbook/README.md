@@ -1,69 +1,73 @@
 # growthbook
 
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
-
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) 
-
-GrowthBook - an open source solution for feature flagging and experimentation platform
-
-**Homepage:** <https://www.growthbook.io//>
+A Helm chart for Growthbook
 
 ## Maintainers
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| bisonlou | bisonlou@gmail.com |  |
-| Yann-J | yann.jouanique@gmail.com |  |
-| Nzeugaa | jean.poutcheu@gmail.com |  |
-
-## Source Code
-
-* <https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/growthbook>
-
-## TL;DR;
-
-```console
-$ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
-$ helm install my-release one-acre-fund/growthbook
-```
+| bisonlou | <bisonlou@gmail.com> |  |
+| Yann-J | <yann.jouanique@gmail.com> |  |
+| Nzeugaa | <jean.poutcheu@gmail.com> |  |
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | mongodb | ~10.26.0 |
+| https://charts.bitnami.com/bitnami/ | mongodb | 10.26.0 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| growthbook.nodeEnv | string | `"production"` | Set to "production" to turn on additional optimizations and API request logging |
-| growthbook.mongodbUri | string | `"mongodb://root:password@mongo:27017/"` | MongoDB uri |
-| growthbook.appOrigin | string | `"https://my-app-origin.io:443"` | Frontend App Origin URL |
-| growthbook.apiHost | string | `"https://my-api-host.io:443"` | Backend API URL |
-| growthbook.email.enabled | bool | `false` | Email enabled or not in order to send experiment alerts, team member invites, and reset password emails |
-| growthbook.email.host | string | `"host.example.com"` | Email SMTP host |
-| growthbook.email.port  | int | `25` | Email SMTP port |
-| growthbook.email.hostUser  | string | `"user"` | Email SMTP host user |
-| growthbook.email.hostPassword | string | `"password"` | Email SMTP host password  |
-| growthbook.email.sender | string | see `"sender@example.com"` | Sender email |
-| ingress.enabled | bool | `false` | Install ingress? |
-| ingress.appOriginName | string | `"my-app-origin.io"` | Frontend App Origin Host |
-| ingress.apiHostName| string | `"my-api-host.io"` | Backend API Host |
-| replicaCount | int | `1` | Replica count  |
-| mongodb.auth.rootUser  | string | `"user"` | MongoDB root user |
-| mongodb.auth.rootPassword | string | `"password"` | MongoDB root password  |
-| autoscaling.enabled | bool | `false` | Enable Autoscaling?  |
-| autoscaling.minReplicas | int | `1` | Autoscaling min replicas  |
-| autoscaling.maxReplicas | int | `100` | Autoscaling max replicas  |
-| autoscaling.targetCPUUtilizationPercentage | int | `80` | Autoscaling Target CPU Utilization Percentage |
-| autoscaling.targetMemoryUtilizationPercentage | int | `80` | Autoscaling Target Memory Utilization Percentage |
-| serviceAccount.create | bool | `true` | Create a ServiceAccount? |
-| serviceAccount.annotations | object | `{}` | ServiceAccount annotations |
-| serviceAccount.name | string | `""` | The name of the service account to use |
-| persistence.enabled | bool | `false` | Enable persistence? |
-| persistence.type | string | `"emptyDir"` | Persistent volume type, possible options are [existing, emptyDir, dynamic] |
-| persistence.storageClassName | string | `""` | Persistent volume storage class name |
-| persistence.accessModes[0] | string | `"ReadWriteMany"` | Persistent acces mode |
-| persistence.storage | string | `3Gi` | Persistent volume claim storage size |
-| persistence.existingClaim | string | `""` | Existing Persistent volume claim to use |
+| affinity | object | `{}` |  |
+| autoscaling.enabled | bool | `false` |  |
+| autoscaling.maxReplicas | int | `100` |  |
+| autoscaling.minReplicas | int | `1` |  |
+| autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
+| autoscaling.targetMemoryUtilizationPercentage | int | `80` |  |
+| growthbook.apiHost | string | `"https://my-api-host.io:443"` |  |
+| growthbook.appOrigin | string | `"https://my-app-origin.io:443"` |  |
+| growthbook.email.enabled | bool | `false` |  |
+| growthbook.email.host | string | `"host.example.com"` |  |
+| growthbook.email.hostPassword | string | `"password"` |  |
+| growthbook.email.hostUser | string | `"user"` |  |
+| growthbook.email.port | int | `25` |  |
+| growthbook.email.sender | string | `"sender@example.com"` |  |
+| growthbook.mongodbUri | string | `"mongodb://root:password@mongo:27017/"` |  |
+| growthbook.nodeEnv | string | `"production"` |  |
+| growthbook.persistence.accessModes[0] | string | `"ReadWriteMany"` |  |
+| growthbook.persistence.enabled | bool | `false` |  |
+| growthbook.persistence.storage | string | `"3Gi"` |  |
+| growthbook.persistence.storageClassName | string | `"-"` |  |
+| growthbook.persistence.type | string | `"emptyDir"` |  |
+| image.pullPolicy | string | `"Always"` |  |
+| image.repository | string | `"growthbook/growthbook"` |  |
+| image.tag | string | `"latest"` |  |
+| ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-headers" | string | `"Authorization,Referer,sec-ch-ua,sec-ch-ua-mobile,sec-ch-ua-platform,User-Agent,X-Organization,Content-Type"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-origin" | string | `"https://my-app-origin.io"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/enable-cors" | string | `"true"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/force-ssl-redirect" | string | `"true"` |  |
+| ingress.apiHostName | string | `"my-api-host.io"` |  |
+| ingress.appOriginName | string | `"my-app-origin.io"` |  |
+| ingress.enabled | bool | `false` |  |
+| ingress.name | string | `"growthbook-ingress"` |  |
+| mongodb.auth.rootPassword | string | `"password"` |  |
+| mongodb.auth.rootUser | string | `"root"` |  |
+| nodeSelector | object | `{}` |  |
+| port.backendPort | int | `3100` |  |
+| port.frontendPort | int | `3000` |  |
+| replicaCount | int | `1` |  |
+| service.type | string | `"ClusterIP"` |  |
+| serviceAccount.annotations | object | `{}` |  |
+| serviceAccount.create | bool | `true` |  |
+| serviceAccount.name | string | `""` |  |
+| tolerations | list | `[]` |  |
+| volume.mountPath | string | `"/usr/local/src/app/packages/back-end/uploads"` |  |
+| volume.name | string | `"uploads-persistent-storage"` |  |
+
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.10.0](https://github.com/norwoodj/helm-docs/releases/v1.10.0)
