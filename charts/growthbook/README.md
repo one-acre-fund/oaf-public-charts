@@ -46,6 +46,8 @@ A Helm chart for Growthbook
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"growthbook/growthbook"` |  |
 | image.tag | string | `"latest"` |  |
+| nameOverride | string | `""` |  |
+| fullnameOverride | string | `""` |  |
 | ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
 | ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-headers" | string | `"Authorization,Referer,sec-ch-ua,sec-ch-ua-mobile,sec-ch-ua-platform,User-Agent,X-Organization,Content-Type"` |  |
 | ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-origin" | string | `"https://my-app-origin.io"` |  |

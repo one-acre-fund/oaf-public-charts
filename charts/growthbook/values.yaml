@@ -10,6 +10,9 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: latest
 
+nameOverride: ""
+fullnameOverride: ""
+
 port:
   frontendPort: 3000
   backendPort: 3100
