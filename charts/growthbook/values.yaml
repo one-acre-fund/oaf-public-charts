@@ -28,7 +28,7 @@ serviceAccount:
 
 growthbook:
   nodeEnv: production
-  mongodbUri: mongodb://root:password@mongo:27017/
+  mongodbUri: mongodb://growthbook:growthbook@mongo:27017/growthbook-db?authSource=growthbook-db
   appOrigin: https://my-app-origin.io:443
   apiHost: https://my-api-host.io:443
   email:
@@ -103,3 +103,10 @@ mongodb:
   auth:
     rootUser: root
     rootPassword: password
+    username: growthbook
+    password: growthbook
+    database: growthbook-db
+  initdbScripts:
+    grant-role.js: |
+      use growthbook-db
+      db.grantRolesToUser("{{ .Values.auth.username }}", [{ role: 'readWrite', db: "{{ .Values.auth.database }}" }])
