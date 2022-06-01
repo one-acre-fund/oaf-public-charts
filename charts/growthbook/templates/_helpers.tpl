@@ -73,3 +73,11 @@ Create the name of the service account to use
             claimName: {{ include "growthbook.fullname" . }}
 {{- end }}
 {{- end }}
+
+{{- define "growthbook.mongo.uri" -}}
+{{- if .Values.mongodb.enabled -}}
+{{- printf "mongodb://%s:%s@%s-mongodb:27017/%s" .Values.mongodb.auth.username  .Values.mongodb.auth.password (include "growthbook.fullname" .) .Values.mongodb.auth.database }}
+{{- else }}
+{{- .Values.growthbook.externalMongodbUri }}
+{{- end }}
+{{- end }}

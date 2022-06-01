@@ -37,7 +37,7 @@ spec:
             - name: NODE_ENV
               value: {{ .Values.growthbook.nodeEnv }}
             - name: MONGODB_URI
-              value: {{ .Values.growthbook.mongodbUri }}
+              value: {{ include "growthbook.mongo.uri" . }}
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
