@@ -8,11 +8,11 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.port.frontendPort }}
-      targetPort: {{ .Values.port.frontendPort }}
+      targetPort: 3000
       protocol: TCP
       name: frontend-port
     - port: {{ .Values.port.backendPort }}
-      targetPort: {{ .Values.port.backendPort }}
+      targetPort: 3100
       protocol: TCP
       name: backend-port
   selector:

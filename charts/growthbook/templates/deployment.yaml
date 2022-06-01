@@ -34,8 +34,25 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: NODE_ENV
-              value: {{ .Values.growthbook.nodeEnv }}
+            {{- range $key, $value := .Values.growthbook.extraEnvVars }}
+            - name: {{ $key }}
+              value: |-
+                {{- tpl $value $ | nindent 16 }}
+            {{- end }}
+            - name: EMAIL_ENABLED
+              value: {{ .Values.growthbook.email.enabled | quote }}
+            {{ if .Values.growthbook.email.enabled }}
+            - name: EMAIL_HOST
+              value: {{ .Values.growthbook.email.host }}
+            - name: EMAIL_PORT
+              value: {{ .Values.growthbook.email.port | quote }}
+            - name: EMAIL_HOST_USER
+              value: {{ .Values.growthbook.email.hostUser }}
+            - name: EMAIL_HOST_PASSWORD
+              value: {{ .Values.growthbook.email.hostPassword }}
+            - name: EMAIL_FROM
+              value: {{ .Values.growthbook.email.sender }}
+            {{ end }}
             - name: MONGODB_URI
               value: {{ include "growthbook.mongo.uri" . }}
             - name: JWT_SECRET
@@ -48,33 +65,15 @@ spec:
                 secretKeyRef:
                   key: encryption-key
                   name: growthbook-secrets
-            - name: APP_ORIGIN
-              value: {{ .Values.growthbook.appOrigin }}
-            - name: API_HOST
-              value: {{ .Values.growthbook.apiHost }}
-            - name: EMAIL_ENABLED 
-              value: "{{ .Values.growthbook.email.enabled }}"
-            {{ if .Values.growthbook.email.enabled }}
-            - name: EMAIL_HOST
-              value: {{ .Values.growthbook.email.host }}
-            - name: EMAIL_PORT
-              value: {{ .Values.growthbook.email.port }}
-            - name: EMAIL_HOST_USER
-              value: {{ .Values.growthbook.email.hostUser }}
-            - name: EMAIL_HOST_PASSWORD
-              value: {{ .Values.growthbook.email.hostPassword }}
-            - name: EMAIL_FROM
-              value: {{ .Values.growthbook.email.sender }}
-            {{ end }}
           volumeMounts:
             - name: {{ .Values.volume.name }}
               mountPath: {{ .Values.volume.mountPath }}
           ports:
             - name: frontend-port
-              containerPort: {{ .Values.port.frontendPort }}
+              containerPort: 3000
               protocol: TCP
             - name: backend-port
-              containerPort: {{ .Values.port.backendPort }}
+              containerPort: 3100
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

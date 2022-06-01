@@ -27,17 +27,19 @@ serviceAccount:
   name: ""
 
 growthbook:
-  nodeEnv: production
-  externalMongodbUri:
-  appOrigin: https://my-app-origin.io:443
-  apiHost: https://my-api-host.io:443
+  extraEnvVars:
+    NODE_ENV: production
+    APP_ORIGIN: https://my-app-origin.io:443
+    API_HOST: https://my-api-host.io:443
   email:
     enabled: false
-    host: host.example.com
+    host:
     port: 25
-    hostUser: user
-    hostPassword: password
-    sender: sender@example.com
+    hostUser:
+    hostPassword:
+    sender:
+  # For mongodb not installed with a subchart
+  externalMongodbUri:
   persistence:
     enabled: false
     ## what type volume, possible options are [existing, emptyDir, dynamic] dynamic for Dynamic Volume Provisioning, existing for using an existing
@@ -102,8 +104,6 @@ autoscaling:
 mongodb:
   # -- Install MongoDB?
   enabled: true
-  # For now we only support a db installed with a subchart
-
   auth:
     rootUser: root
     rootPassword: password
