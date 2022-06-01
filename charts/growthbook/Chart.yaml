@@ -25,8 +25,13 @@ appVersion: "1.16.0"
 # Disable if you already set up mongodb
 dependencies:
   - name: mongodb
-    version: 10.26.0
+    version: ~10.26.0
     repository: https://charts.bitnami.com/bitnami/
+    condition: mongodb.enabled
+  - name: gatekeeper
+    version: ~0.1.14
+    repository: https://gogatekeeper.github.io/helm-gogatekeeper
+    condition: gatekeeper.enabled
 
 maintainers:
   - name: bisonlou

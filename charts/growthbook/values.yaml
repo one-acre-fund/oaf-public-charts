@@ -100,6 +100,11 @@ autoscaling:
 # Example below assumes prometheus is running at sys-monitoring namespace
 # For more configurations and explanations, visit https://github.com/bitnami/charts/tree/master/bitnami/mongodb
 mongodb:
+  # -- Install MongoDB?
+  enabled: true
+  # TODO: support external db
+  # For now we only support a db installed with a subchart
+
   auth:
     rootUser: root
     rootPassword: password
@@ -110,3 +115,54 @@ mongodb:
     grant-role.js: |
       use growthbook-db
       db.grantRolesToUser("{{ .Values.auth.username }}", [{ role: 'readWrite', db: "{{ .Values.auth.database }}" }])
+
+gatekeeper:
+  enabled: true
+  config:
+    # -- the interface definition you wish the proxy to listen, all interfaces is specified as `:<port>`, unix sockets as `unix://<REL_PATH>` or `unix://</ABS PATH>`
+    #listen: :3000
+    # -- port on which metrics and health endpoints will be available, if not specified it will be on above specified port
+    #listen-admin: :4000
+    # -- Setting this enables the prometheus metrics collector at `/oauth/metrics`
+    #enable-metrics: false
+
+    # -- the URL for retrieve the OpenID configuration
+    # discovery-url: <DISCOVERY URL>
+    # -- the client id for the 'client' application
+    # client-id: <CLIENT_ID>
+    # -- the secret associated to the 'client' application
+    # client-secret: <CLIENT_SECRET>
+
+    # -- whether to enable refresh tokens
+    # enable-refresh-tokens: true
+    # -- the redirection URL, essentially the site URL, note: /oauth/callback is added at the end
+    # redirection-url: http://127.0.0.1:3000
+    # -- the encryption key used to encode the session state (must be either 16 or 32 characters for AES-128/AES-256 selection)
+    # encryption-key: <ENCRYPTION_KEY>
+    # -- the upstream endpoint which we should proxy request
+    # upstream-url: http://127.0.0.1:80
+    # -- Returns HTTP 401 when no authentication is present, used with forward proxies.
+    # no-redirects: false
+    # -- additional scopes to add to the default (openid+email+profile)
+    # scopes:
+    # - vpn-user
+
+    # -- a collection of resource i.e. URLs that you wish to protect
+    # resources:
+    # - uri: /admin/test
+    #   # the methods on this URL that should be protected, if missing, we assuming all
+    #   methods:
+    #   - GET
+    #   # a list of roles the user must have in order to access URLs under the above
+    #   # If all you want is authentication ONLY, simply remove the roles array - the user must be authenticated but
+    #   # no roles are required
+    #   roles:
+    #   - openvpn:vpn-user
+    #   - openvpn:prod-vpn
+    #   - test
+    # - uri: /admin/*
+    #   methods:
+    #   - GET
+    #   roles:
+    #   - openvpn:vpn-user
+    #   - openvpn:commons-prod-vpn
