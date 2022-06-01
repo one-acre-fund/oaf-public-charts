@@ -55,16 +55,6 @@ spec:
             {{ end }}
             - name: MONGODB_URI
               value: {{ include "growthbook.mongo.uri" . }}
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  key: jwt-secret
-                  name: growthbook-secrets
-            - name: ENCRYPTION_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: encryption-key
-                  name: growthbook-secrets
           volumeMounts:
             - name: {{ .Values.volume.name }}
               mountPath: {{ .Values.volume.mountPath }}

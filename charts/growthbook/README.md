@@ -32,6 +32,8 @@ A Helm chart for Growthbook
 | growthbook.extraEnvVars.NODE_ENV | string | `"production"` |  |
 | growthbook.extraEnvVars.APP_ORIGIN | string | `"https://my-app-origin.io:443"` |  |
 | growthbook.extraEnvVars.API_HOST | string | `"https://my-api-host.io:443"` |  |
+| growthbook.extraEnvVars.JWT_SECRET | string | `"jwtSecretString"` |  |
+| growthbook.extraEnvVars.ENCRYPTION_KEY | string | `"encryptionKeyString"` |  |
 | growthbook.email.enabled | bool | `false` |  |
 | growthbook.email.host | string | `""` |  |
 | growthbook.email.hostPassword | string | `""` |  |

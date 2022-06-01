@@ -31,6 +31,8 @@ growthbook:
     NODE_ENV: production
     APP_ORIGIN: https://my-app-origin.io:443
     API_HOST: https://my-api-host.io:443
+    JWT_SECRET: jwtSecretString
+    ENCRYPTION_KEY: encryptionKeyString
   email:
     enabled: false
     host:
