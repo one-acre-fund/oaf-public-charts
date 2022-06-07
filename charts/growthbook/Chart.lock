@@ -1,9 +1,9 @@
 dependencies:
 - name: mongodb
   repository: https://charts.bitnami.com/bitnami/
-  version: 10.26.4
+  version: 11.2.0
 - name: gatekeeper
   repository: https://gogatekeeper.github.io/helm-gogatekeeper
   version: 0.1.18
-digest: sha256:c966b1456834e37a614100f9799dc2623730e55c5fada4183e6953c35d42a7d7
-generated: "2022-06-01T09:55:06.356957+02:00"
+digest: sha256:5b0119bfb920c57608da58bfde3a4fb2b6377600719e83ce647fe6bc3ee44f9d
+generated: "2022-06-07T18:08:12.440421+02:00"
