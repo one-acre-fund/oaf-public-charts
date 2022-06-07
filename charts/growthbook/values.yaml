@@ -1,0 +1,175 @@
+# Default values for growthbook.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: growthbook/growthbook
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: latest
+
+nameOverride: ""
+fullnameOverride: ""
+
+port:
+  frontendPort: 3000
+  backendPort: 3100
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+growthbook:
+  extraEnvVars:
+    NODE_ENV: production
+    APP_ORIGIN: https://my-app-origin.io:443
+    API_HOST: https://my-api-host.io:443
+    JWT_SECRET: jwtSecretString
+    ENCRYPTION_KEY: encryptionKeyString
+    # Site Manager is alerted when a new member joins the organization
+    SITE_MANAGER_EMAIL:
+    # Required if using Google Analytics as a data source
+    GOOGLE_OAUTH_CLIENT_ID:
+    GOOGLE_OAUTH_CLIENT_SECRET:
+  # To send emails from the app
+  email:
+    enabled: false
+    host:
+    port: 25
+    hostUser:
+    hostPassword:
+    sender:
+  # For mongodb not installed with a subchart
+  externalMongodbUri:
+  persistence:
+    enabled: false
+    ## what type volume, possible options are [existing, emptyDir, dynamic] dynamic for Dynamic Volume Provisioning, existing for using an existing
+    type: emptyDir
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    storageClassName: "-"
+    ## Persistent Volume Access Mode
+    ##
+    accessModes:
+      - ReadWriteMany
+    ## Persistent Volume size
+    ##
+    storage: 3Gi
+    ## Use an existing PVC
+    ##
+    # existingClaim:
+
+tolerations: []
+
+affinity: {}
+
+# Set your nodeSelector setting
+nodeSelector: {}
+
+volume:
+  name: uploads-persistent-storage
+  mountPath: /usr/local/src/app/packages/back-end/uploads
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: false
+  name: growthbook-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    # Specify your app-origin with 'https://' prefix
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://my-app-origin.io"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization,Referer,sec-ch-ua,sec-ch-ua-mobile,sec-ch-ua-platform,User-Agent,X-Organization,Content-Type"
+  # Specify your app-origin, api-host without 'https://' prefix
+  appOriginName: my-app-origin.io
+  apiHostName: my-api-host.io
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Disable if you already set up mongodb, you should also disable dependencies in Chart.yaml.
+# Make sure you specify right mongodb credential in secret
+# Example below assumes prometheus is running at sys-monitoring namespace
+# For more configurations and explanations, visit https://github.com/bitnami/charts/tree/master/bitnami/mongodb
+mongodb:
+  # -- Install MongoDB?
+  enabled: true
+  auth:
+    rootUser: root
+    rootPassword: password
+    username: growthbook
+    password: growthbook
+    database: growthbook-db
+  initdbScripts:
+    grant-role.js: |
+      use growthbook-db
+      db.grantRolesToUser("{{ .Values.auth.username }}", [{ role: 'readWrite', db: "{{ .Values.auth.database }}" }])
+
+gatekeeper:
+  enabled: false
+  config:
+    # -- the interface definition you wish the proxy to listen, all interfaces is specified as `:<port>`, unix sockets as `unix://<REL_PATH>` or `unix://</ABS PATH>`
+    # listen: :3000
+    # -- port on which metrics and health endpoints will be available, if not specified it will be on above specified port
+    # listen-admin: :4000
+    # -- Setting this enables the prometheus metrics collector at `/oauth/metrics`
+    enable-metrics: false
+
+    # -- the URL for retrieve the OpenID configuration
+    # discovery-url: <DISCOVERY URL>
+    # -- the client id for the 'client' application
+    # client-id: <CLIENT_ID>
+    # -- the secret associated to the 'client' application
+    # client-secret: <CLIENT_SECRET>
+
+    # -- whether to enable refresh tokens
+    # enable-refresh-tokens: true
+    # -- the redirection URL, essentially the site URL, note: /oauth/callback is added at the end
+    # redirection-url: http://127.0.0.1:3000
+    # -- the encryption key used to encode the session state (must be either 16 or 32 characters for AES-128/AES-256 selection)
+    # encryption-key: <ENCRYPTION_KEY>
+    # -- the upstream endpoint which we should proxy request
+    # upstream-url: http://127.0.0.1:80
+    # -- Returns HTTP 401 when no authentication is present, used with forward proxies.
+    # no-redirects: false
+    # -- additional scopes to add to the default (openid+email+profile)
+    # scopes:
+    # - vpn-user
+
+    # -- a collection of resource i.e. URLs that you wish to protect
+    # resources:
+    # - uri: /admin/test
+    #   # the methods on this URL that should be protected, if missing, we assuming all
+    #   methods:
+    #   - GET
+    #   # a list of roles the user must have in order to access URLs under the above
+    #   # If all you want is authentication ONLY, simply remove the roles array - the user must be authenticated but
+    #   # no roles are required
+    #   roles:
+    #   - openvpn:vpn-user
+    #   - openvpn:prod-vpn
+    #   - test
+    # - uri: /admin/*
+    #   methods:
+    #   - GET
+    #   roles:
+    #   - openvpn:vpn-user
+    #   - openvpn:commons-prod-vpn

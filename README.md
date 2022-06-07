@@ -18,6 +18,7 @@ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
 * [Fineract](https://fineract.apache.org/)
 * [Apicurio Studio](https://www.apicur.io/studio/)
 * [Metabase](https://www.metabase.com/)
+* [GrowthBook](https://growthbook.io/)
 
 ## How to contribute
 
