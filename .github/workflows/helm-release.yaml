@@ -26,8 +26,11 @@ jobs:
         with:
           version: v3.4.0
 
-      - name: Add repo
+      - name: Add bitnami repo
         run: helm repo add bitnami https://charts.bitnami.com/bitnami
+      
+      - name: Add gogatekeeper repo
+        run: helm repo add gogatekeeper https://gogatekeeper.github.io/helm-gogatekeeper
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.2.0

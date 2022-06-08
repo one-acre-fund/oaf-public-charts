@@ -49,7 +49,7 @@ growthbook:
   # For mongodb not installed with a subchart
   externalMongodbUri:
   persistence:
-    enabled: false
+    enabled: true
     ## what type volume, possible options are [existing, emptyDir, dynamic] dynamic for Dynamic Volume Provisioning, existing for using an existing
     type: emptyDir
     ## Persistent Volume Storage Class
@@ -58,14 +58,14 @@ growthbook:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
-    storageClassName: "-"
+    # storageClassName: "-"
     ## Persistent Volume Access Mode
     ##
     accessModes:
       - ReadWriteMany
     ## Persistent Volume size
     ##
-    storage: 3Gi
+    storage: 1Gi
     ## Use an existing PVC
     ##
     # existingClaim:
