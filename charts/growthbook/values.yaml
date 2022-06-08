@@ -69,7 +69,7 @@ growthbook:
       - ReadWriteMany
     ## Persistent Volume size
     ##
-    storage: 1Gi
+    storage: 3Gi
     ## Use an existing PVC
     ##
     # existingClaim:

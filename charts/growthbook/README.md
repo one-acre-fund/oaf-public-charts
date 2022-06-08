@@ -50,7 +50,7 @@ A Helm chart for Growthbook
 | growthbook.externalMongodbUri | string | `""` |  |
 | growthbook.persistence.accessModes[0] | string | `"ReadWriteMany"` |  |
 | growthbook.persistence.enabled | bool | `true` |  |
-| growthbook.persistence.storage | string | `"1Gi"` |  |
+| growthbook.persistence.storage | string | `"3Gi"` |  |
 | growthbook.persistence.storageClassName | string | `"-"` |  |
 | growthbook.persistence.type | string | `"emptyDir"` |  |
 | image.pullPolicy | string | `"Always"` |  |
