@@ -51,7 +51,15 @@ spec:
             - name: EMAIL_HOST_PASSWORD
               value: {{ .Values.growthbook.email.hostPassword }}
             - name: EMAIL_FROM
-              value: {{ .Values.growthbook.email.sender }}
+              value: {{ .Values.growthbook.email.senderEmail }}
+            - name: SITE_MANAGER_EMAIL
+              value: {{ .Values.growthbook.email.siteManagerEmail }}
+            {{ end }}
+            {{ if .Values.growthbook.datasource.google.enabled }}
+            - name: GOOGLE_OAUTH_CLIENT_ID
+              value: {{ .Values.growthbook.datasource.google.clientId }}
+            - name: GOOGLE_OAUTH_CLIENT_SECRET
+              value: {{ .Values.growthbook.datasource.google.clientSecret }}
             {{ end }}
             - name: MONGODB_URI
               value: {{ include "growthbook.mongo.uri" . }}
