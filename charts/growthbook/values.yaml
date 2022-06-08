@@ -33,11 +33,6 @@ growthbook:
     API_HOST: https://my-api-host.io:443
     JWT_SECRET: jwtSecretString
     ENCRYPTION_KEY: encryptionKeyString
-    # Site Manager is alerted when a new member joins the organization
-    SITE_MANAGER_EMAIL:
-    # Required if using Google Analytics as a data source
-    GOOGLE_OAUTH_CLIENT_ID:
-    GOOGLE_OAUTH_CLIENT_SECRET:
   # To send emails from the app
   email:
     enabled: false
@@ -45,11 +40,20 @@ growthbook:
     port: 25
     hostUser:
     hostPassword:
-    sender:
+    senderEmail:
+    # Site Manager is alerted when a new member joins the organization
+    siteManagerEmail:
+  # To configure datasource
+  datasource:
+    # Required if using Google Analytics as a data source
+    google:
+      enabled: false
+      clientId:
+      clientSecret:
   # For mongodb not installed with a subchart
   externalMongodbUri:
   persistence:
-    enabled: false
+    enabled: true
     ## what type volume, possible options are [existing, emptyDir, dynamic] dynamic for Dynamic Volume Provisioning, existing for using an existing
     type: emptyDir
     ## Persistent Volume Storage Class
@@ -58,7 +62,7 @@ growthbook:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
-    storageClassName: "-"
+    # storageClassName: "-"
     ## Persistent Volume Access Mode
     ##
     accessModes:

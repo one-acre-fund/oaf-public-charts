@@ -42,10 +42,14 @@ A Helm chart for Growthbook
 | growthbook.email.hostPassword | string | `""` |  |
 | growthbook.email.hostUser | string | `""` |  |
 | growthbook.email.port | int | `25` |  |
-| growthbook.email.sender | string | `""` |  |
+| growthbook.email.senderEmail | string | `""` |  |
+| growthbook.email.siteManagerEmail | string | `""` |  |
+| growthbook.datasource.google.enabled | bool | `false` |  |
+| growthbook.datasource.google.clientId | string | `""` |  |
+| growthbook.datasource.google.clientSecret | string | `""` |  |
 | growthbook.externalMongodbUri | string | `""` |  |
 | growthbook.persistence.accessModes[0] | string | `"ReadWriteMany"` |  |
-| growthbook.persistence.enabled | bool | `false` |  |
+| growthbook.persistence.enabled | bool | `true` |  |
 | growthbook.persistence.storage | string | `"3Gi"` |  |
 | growthbook.persistence.storageClassName | string | `"-"` |  |
 | growthbook.persistence.type | string | `"emptyDir"` |  |

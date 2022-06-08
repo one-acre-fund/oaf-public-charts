@@ -8,10 +8,12 @@ spec:
     {{- range .Values.growthbook.persistence.accessModes }}
     - {{ . | quote }}
     {{- end }}
+  {{- if .Values.growthbook.persistence.storageClass }}
   {{- if eq "-" .Values.growthbook.persistence.storageClassName }}
   storageClassName: ""
   {{- else }}
   storageClassName: {{ .Values.growthbook.persistence.storageClassName }}
+  {{- end }}
   {{- end }}
   volumeMode: Filesystem
   resources:
