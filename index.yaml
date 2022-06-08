@@ -955,6 +955,33 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/geonode-0.1.1/geonode-0.1.1.tgz
     version: 0.1.1
+  growthbook:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-06-08T11:49:53.72234638Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami/
+      version: ~11.2.0
+    - condition: gatekeeper.enabled
+      name: gatekeeper
+      repository: https://gogatekeeper.github.io/helm-gogatekeeper
+      version: ~0.1.14
+    description: A Helm chart for Growthbook
+    digest: af4ea572c053cd61e67b81fea17cda8f603a2695dfa7d151f12aff89a9288804
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    - email: jean.poutcheu@gmail.com
+      name: Nzeugaa
+    name: growthbook
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/growthbook-0.1.1/growthbook-0.1.1.tgz
+    version: 0.1.1
   kobotoolbox:
   - apiVersion: v2
     created: "2022-05-17T15:28:50.657398039Z"
@@ -2219,4 +2246,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2022-05-25T14:19:45.964407344Z"
+generated: "2022-06-08T11:49:53.722673882Z"
