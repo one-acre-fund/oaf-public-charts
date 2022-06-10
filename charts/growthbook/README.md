@@ -1,6 +1,6 @@
 # growthbook
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for Growthbook
 
@@ -16,7 +16,7 @@ A Helm chart for Growthbook
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami/ | mongodb | ~10.26.0 |
+| https://charts.bitnami.com/bitnami/ | mongodb | ~11.2.0 |
 | https://gogatekeeper.github.io/helm-gogatekeeper | gatekeeper | ~0.1.14 |
 
 ## Values
@@ -29,35 +29,32 @@ A Helm chart for Growthbook
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | autoscaling.targetMemoryUtilizationPercentage | int | `80` |  |
-| growthbook.extraEnvVars.NODE_ENV | string | `"production"` |  |
-| growthbook.extraEnvVars.APP_ORIGIN | string | `"https://my-app-origin.io:443"` |  |
-| growthbook.extraEnvVars.API_HOST | string | `"https://my-api-host.io:443"` |  |
-| growthbook.extraEnvVars.JWT_SECRET | string | `"jwtSecretString"` |  |
-| growthbook.extraEnvVars.ENCRYPTION_KEY | string | `"encryptionKeyString"` |  |
-| growthbook.extraEnvVars.SITE_MANAGER_EMAIL | string | `""` |  |
-| growthbook.extraEnvVars.GOOGLE_OAUTH_CLIENT_ID | string | `""` |  |
-| growthbook.extraEnvVars.GOOGLE_OAUTH_CLIENT_SECRET | string | `""` |  |
-| growthbook.email.enabled | bool | `false` |  |
-| growthbook.email.host | string | `""` |  |
-| growthbook.email.hostPassword | string | `""` |  |
-| growthbook.email.hostUser | string | `""` |  |
-| growthbook.email.port | int | `25` |  |
-| growthbook.email.senderEmail | string | `""` |  |
-| growthbook.email.siteManagerEmail | string | `""` |  |
+| fullnameOverride | string | `""` |  |
+| gatekeeper.config.enable-metrics | bool | `false` | Setting this enables the prometheus metrics collector at `/oauth/metrics` |
+| gatekeeper.enabled | bool | `false` |  |
+| growthbook.datasource.google.clientId | string | `nil` |  |
+| growthbook.datasource.google.clientSecret | string | `nil` |  |
 | growthbook.datasource.google.enabled | bool | `false` |  |
-| growthbook.datasource.google.clientId | string | `""` |  |
-| growthbook.datasource.google.clientSecret | string | `""` |  |
-| growthbook.externalMongodbUri | string | `""` |  |
+| growthbook.email.enabled | bool | `false` |  |
+| growthbook.email.host | string | `nil` |  |
+| growthbook.email.hostPassword | string | `nil` |  |
+| growthbook.email.hostUser | string | `nil` |  |
+| growthbook.email.port | int | `25` |  |
+| growthbook.email.senderEmail | string | `nil` |  |
+| growthbook.email.siteManagerEmail | string | `nil` |  |
+| growthbook.externalMongodbUri | string | `nil` |  |
+| growthbook.extraEnvVars.API_HOST | string | `"https://my-api-host.io:443"` |  |
+| growthbook.extraEnvVars.APP_ORIGIN | string | `"https://my-app-origin.io:443"` |  |
+| growthbook.extraEnvVars.ENCRYPTION_KEY | string | `"encryptionKeyString"` |  |
+| growthbook.extraEnvVars.JWT_SECRET | string | `"jwtSecretString"` |  |
+| growthbook.extraEnvVars.NODE_ENV | string | `"production"` |  |
 | growthbook.persistence.accessModes[0] | string | `"ReadWriteMany"` |  |
 | growthbook.persistence.enabled | bool | `true` |  |
 | growthbook.persistence.storage | string | `"3Gi"` |  |
-| growthbook.persistence.storageClassName | string | `"-"` |  |
 | growthbook.persistence.type | string | `"emptyDir"` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"growthbook/growthbook"` |  |
 | image.tag | string | `"latest"` |  |
-| nameOverride | string | `""` |  |
-| fullnameOverride | string | `""` |  |
 | ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
 | ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-headers" | string | `"Authorization,Referer,sec-ch-ua,sec-ch-ua-mobile,sec-ch-ua-platform,User-Agent,X-Organization,Content-Type"` |  |
 | ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-origin" | string | `"https://my-app-origin.io"` |  |
@@ -67,8 +64,14 @@ A Helm chart for Growthbook
 | ingress.appOriginName | string | `"my-app-origin.io"` |  |
 | ingress.enabled | bool | `false` |  |
 | ingress.name | string | `"growthbook-ingress"` |  |
+| mongodb.auth.database | string | `"growthbook-db"` |  |
+| mongodb.auth.password | string | `"growthbook"` |  |
 | mongodb.auth.rootPassword | string | `"password"` |  |
 | mongodb.auth.rootUser | string | `"root"` |  |
+| mongodb.auth.username | string | `"growthbook"` |  |
+| mongodb.enabled | bool | `true` | Install MongoDB? |
+| mongodb.initdbScripts."grant-role.js" | string | `"use growthbook-db\ndb.grantRolesToUser(\"{{ .Values.auth.username }}\", [{ role: 'readWrite', db: \"{{ .Values.auth.database }}\" }])\n"` |  |
+| nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | port.backendPort | int | `3100` |  |
 | port.frontendPort | int | `3000` |  |
@@ -80,8 +83,6 @@ A Helm chart for Growthbook
 | tolerations | list | `[]` |  |
 | volume.mountPath | string | `"/usr/local/src/app/packages/back-end/uploads"` |  |
 | volume.name | string | `"uploads-persistent-storage"` |  |
-| gatekeeper.config | string | `nil` |  |
-| gatekeeper.enabled | bool | `false` |  |
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.10.0](https://github.com/norwoodj/helm-docs/releases/v1.10.0)
+Autogenerated from chart metadata using [helm-docs v1.8.1](https://github.com/norwoodj/helm-docs/releases/v1.8.1)
