@@ -64,7 +64,7 @@ spec:
             - name: MONGODB_URI
               value: {{ include "growthbook.mongo.uri" . }}
           volumeMounts:
-            - name: {{ .Values.volume.name }}
+            - name: {{ include "growthbook.fullname" . }}
               mountPath: {{ .Values.volume.mountPath }}
           ports:
             - name: frontend-port
