@@ -78,7 +78,7 @@ spec:
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 8 }}
       volumes:
-        - name: {{ .Values.volume.name }}
+        - name: {{ include "growthbook.fullname" . }}
           {{ include "growthbook.pvc" . }}
       {{- with .Values.affinity }}
       affinity:
