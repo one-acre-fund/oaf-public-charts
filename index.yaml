@@ -958,6 +958,32 @@ entries:
   growthbook:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-06-15T09:30:14.627927429Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami/
+      version: ~11.1.0
+    - condition: gatekeeper.enabled
+      name: gatekeeper
+      repository: https://gogatekeeper.github.io/helm-gogatekeeper
+      version: ~0.1.14
+    description: A Helm chart for Growthbook
+    digest: 2df4a8be464676a336b45b0a895a7e6e848ea329b5684047eb8b0623dc51ceca
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    - email: jean.poutcheu@gmail.com
+      name: Nzeugaa
+    name: growthbook
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/growthbook-0.1.4/growthbook-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-06-10T13:25:32.859413827Z"
     dependencies:
     - condition: mongodb.enabled
@@ -2298,4 +2324,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2022-06-10T13:25:32.859723729Z"
+generated: "2022-06-15T09:30:14.628319332Z"
