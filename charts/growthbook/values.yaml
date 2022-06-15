@@ -31,8 +31,8 @@ growthbook:
     NODE_ENV: production
     APP_ORIGIN: https://my-app-origin.io:443
     API_HOST: https://my-api-host.io:443
-    JWT_SECRET: jwtSecretString
-    ENCRYPTION_KEY: encryptionKeyString
+  jwtSecret: jwtSecretString
+  encryptionKey: encryptionKeyString
   # To send emails from the app
   email:
     enabled: false
@@ -124,7 +124,7 @@ mongodb:
     database: growthbook-db
   initdbScripts:
     grant-role.js: |
-      use growthbook-db
+      db = db.getSiblingDB('{{ .Values.auth.database }}')
       db.grantRolesToUser("{{ .Values.auth.username }}", [{ role: 'readWrite', db: "{{ .Values.auth.database }}" }])
 
 gatekeeper:

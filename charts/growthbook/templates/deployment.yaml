@@ -27,6 +27,18 @@ spec:
       serviceAccountName: {{ include "growthbook.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        # Wait for MongoDB
+        - name: wait-db
+          image: jwilder/dockerize
+          # We don't care about having latest...
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - dockerize -timeout=120s -wait tcp://${MONGODB_HOST}:${MONGODB_PORT}
+          env:
+            {{- include "growthbook.mongo.env" . | nindent 12 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -39,6 +51,21 @@ spec:
               value: |-
                 {{- tpl $value $ | nindent 16 }}
             {{- end }}
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "growthbook.fullname" . }}
+                  key: JWT_SECRET
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "growthbook.fullname" . }}
+                  key: ENCRYPTION_KEY
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "growthbook.fullname" . }}
+                  key: MONGODB_URI
             - name: EMAIL_ENABLED
               value: {{ .Values.growthbook.email.enabled | quote }}
             {{ if .Values.growthbook.email.enabled }}
@@ -61,8 +88,6 @@ spec:
             - name: GOOGLE_OAUTH_CLIENT_SECRET
               value: {{ .Values.growthbook.datasource.google.clientSecret }}
             {{ end }}
-            - name: MONGODB_URI
-              value: {{ include "growthbook.mongo.uri" . }}
           volumeMounts:
             - name: {{ include "growthbook.fullname" . }}
               mountPath: {{ .Values.volume.mountPath }}
