@@ -45,8 +45,8 @@ A Helm chart for Growthbook
 | growthbook.externalMongodbUri | string | `nil` |  |
 | growthbook.extraEnvVars.API_HOST | string | `"https://my-api-host.io:443"` |  |
 | growthbook.extraEnvVars.APP_ORIGIN | string | `"https://my-app-origin.io:443"` |  |
-| growthbook.extraEnvVars.ENCRYPTION_KEY | string | `"encryptionKeyString"` |  |
-| growthbook.extraEnvVars.JWT_SECRET | string | `"jwtSecretString"` |  |
+| growthbook.encryptionKey | string | `"encryptionKeyString"` |  |
+| growthbook.jwtSecret | string | `"jwtSecretString"` |  |
 | growthbook.extraEnvVars.NODE_ENV | string | `"production"` |  |
 | growthbook.persistence.accessModes[0] | string | `"ReadWriteMany"` |  |
 | growthbook.persistence.enabled | bool | `true` |  |
