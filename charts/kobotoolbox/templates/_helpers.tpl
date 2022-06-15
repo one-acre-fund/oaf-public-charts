@@ -3,11 +3,11 @@
 # TODO: move passwords to secrets...
 
 {{- define "kc_dburl" -}}
-postgis://{{ .Values.postgresql.postgresqlUsername }}:{{ .Values.postgresql.postgresqlPassword }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.kobocatDatabase }}
+postgis://{{ .Values.postgresql.postgresqlUsername }}:{{ urlquery .Values.postgresql.postgresqlPassword }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.kobocatDatabase }}
 {{- end -}}
 
 {{- define "kpi_dburl" -}}
-postgis://{{ .Values.postgresql.postgresqlUsername }}:{{ .Values.postgresql.postgresqlPassword }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.kpiDatabase }}
+postgis://{{ .Values.postgresql.postgresqlUsername }}:{{ urlquery .Values.postgresql.postgresqlPassword }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.kpiDatabase }}
 {{- end -}}
 
 {{- define "internal_domain" -}}
@@ -35,19 +35,19 @@ kobo.local
 {{- end -}}
 
 {{- define "redis_url_session" -}}
-redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-rediscache-master:6379/2
+redis://:{{ urlquery .Values.global.redis.password }}@{{ .Release.Name }}-rediscache-master:6379/2
 {{- end -}}
 
 {{- define "redis_url_lock" -}}
-redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-rediscache-master:6379/3
+redis://:{{ urlquery .Values.global.redis.password }}@{{ .Release.Name }}-rediscache-master:6379/3
 {{- end -}}
 
 {{- define "redis_url_kobobroker" -}}
-redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-master:6379/2
+redis://:{{ urlquery .Values.global.redis.password }}@{{ .Release.Name }}-redismain-master:6379/2
 {{- end -}}
 
 {{- define "redis_url_kpibroker" -}}
-redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-master:6379/1
+redis://:{{ urlquery .Values.global.redis.password }}@{{ .Release.Name }}-redismain-master:6379/1
 {{- end -}}
 
 {{- define "env_general" -}}
