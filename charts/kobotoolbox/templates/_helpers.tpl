@@ -185,7 +185,7 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
 - name: POSTGRES_PORT
   value: '5432'
 - name: POSTGRES_HOST
-  value: {{ .Release.Name }}-postgresql
+  value: {{ .Values.postgresql.postgresqlHost | quote }}
 - name: POSTGRES_USER
   value: {{ .Values.postgresql.postgresqlUsername | quote }}
 - name: POSTGRES_PASSWORD
