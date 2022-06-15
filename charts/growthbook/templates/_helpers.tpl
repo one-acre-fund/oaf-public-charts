@@ -81,3 +81,10 @@ Create the name of the service account to use
 {{- .Values.growthbook.externalMongodbUri }}
 {{- end }}
 {{- end }}
+
+{{- define "growthbook.mongo.env" -}}
+- name: MONGODB_PORT
+  value: '27017'
+- name: MONGODB_HOST
+  value: {{ include "growthbook.fullname" . }}-mongodb
+{{- end }}
