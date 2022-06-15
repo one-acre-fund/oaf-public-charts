@@ -264,7 +264,7 @@ postgresql:
 
   # TODO: support external db
   # For now we only support a db installed with a subchart
-
+  postgresqlHost: "{{ .Release.Name }}-postgresql"
   postgresqlPostgresPassword: admin
   postgresqlUsername: postgres
   postgresqlPassword: kobo
