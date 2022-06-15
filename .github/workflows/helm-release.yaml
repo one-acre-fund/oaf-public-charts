@@ -28,7 +28,7 @@ jobs:
 
       - name: Add bitnami repo
         run: helm repo add bitnami https://charts.bitnami.com/bitnami
-      
+
       - name: Add gatekeeper repo
         run: helm repo add gatekeeper https://gogatekeeper.github.io/helm-gogatekeeper
 
