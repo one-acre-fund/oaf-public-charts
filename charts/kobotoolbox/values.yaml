@@ -264,8 +264,9 @@ postgresql:
 
   # TODO: support external db
   # For now we only support a db installed with a subchart
-  postgresqlHost: "{{ .Release.Name }}-postgresql"
-  postgresqlPostgresPassword: admin
-  postgresqlUsername: postgres
-  postgresqlPassword: kobo
+  auth:
+    host: "{{ .Release.Name }}-postgresql"
+    postgresPassword: admin
+    username: postgres
+    password: kobo
   initdbScriptsConfigMap: "{{ .Release.Name }}-postgres-init"
