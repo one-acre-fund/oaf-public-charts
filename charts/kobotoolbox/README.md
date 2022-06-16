@@ -27,10 +27,10 @@ $ helm install my-release one-acre-fund/kobotoolbox
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | mongodb | ~10.1.3 |
-| https://charts.bitnami.com/bitnami | postgresql | ~10.1.2 |
-| https://charts.bitnami.com/bitnami | redismain(redis) | ~10.7.4 |
-| https://charts.bitnami.com/bitnami | rediscache(redis) | ~10.7.4 |
+| https://charts.bitnami.com/bitnami | mongodb | ~12.1.20 |
+| https://charts.bitnami.com/bitnami | postgresql | ~11.6.6 |
+| https://charts.bitnami.com/bitnami | redismain(redis) | ~16.12.2 |
+| https://charts.bitnami.com/bitnami | rediscache(redis) | ~16.12.2 |
 
 ## Values
 
