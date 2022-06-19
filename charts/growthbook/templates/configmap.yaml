@@ -1,0 +1,17 @@
+apiVersion: v1
+data:
+  livenessprobe-exec.sh: |
+    #!/bin/bash
+    CURL_HTTP=$(curl -s -o /dev/null -w "%{http_code}" -XPOST http://localhost:3100/auth/refresh)
+    CURL_EXIT=$?
+    if [ $CURL_EXIT -eq 0 ] && [ $CURL_HTTP -eq 200 ]; then
+      echo "Liveness check probe OK"
+      exit 0
+    else
+      echo "Liveness check probe ERROR - curl exit code $CURL_EXIT, API HTTP code $CURL_HTTP"
+      exit 1
+    fi
+
+kind: ConfigMap
+metadata:
+  name: {{ include "growthbook.fullname" . }}-livenessprobe-exec
