@@ -80,7 +80,11 @@ Create the name of the service account to use
 
 {{- define "growthbook.mongo.uri" -}}
 {{- if .Values.mongodb.enabled -}}
-{{- printf "mongodb://%s:%s@%s:27017/%s" .Values.mongodb.auth.username  .Values.mongodb.auth.password (include "growthbook.mongo.service" .) .Values.mongodb.auth.database }}
+{{- if ne .Values.mongodb.architecture "replicaset" -}}
+{{- printf "mongodb://%s:%s@%s:27017/%s" .Values.mongodb.auth.username .Values.mongodb.auth.password (include "growthbook.mongo.service" .) .Values.mongodb.auth.database }}
+{{- else }}
+{{- printf "mongodb://%s:%s@%s:27017/%s?replicaSet=%s" .Values.mongodb.auth.username .Values.mongodb.auth.password (include "growthbook.mongo.service" .) .Values.mongodb.auth.database .Values.mongodb.replicaSetName }}
+{{- end }}
 {{- else }}
 {{- .Values.growthbook.externalMongodbUri }}
 {{- end }}
