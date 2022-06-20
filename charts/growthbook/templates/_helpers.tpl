@@ -75,7 +75,7 @@ Create the name of the service account to use
 {{- end }}
 
 {{- define "growthbook.mongo.service" -}}
-{{ include "growthbook.fullname" . }}-{{- if eq .Values.mongodb.architecture "replicaset" -}}mongodb-headless{{- else -}}mongo{{- end -}}
+{{ include "growthbook.fullname" . }}-{{- if eq .Values.mongodb.architecture "replicaset" -}}mongodb-headless{{- else -}}mongodb{{- end -}}
 {{- end }}
 
 {{- define "growthbook.mongo.uri" -}}
