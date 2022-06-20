@@ -214,18 +214,12 @@ global:
 rediscache:
   enabled: true
   usePassword: true
-  cluster:
-    # disable slaves
-    enabled: false
-    slaveCount: 1
+  architecture: standalone
 
 redismain:
   enabled: true
   usePassword: true
-  cluster:
-    # disable slaves
-    enabled: false
-    slaveCount: 1
+  architecture: standalone
 
 # -- Standard MongoDB values
 # See https://artifacthub.io/packages/helm/bitnami/mongodb for doc
