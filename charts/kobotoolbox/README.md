@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.2.11](https://img.shields.io/badge/Version-0.2.11-informational?style=flat-square)
+![Version: 0.2.12](https://img.shields.io/badge/Version-0.2.12-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -83,8 +83,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | postgresql.kobocatDatabase | string | `"kobocat"` | DB name for the form server |
 | postgresql.kpiDatabase | string | `"koboform"` | DN name for the main Kobo UI |
 | probes.enabled | bool | `true` |  |
-| rediscache.cluster.enabled | bool | `false` |  |
-| rediscache.cluster.slaveCount | int | `1` |  |
+| rediscache.architecture | string | `"standalone"` |  |
 | rediscache.enabled | bool | `true` |  |
 | rediscache.usePassword | bool | `true` |  |
 | redismain.cluster.enabled | bool | `false` |  |
