@@ -122,6 +122,8 @@ mongodb:
     username: growthbook
     password: growthbook
     database: growthbook-db
+  architecture: standalone
+  replicaSetName: rs0
   initdbScripts:
     grant-role.js: |
       db = db.getSiblingDB('{{ .Values.auth.database }}')

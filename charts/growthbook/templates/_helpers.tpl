@@ -74,9 +74,17 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{- define "growthbook.mongo.service" -}}
+{{ include "growthbook.fullname" . }}-{{- if eq .Values.mongodb.architecture "replicaset" -}}mongodb-headless{{- else -}}mongodb{{- end -}}
+{{- end }}
+
 {{- define "growthbook.mongo.uri" -}}
 {{- if .Values.mongodb.enabled -}}
-{{- printf "mongodb://%s:%s@%s-mongodb:27017/%s" .Values.mongodb.auth.username  .Values.mongodb.auth.password (include "growthbook.fullname" .) .Values.mongodb.auth.database }}
+{{- if ne .Values.mongodb.architecture "replicaset" -}}
+{{- printf "mongodb://%s:%s@%s:27017/%s" .Values.mongodb.auth.username .Values.mongodb.auth.password (include "growthbook.mongo.service" .) .Values.mongodb.auth.database }}
+{{- else }}
+{{- printf "mongodb://%s:%s@%s:27017/%s?replicaSet=%s" .Values.mongodb.auth.username .Values.mongodb.auth.password (include "growthbook.mongo.service" .) .Values.mongodb.auth.database .Values.mongodb.replicaSetName }}
+{{- end }}
 {{- else }}
 {{- .Values.growthbook.externalMongodbUri }}
 {{- end }}
@@ -86,5 +94,5 @@ Create the name of the service account to use
 - name: MONGODB_PORT
   value: '27017'
 - name: MONGODB_HOST
-  value: {{ include "growthbook.fullname" . }}-mongodb
+  value: {{ include "growthbook.mongo.service" . }}
 {{- end }}
