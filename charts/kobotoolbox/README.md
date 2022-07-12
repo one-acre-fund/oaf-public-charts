@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.2.12](https://img.shields.io/badge/Version-0.2.12-informational?style=flat-square)
+![Version: 0.2.13](https://img.shields.io/badge/Version-0.2.13-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -86,8 +86,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | rediscache.architecture | string | `"standalone"` |  |
 | rediscache.enabled | bool | `true` |  |
 | rediscache.usePassword | bool | `true` |  |
-| redismain.cluster.enabled | bool | `false` |  |
-| redismain.cluster.slaveCount | int | `1` |  |
+| redismain.architecture | string | `"standalone"` |  |
 | redismain.enabled | bool | `true` |  |
 | redismain.usePassword | bool | `true` |  |
 | smtp.from | string | `""` | SMTP "from" address |
