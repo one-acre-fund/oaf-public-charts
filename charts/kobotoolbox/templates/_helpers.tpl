@@ -3,11 +3,11 @@
 # TODO: move passwords to secrets...
 
 {{- define "kc_dburl" -}}
-postgis://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.postgresPassword }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.kobocatDatabase }}
+postgis://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.postgresPassword }}@{{ .Values.postgresql.auth.host }}:5432/{{ .Values.postgresql.kobocatDatabase }}
 {{- end -}}
 
 {{- define "kpi_dburl" -}}
-postgis://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.postgresPassword }}@{{ .Release.Name }}-postgresql:5432/{{ .Values.postgresql.kpiDatabase }}
+postgis://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.postgresPassword }}@{{ .Values.postgresql.auth.host }}:5432/{{ .Values.postgresql.kpiDatabase }}
 {{- end -}}
 
 {{- define "internal_domain" -}}
