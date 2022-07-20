@@ -224,6 +224,10 @@ spec:
         - name: kobo-assets
           configMap:
             name: {{ .Release.Name }}-assets
+        # This volume will host uploaded media. If the pod is scaled to more than 1 replica, it needs to be ReadWriteMany
+        - name: media
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-kobo-media
         # Using an emptyDir to cache compiled statics... it will survive container crashes, but not pod restarts
         - name: cache-volume
           emptyDir: {}
