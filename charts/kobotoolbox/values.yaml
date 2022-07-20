@@ -7,7 +7,7 @@ kobocat:
     name: kobotoolbox/kobocat
     # -- KoboCat docker image tag
     # see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags
-    tag: "2.021.24b"
+    tag: "beta"
   # -- DNS subdomain name to serve the form server from
   subdomain: kc
   # -- Dictionary of env variables to pass
@@ -19,7 +19,7 @@ kpi:
     # See https://hub.docker.com/r/kobotoolbox/kpi for list of tags
     name: kobotoolbox/kpi
     # -- kpi docker image tag
-    tag: "2.021.41"
+    tag: "beta"
   # -- DNS subdomain to serve the main UI from
   subdomain: kobo
   # -- Dictionary of env variables to pass
@@ -169,6 +169,14 @@ general:
     storageClass: ""
     # -- Needs to be ReadWriteMany if you intend to scale to more than 1 pod!
     accessMode: ReadWriteOnce
+
+  # Azure blob storage credentials
+  kpiDefaultFileStorage: storages.backends.azure_storage.AzureStorage
+  azureAccountName: storage-account-name
+  azureContainer: storage-container-name
+  azureUrlExpirationSecs: None
+  kobocatDefaultFileStorage: storages.backends.azure_storage.AzureStorage
+  azureAccountKey: secrettoken
 
 ingress:
   # -- Install ingress?
