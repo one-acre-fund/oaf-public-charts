@@ -62,13 +62,6 @@ spec:
             - name: cache-volume
               subPath: static
               mountPath: /srv/www
-            - name: media
-              subPath: kobocat_media_uploads
-              mountPath: /media
-            # expose kpi media
-            - name: media
-              subPath: kpi_media
-              mountPath: /srv/kpi_media
           {{- if .Values.probes.enabled }}
           readinessProbe:
             httpGet:
@@ -133,10 +126,6 @@ spec:
               mountPath: /srv/src/kobocat/docker/kobocat.ini
               subPath: kc_uwsgi.ini
               readOnly: true
-            # Store uploaded media in PVC
-            - name: media
-              subPath: kobocat_media_uploads
-              mountPath: /srv/src/kobocat/media
             - name: cache-volume
               subPath: static/kobocat
               mountPath: /srv/static
@@ -212,13 +201,6 @@ spec:
             - name: cache-volume
               subPath: static/kpi
               mountPath: /srv/static
-            # media
-            - name: media
-              subPath: kpi_media
-              mountPath: /srv/src/kpi/media
-            - name: media
-              subPath: kobocat_media_uploads
-              mountPath: /srv/src/kobocat/media
           readinessProbe:
             tcpSocket:
               port: 8003

@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.2.14](https://img.shields.io/badge/Version-0.2.14-informational?style=flat-square)
+![Version: 0.2.16](https://img.shields.io/badge/Version-0.2.16-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -49,12 +49,18 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | external.ravenDSN.kobocat | string | `""` |  |
 | external.ravenDSN.kpi | string | `""` |  |
 | external.ravenDSN.kpiJs | string | `""` |  |
+| general.azureAccountKey | string | `"secrettoken"` |  |
+| general.azureAccountName | string | `"storage-account-name"` |  |
+| general.azureContainer | string | `"storage-container-name"` |  |
+| general.azureUrlExpirationSecs | string | `"None"` |  |
 | general.debug | bool | `false` | Enable various debug flags? |
 | general.djangoSecret | string | `"EKMvRtT2RFB3xDvFty4SVCsTyaQAHS9aA2mkRqtTp9zQYz48fp"` | Random Django secret |
 | general.externalDomain | string | `"example.com"` | Parent domain to serve all apps from __WARNING__: The subdomains MUST be reachable since the application will try to call itself at this address |
 | general.externalPort | string | `nil` | Public URL port |
 | general.externalScheme | string | `"http"` | Public URL scheme |
 | general.forceInternal | bool | `false` | Set this to true in order to force internal resolution of external domains, in case those aren't reachable from inside the containers. Useful for troubleshooting, but won't work if the public scheme is https |
+| general.kobocatDefaultFileStorage | string | `"storages.backends.azure_storage.AzureStorage"` |  |
+| general.kpiDefaultFileStorage | string | `"storages.backends.azure_storage.AzureStorage"` |  |
 | general.mediaStorage.accessMode | string | `"ReadWriteOnce"` | Needs to be ReadWriteMany if you intend to scale to more than 1 pod! |
 | general.mediaStorage.size | string | `"10Gi"` | Storage size for uploaded media volume |
 | general.mediaStorage.storageClass | string | `""` | Storage class will default to global.storageClass if provided, but can be specifically overridden here |
@@ -70,11 +76,11 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | ingress.tls | object | `{}` | Ingress TLS settings |
 | kobocat.extraEnv | object | `{}` | Dictionary of env variables to pass |
 | kobocat.image.name | string | `"kobotoolbox/kobocat"` | KoboCat docker image name |
-| kobocat.image.tag | string | `"2.021.24b"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
+| kobocat.image.tag | string | `"beta"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
 | kobocat.subdomain | string | `"kc"` | DNS subdomain name to serve the form server from |
 | kpi.extraEnv | object | `{"DJANGO_LANGUAGE_CODES":"en fr es ar zh-hans hi ku","KOBO_SUPPORT_URL":"http://support.kobotoolbox.org/"}` | Dictionary of env variables to pass |
 | kpi.image.name | string | `"kobotoolbox/kpi"` | kpi docker image name See https://hub.docker.com/r/kobotoolbox/kpi for list of tags |
-| kpi.image.tag | string | `"2.021.41"` | kpi docker image tag |
+| kpi.image.tag | string | `"beta"` | kpi docker image tag |
 | kpi.subdomain | string | `"kobo"` | DNS subdomain to serve the main UI from |
 | mongodb | object | see `values.yaml` | Standard MongoDB values See https://artifacthub.io/packages/helm/bitnami/mongodb for doc |
 | mongodb.enabled | bool | `true` | Install MongoDB? |
