@@ -31,5 +31,5 @@ spec:
     - hosts:
         - {{ .Values.ingress.appOriginName }}
         - {{ .Values.ingress.apiHostName }}
-      secretName: {{ .secretName }}
+      secretName: {{ .Values.ingress.name }}-tls
 {{- end -}}
