@@ -81,7 +81,7 @@ spec:
                   key: MONGODB_URI
             - name: EMAIL_ENABLED
               value: {{ .Values.growthbook.email.enabled | quote }}
-            {{ if .Values.growthbook.email.enabled }} 
+            {{ if .Values.growthbook.email.enabled }}
             - name: EMAIL_HOST
               value: {{ .Values.growthbook.email.host }}
             - name: EMAIL_PORT
