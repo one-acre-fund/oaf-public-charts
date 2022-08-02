@@ -27,6 +27,7 @@ spec:
       serviceAccountName: {{ include "growthbook.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{ if .Values.growthbook.mongodb.enabled }} 
       initContainers:
         # Wait for MongoDB
         - name: wait-db
@@ -39,6 +40,7 @@ spec:
             - dockerize -timeout=120s -wait tcp://${MONGODB_HOST}:${MONGODB_PORT}
           env:
             {{- include "growthbook.mongo.env" . | nindent 12 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -79,7 +81,7 @@ spec:
                   key: MONGODB_URI
             - name: EMAIL_ENABLED
               value: {{ .Values.growthbook.email.enabled | quote }}
-            {{ if .Values.growthbook.email.enabled }}
+            {{ if .Values.growthbook.email.enabled }} 
             - name: EMAIL_HOST
               value: {{ .Values.growthbook.email.host }}
             - name: EMAIL_PORT
