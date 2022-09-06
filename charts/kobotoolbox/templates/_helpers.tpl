@@ -125,7 +125,9 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
   value: ".{{ .Values.general.externalDomain }} .{{ include "internal_domain" . }} localhost"
 
 - name: KPI_DEFAULT_FILE_STORAGE
-  value: {{ .Values.general.kpiDefaultFileStorage | quote }}
+  value: {{ .Values.general.defaultFileStorage | quote }}
+- name: KOBOCAT_DEFAULT_FILE_STORAGE
+  value: {{ .Values.general.defaultFileStorage | quote }}
 - name: AZURE_ACCOUNT_NAME
   value: {{ .Values.general.azureAccountName | quote }}
 - name: AZURE_CONTAINER
@@ -307,6 +309,7 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
   value: {{ include "kobocat_url" . | quote }}
 - name: ENKETO_URL
   value: {{ include "enketo_url" . | quote }}
+  
 
 # DATABASE
 - name: DATABASE_URL

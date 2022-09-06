@@ -171,7 +171,7 @@ general:
     accessMode: ReadWriteOnce
 
   # Azure blob storage credentials
-  kpiDefaultFileStorage: storages.backends.azure_storage.AzureStorage
+  defaultFileStorage: storages.backends.azure_storage.AzureStorage
   azureAccountName: storage-account-name
   azureContainer: storage-container-name
   azureUrlExpirationSecs: None
