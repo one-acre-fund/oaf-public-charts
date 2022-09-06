@@ -6,6 +6,8 @@ metadata:
 data:
   kpi_uwsgi.ini: |
     [uwsgi]
+    
+    lazy-apps = True
 
     # directory structure
     chdir       = $(KPI_SRC_DIR)
