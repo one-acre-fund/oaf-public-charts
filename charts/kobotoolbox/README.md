@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.2.18](https://img.shields.io/badge/Version-0.2.18-informational?style=flat-square)
+![Version: 0.2.19](https://img.shields.io/badge/Version-0.2.19-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -54,13 +54,13 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | general.azureContainer | string | `"storage-container-name"` |  |
 | general.azureUrlExpirationSecs | string | `"None"` |  |
 | general.debug | bool | `false` | Enable various debug flags? |
+| general.defaultFileStorage | string | `"storages.backends.azure_storage.AzureStorage"` |  |
 | general.djangoSecret | string | `"EKMvRtT2RFB3xDvFty4SVCsTyaQAHS9aA2mkRqtTp9zQYz48fp"` | Random Django secret |
 | general.externalDomain | string | `"example.com"` | Parent domain to serve all apps from __WARNING__: The subdomains MUST be reachable since the application will try to call itself at this address |
 | general.externalPort | string | `nil` | Public URL port |
 | general.externalScheme | string | `"http"` | Public URL scheme |
 | general.forceInternal | bool | `false` | Set this to true in order to force internal resolution of external domains, in case those aren't reachable from inside the containers. Useful for troubleshooting, but won't work if the public scheme is https |
 | general.kobocatDefaultFileStorage | string | `"storages.backends.azure_storage.AzureStorage"` |  |
-| general.kpiDefaultFileStorage | string | `"storages.backends.azure_storage.AzureStorage"` |  |
 | general.mediaStorage.accessMode | string | `"ReadWriteOnce"` | Needs to be ReadWriteMany if you intend to scale to more than 1 pod! |
 | general.mediaStorage.size | string | `"10Gi"` | Storage size for uploaded media volume |
 | general.mediaStorage.storageClass | string | `""` | Storage class will default to global.storageClass if provided, but can be specifically overridden here |
