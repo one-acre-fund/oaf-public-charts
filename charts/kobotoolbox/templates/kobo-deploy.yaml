@@ -94,10 +94,10 @@ spec:
         - name: kobocat
           image: "{{ .Values.kobocat.image.name }}:{{ .Values.kobocat.image.tag }}"
           terminationMessagePolicy: FallbackToLogsOnError
-          # command:
-          # - sh
-          # - -c
-          # - sleep infinity
+          command:
+          - sh
+          - -c
+          - sleep infinity
           ports:
             - containerPort: 8001
           env:
