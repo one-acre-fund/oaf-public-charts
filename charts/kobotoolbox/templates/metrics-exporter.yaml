@@ -22,7 +22,7 @@ spec:
           image: timonwong/uwsgi-exporter:latest
           imagePullPolicy: IfNotPresent
           args:
-            - --stats.uri {{ .Release.Name }}-kobo:8001
-            - --web.telemetry-path /metrics
+            - --stats.uri="{{ .Release.Name }}-kobo:8001"
+            - --web.telemetry-path="/metrics"
           ports:
             - containerPort: 9117
