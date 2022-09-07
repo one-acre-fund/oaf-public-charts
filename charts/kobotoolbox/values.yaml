@@ -171,11 +171,10 @@ general:
     accessMode: ReadWriteOnce
 
   # Azure blob storage credentials
-  defaultFileStorage: storages.backends.azure_storage.AzureStorage
+  defaultFileStorage: kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage
   azureAccountName: storage-account-name
   azureContainer: storage-container-name
-  azureUrlExpirationSecs: None
-  kobocatDefaultFileStorage: storages.backends.azure_storage.AzureStorage
+  azureUrlExpirationSecs: 3600
   azureAccountKey: secrettoken
 
 ingress:
