@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-uwsgi-exporter
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.enketo.replicas }}
+  selector:
+    matchLabels:
+      org.kobotoolbox.instance: {{ .Release.Name }}-uwsgi-exporter
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9117'
+        prometheus.io/path: '/metrics'
+      labels:
+        org.kobotoolbox.instance: {{ .Release.Name }}-uwsgi-exporter
+    spec:
+      containers:
+        - name: uwsgi-exporter
+          image: timonwong/uwsgi-exporter:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - --stats.uri {{ .Release.Name }}-kobo:8001
+            - --web.telemetry-path /metrics
+          ports:
+            - containerPort: 9117
