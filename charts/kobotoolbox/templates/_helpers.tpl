@@ -134,8 +134,6 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
   value: {{ .Values.general.azureContainer | quote }}
 - name: AZURE_URL_EXPIRATION_SECS
   value: {{ .Values.general.azureUrlExpirationSecs | quote }}
-- name: KOBOCAT_DEFAULT_FILE_STORAGE
-  value: {{ .Values.general.kpiDefaultFileStorage | quote }}
 
 - name: AZURE_ACCOUNT_KEY
   valueFrom:
