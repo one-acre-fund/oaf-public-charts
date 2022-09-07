@@ -84,6 +84,8 @@ data:
   kc_uwsgi.ini: |
     [uwsgi]
 
+    lazy-apps = True
+
     # directory structure
     chdir           = $(KOBOCAT_SRC_DIR)
     module          = onadata.apps.main.wsgi
