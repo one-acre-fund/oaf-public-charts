@@ -1,6 +1,6 @@
 # flagsmith
 
-![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square)
+![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square)
 
 Flagsmith - a Feature flag and remote configuration solution
 
@@ -27,7 +27,7 @@ $ helm install my-release one-acre-fund/flagsmith
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | postgresql | ~10.1.2 |
+| https://charts.bitnami.com/bitnami | postgresql | ~11.6.6 |
 
 ## Values
 
