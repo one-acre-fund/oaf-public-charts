@@ -116,7 +116,7 @@ spec:
                 {{- tpl $value $ | nindent 16 }}
             {{- end }}
           envFrom:
-            secretKeyRef:
+            - secretKeyRef:
               name: {{ .Release.Name }}-kobocat-secrets
           volumeMounts:
             # Replace redundant init scripts with empty files
@@ -187,7 +187,7 @@ spec:
                 {{- tpl $value $ | nindent 16 }}
             {{- end }}
           envFrom:
-            secretKeyRef:
+            - secretKeyRef:
               name: {{ .Release.Name }}-kpi-secrets
           ports:
             - containerPort: 8003
