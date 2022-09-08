@@ -44,6 +44,8 @@ enketo:
   encryptionKey: w0RkyuQSB33md8cZB5Xx
   # -- Random API key
   lessSecureEncryptionKey: wUNQWPwA3bDVzckKKtS4
+  # -- Logo source (data:URI or relative path in `public/images` folder)
+  logoSource: ""
   # -- Enketo configuration - will be evaluated as a template
   # @default -- see `values.yaml`
   config: |-
@@ -112,6 +114,11 @@ enketo:
       },
       "payload limit": "1mb",
       "text field character limit": 1000000,
+      {{- if .Values.enketo.logoSource }}
+      "logo": {
+        "source": "{{ .Values.enketo.logoSource }}"
+      },
+      {{- end }}
       "maps": [
         {
           "name": "humanitarian",

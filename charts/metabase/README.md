@@ -1,8 +1,6 @@
 # metabase
 
-
-
-![Version: 0.1.10](https://img.shields.io/badge/Version-0.1.10-informational?style=flat-square) 
+![Version: 0.1.10](https://img.shields.io/badge/Version-0.1.10-informational?style=flat-square)
 
 Metabase with postgres persistence and plugins support
 
@@ -12,7 +10,7 @@ Metabase with postgres persistence and plugins support
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Yann-J | yann.jouanique@gmail.com |  |
+| Yann-J | <yann.jouanique@gmail.com> |  |
 
 ## Source Code
 

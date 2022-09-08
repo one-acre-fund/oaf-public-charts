@@ -1,8 +1,6 @@
 # fineract
 
-
-
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) 
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square)
 
 Apache Fineract: A Platform for Microfinance
 
@@ -12,7 +10,7 @@ Apache Fineract: A Platform for Microfinance
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Yann-J | yann.jouanique@gmail.com |  |
+| Yann-J | <yann.jouanique@gmail.com> |  |
 
 ## Source Code
 
@@ -52,7 +50,7 @@ $ helm install --set mysql.auth.password=xxx --set mysql.auth.rootPassword=yyy m
 | global.db.tenantsDb | string | `"fineract_tenants"` | DB name for tenants db |
 | ingress.annotations | object | `{}` | Ingress annotations |
 | ingress.enabled | bool | `false` | Create Ingress? |
-| ingress.hosts | list | `[]` |  |
+| ingress.hosts | list | `[]` | List of domains to serve on |
 | ingress.tls | list | `[]` | TLS settings |
 | mifosx.apiURL | string | `"https://www.example.com"` |  |
 | mifosx.enabled | bool | `false` | Deploy mifos-x UI? |

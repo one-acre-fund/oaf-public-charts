@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.2.26](https://img.shields.io/badge/Version-0.2.26-informational?style=flat-square)
+![Version: 0.2.27](https://img.shields.io/badge/Version-0.2.27-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -42,6 +42,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | enketo.image.name | string | `"enketo/enketo-express"` | Enketo image name - the web-based form preview and filling UI |
 | enketo.image.tag | string | `"3.0.4"` | Enketo image tag See https://hub.docker.com/r/kobotoolbox/enketo-express-extra-widgets |
 | enketo.lessSecureEncryptionKey | string | `"wUNQWPwA3bDVzckKKtS4"` | Random API key |
+| enketo.logoSource | string | `""` | Logo source (data:URI or relative path in `public/images` folder) |
 | enketo.replicas | int | `1` | Number of Enketo pods |
 | enketo.subdomain | string | `"ee"` | DNS subdomain to serve Enketo from |
 | external.google.analyticsToken | string | `""` |  |

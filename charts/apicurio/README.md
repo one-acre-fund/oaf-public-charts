@@ -1,8 +1,6 @@
 # apicurio
 
-
-
-![Version: 1.0.11](https://img.shields.io/badge/Version-1.0.11-informational?style=flat-square) 
+![Version: 1.0.11](https://img.shields.io/badge/Version-1.0.11-informational?style=flat-square)
 
 Apicurio Studio API designer
 
@@ -12,7 +10,7 @@ Apicurio Studio API designer
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Yann-J | yann.jouanique@gmail.com |  |
+| Yann-J | <yann.jouanique@gmail.com> |  |
 
 ## Source Code
 
