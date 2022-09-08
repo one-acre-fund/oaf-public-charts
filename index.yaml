@@ -2,6 +2,30 @@ apiVersion: v1
 entries:
   apicurio:
   - apiVersion: v2
+    created: "2022-09-08T20:13:08.680881897Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: Apicurio Studio API designer
+    digest: 077088303527ff319e0ba5f7fa59332c73a1c625ddda60b20d4e596a1499e603
+    home: http://www.apicur.io/
+    icon: https://avatars.githubusercontent.com/u/28107283?s=400&v=4
+    keywords:
+    - api
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: apicurio
+    sources:
+    - https://github.com/Apicurio/apicurio-studio
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/apicurio
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/apicurio-1.0.13/apicurio-1.0.13.tgz
+    version: 1.0.13
+  - apiVersion: v2
     created: "2022-03-31T07:10:34.306497459Z"
     dependencies:
     - condition: postgresql.enabled
@@ -428,6 +452,30 @@ entries:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/fineract-0.1.0/fineract-0.1.0.tgz
     version: 0.1.0
   flagsmith:
+  - apiVersion: v2
+    created: "2022-09-08T20:13:08.883821461Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: Flagsmith - a Feature flag and remote configuration solution
+    digest: 7daadfe5fde111b25db37f64a7d1cd55172566b4b5d8fbac0ad0e3413da95198
+    home: https://flagsmith.com/
+    icon: https://avatars.githubusercontent.com/u/58150233?s=400&v=4
+    keywords:
+    - feature-flags
+    - remote-config
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: flagsmith
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/flagsmith
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/flagsmith-0.1.5/flagsmith-0.1.5.tgz
+    version: 0.1.5
   - apiVersion: v2
     created: "2021-05-28T07:00:08.996446544Z"
     dependencies:
@@ -958,6 +1006,32 @@ entries:
   growthbook:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-09-08T20:13:09.050244818Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami/
+      version: ~11.1.0
+    - condition: gatekeeper.enabled
+      name: gatekeeper
+      repository: https://gogatekeeper.github.io/helm-gogatekeeper
+      version: ~0.1.14
+    description: A Helm chart for Growthbook
+    digest: a96ab482b8b8a71452920362e1514be93936ee7c9269a3975f0510eace364147
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    - email: jean.poutcheu@gmail.com
+      name: Nzeugaa
+    name: growthbook
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/growthbook-0.1.6/growthbook-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-06-22T12:50:53.157731347Z"
     dependencies:
     - condition: mongodb.enabled
@@ -1087,6 +1161,43 @@ entries:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/growthbook-0.1.1/growthbook-0.1.1.tgz
     version: 0.1.1
   kobotoolbox:
+  - apiVersion: v2
+    created: "2022-09-08T20:13:09.216816976Z"
+    dependencies:
+    - alias: redismain
+      condition: redismain.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~16.12.2
+    - alias: rediscache
+      condition: rediscache.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~16.12.2
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: ~12.1.20
+    description: KoboToolbox field data collection solution
+    digest: b96eb8c4e8e0a31ab5aaa5779048c22d07e8fe530d40cd79dbca7a77a6736164
+    home: https://www.kobotoolbox.org/
+    icon: https://avatars.githubusercontent.com/u/5543677?s=400&v=4
+    keywords:
+    - survey
+    - field
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: kobotoolbox
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/kobotoolbox
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/kobotoolbox-0.2.28/kobotoolbox-0.2.28.tgz
+    version: 0.2.28
   - apiVersion: v2
     created: "2022-09-07T17:28:24.698048756Z"
     dependencies:
@@ -2122,6 +2233,29 @@ entries:
     version: 0.1.1
   metabase:
   - apiVersion: v2
+    created: "2022-09-08T20:13:09.371475501Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: Metabase with postgres persistence and plugins support
+    digest: de97109d9f7c0f105fd19b37345ecfc33fcd4a949ba40fd3b16f1631912603c4
+    home: https://www.metabase.com/
+    icon: https://avatars.githubusercontent.com/u/10520629?s=400&v=4
+    keywords:
+    - bi
+    - analytics
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: metabase
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/metabase
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/metabase-0.1.11/metabase-0.1.11.tgz
+    version: 0.1.11
+  - apiVersion: v2
     created: "2021-05-31T07:37:36.295633685Z"
     dependencies:
     - condition: postgresql.enabled
@@ -2237,6 +2371,35 @@ entries:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
     version: 0.1.0
   n8n:
+  - apiVersion: v2
+    appVersion: 0.173.1
+    created: "2022-09-08T20:13:09.538201161Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~15.7.5
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    - condition: gatekeeper.enabled
+      name: gatekeeper
+      repository: https://gogatekeeper.github.io/helm-gogatekeeper
+      version: ~0.1.14
+    description: A Helm chart for Kubernetes
+    digest: 9904a02626e5266c036ab179256ab34c925e1169d5abd6269b233827c19881cb
+    icon: https://avatars.githubusercontent.com/u/45487711?s=400&v=4
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: n8n
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/n8n-0.1.35/n8n-0.1.35.tgz
+    version: 0.1.35
   - apiVersion: v2
     appVersion: 0.173.1
     created: "2022-04-20T11:17:25.344442198Z"
@@ -2673,6 +2836,24 @@ entries:
   nocodb:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-09-08T20:13:09.69684683Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: A Helm chart for Kubernetes
+    digest: f6905911bdd2c6f72233dff25ee074e2a63b3e96515d98c79c5001a169e0d385
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: nocodb
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.2.7/nocodb-0.2.7.tgz
+    version: 0.2.7
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-05-25T14:19:45.963715839Z"
     dependencies:
     - condition: postgresql.enabled
@@ -2905,4 +3086,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2022-09-07T17:28:24.698722485Z"
+generated: "2022-09-08T20:13:09.697457337Z"
