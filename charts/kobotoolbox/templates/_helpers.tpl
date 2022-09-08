@@ -124,23 +124,6 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
 - name: DJANGO_ALLOWED_HOSTS
   value: ".{{ .Values.general.externalDomain }} .{{ include "internal_domain" . }} localhost"
 
-- name: KPI_DEFAULT_FILE_STORAGE
-  value: {{ .Values.general.defaultFileStorage | quote }}
-- name: KOBOCAT_DEFAULT_FILE_STORAGE
-  value: {{ .Values.general.defaultFileStorage | quote }}
-- name: AZURE_ACCOUNT_NAME
-  value: {{ .Values.general.azureAccountName | quote }}
-- name: AZURE_CONTAINER
-  value: {{ .Values.general.azureContainer | quote }}
-- name: AZURE_URL_EXPIRATION_SECS
-  value: {{ .Values.general.azureUrlExpirationSecs | quote }}
-
-- name: AZURE_ACCOUNT_KEY
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: AZURE_ACCOUNT_KEY
-
 {{- end -}}
 
 {{- define "env_mongo" -}}
@@ -425,15 +408,11 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
 - name: {{ . }}_UWSGI_CHEAPER_RSS_LIMIT_SOFT
   value: '134217728'
 - name: {{ . }}_UWSGI_CHEAPER_WORKERS_COUNT
-  value: ''
+  value: '1'
 - name: {{ . }}_UWSGI_HARAKIRI
   value: '120'
 - name: {{ . }}_UWSGI_WORKER_RELOAD_MERCY
   value: '120'
-# - name: UWSGI_GROUP
-#   value: wsgi
-# - name: UWSGI_USER
-#   value: wsgi
 {{- end -}}
 
 

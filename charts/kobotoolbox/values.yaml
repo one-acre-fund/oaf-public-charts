@@ -11,7 +11,16 @@ kobocat:
   # -- DNS subdomain name to serve the form server from
   subdomain: kc
   # -- Dictionary of env variables to pass
-  extraEnv: {}
+  extraEnv:
+  # -- Azure blob storage credentials
+    KOBOCAT_DEFAULT_FILE_STORAGE: "kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"
+    AZURE_ACCOUNT_NAME: "storage-account-name"
+    AZURE_CONTAINER: "storage-container-name"
+    AZURE_URL_EXPIRATION_SECS: "3600"
+    AZURE_ACCOUNT_KEY: "secrettoken"
+
+  extraSecretEnv:
+    AZURE_ACCOUNT_KEY: secrettoken
 
 kpi:
   image:
@@ -25,7 +34,14 @@ kpi:
   # -- Dictionary of env variables to pass
   extraEnv:
     DJANGO_LANGUAGE_CODES: en fr es ar zh-hans hi ku
-    KOBO_SUPPORT_URL: http://support.kobotoolbox.org/
+    KOBO_SUPPORT_URL: "http://support.kobotoolbox.org/"
+    KPI_DEFAULT_FILE_STORAGE: "kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"
+    AZURE_ACCOUNT_NAME: "storage-account-name"
+    AZURE_CONTAINER: "storage-container-name"
+    AZURE_URL_EXPIRATION_SECS: "3600"
+
+  extraSecretEnv:
+    AZURE_ACCOUNT_KEY: secrettoken
 
 enketo:
   image:
@@ -176,13 +192,6 @@ general:
     storageClass: ""
     # -- Needs to be ReadWriteMany if you intend to scale to more than 1 pod!
     accessMode: ReadWriteOnce
-
-  # Azure blob storage credentials
-  defaultFileStorage: kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage
-  azureAccountName: storage-account-name
-  azureContainer: storage-container-name
-  azureUrlExpirationSecs: 3600
-  azureAccountKey: secrettoken
 
   # uwsgi exporter
   uwsgiExporter:

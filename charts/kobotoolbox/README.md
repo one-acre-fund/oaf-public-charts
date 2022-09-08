@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.2.27](https://img.shields.io/badge/Version-0.2.27-informational?style=flat-square)
+![Version: 0.2.28](https://img.shields.io/badge/Version-0.2.28-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -50,12 +50,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | external.ravenDSN.kobocat | string | `""` |  |
 | external.ravenDSN.kpi | string | `""` |  |
 | external.ravenDSN.kpiJs | string | `""` |  |
-| general.azureAccountKey | string | `"secrettoken"` |  |
-| general.azureAccountName | string | `"storage-account-name"` |  |
-| general.azureContainer | string | `"storage-container-name"` |  |
-| general.azureUrlExpirationSecs | int | `3600` |  |
 | general.debug | bool | `false` | Enable various debug flags? |
-| general.defaultFileStorage | string | `"kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"` |  |
 | general.djangoSecret | string | `"EKMvRtT2RFB3xDvFty4SVCsTyaQAHS9aA2mkRqtTp9zQYz48fp"` | Random Django secret |
 | general.externalDomain | string | `"example.com"` | Parent domain to serve all apps from __WARNING__: The subdomains MUST be reachable since the application will try to call itself at this address |
 | general.externalPort | string | `nil` | Public URL port |
@@ -75,11 +70,14 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | ingress.annotations | object | `{}` | Ingress annotations |
 | ingress.enabled | bool | `false` | Install ingress? |
 | ingress.tls | object | `{}` | Ingress TLS settings |
-| kobocat.extraEnv | object | `{}` | Dictionary of env variables to pass |
+| kobocat.extraEnv | object | `{"AZURE_ACCOUNT_KEY":"secrettoken","AZURE_ACCOUNT_NAME":"storage-account-name","AZURE_CONTAINER":"storage-container-name","AZURE_URL_EXPIRATION_SECS":"3600","KOBOCAT_DEFAULT_FILE_STORAGE":"kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"}` | Dictionary of env variables to pass |
+| kobocat.extraEnv.KOBOCAT_DEFAULT_FILE_STORAGE | string | `"kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"` | Azure blob storage credentials |
+| kobocat.extraSecretEnv.AZURE_ACCOUNT_KEY | string | `"secrettoken"` |  |
 | kobocat.image.name | string | `"kobotoolbox/kobocat"` | KoboCat docker image name |
 | kobocat.image.tag | string | `"beta"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
 | kobocat.subdomain | string | `"kc"` | DNS subdomain name to serve the form server from |
-| kpi.extraEnv | object | `{"DJANGO_LANGUAGE_CODES":"en fr es ar zh-hans hi ku","KOBO_SUPPORT_URL":"http://support.kobotoolbox.org/"}` | Dictionary of env variables to pass |
+| kpi.extraEnv | object | `{"AZURE_ACCOUNT_NAME":"storage-account-name","AZURE_CONTAINER":"storage-container-name","AZURE_URL_EXPIRATION_SECS":"3600","DJANGO_LANGUAGE_CODES":"en fr es ar zh-hans hi ku","KOBO_SUPPORT_URL":"http://support.kobotoolbox.org/","KPI_DEFAULT_FILE_STORAGE":"kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"}` | Dictionary of env variables to pass |
+| kpi.extraSecretEnv.AZURE_ACCOUNT_KEY | string | `"secrettoken"` |  |
 | kpi.image.name | string | `"kobotoolbox/kpi"` | kpi docker image name See https://hub.docker.com/r/kobotoolbox/kpi for list of tags |
 | kpi.image.tag | string | `"beta"` | kpi docker image tag |
 | kpi.subdomain | string | `"kobo"` | DNS subdomain to serve the main UI from |
