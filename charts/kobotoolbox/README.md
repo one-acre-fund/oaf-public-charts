@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.2.26](https://img.shields.io/badge/Version-0.2.26-informational?style=flat-square)
+![Version: 0.2.27](https://img.shields.io/badge/Version-0.2.27-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -68,6 +68,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | general.superUser.password | string | `"kobo"` | Admin user password |
 | general.superUser.username | string | `"kobo"` | Admin user name - This user will have access to kobotoolbox UI but also the built-in Django admin interface (/admin) |
 | general.supportEmail | string | `"support@example.com"` | Support email visible from the website |
+| general.uwsgiExporter.enabled | bool | `false` |  |
 | global.redis.password | string | `"brFdS9b7Xp"` | Redis password |
 | global.storageClass | string | `"standard"` | Will be used by this and all subcharts |
 | ingress.annotations | object | `{}` | Ingress annotations |

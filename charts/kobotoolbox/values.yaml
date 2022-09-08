@@ -177,6 +177,10 @@ general:
   azureUrlExpirationSecs: 3600
   azureAccountKey: secrettoken
 
+  # uwsgi exporter
+  uwsgiExporter:
+    enabled: false
+
 ingress:
   # -- Install ingress?
   enabled: false
