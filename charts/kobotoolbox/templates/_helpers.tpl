@@ -408,15 +408,11 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
 - name: {{ . }}_UWSGI_CHEAPER_RSS_LIMIT_SOFT
   value: '134217728'
 - name: {{ . }}_UWSGI_CHEAPER_WORKERS_COUNT
-  value: ''
+  value: '1'
 - name: {{ . }}_UWSGI_HARAKIRI
   value: '120'
 - name: {{ . }}_UWSGI_WORKER_RELOAD_MERCY
   value: '120'
-# - name: UWSGI_GROUP
-#   value: wsgi
-# - name: UWSGI_USER
-#   value: wsgi
 {{- end -}}
 
 
