@@ -1,6 +1,6 @@
 # metabase
 
-![Version: 0.1.10](https://img.shields.io/badge/Version-0.1.10-informational?style=flat-square)
+![Version: 0.1.11](https://img.shields.io/badge/Version-0.1.11-informational?style=flat-square)
 
 Metabase with postgres persistence and plugins support
 
@@ -27,7 +27,7 @@ $ helm install my-release one-acre-fund/metabase
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | postgresql | ~10.1.2 |
+| https://charts.bitnami.com/bitnami | postgresql | ~11.6.6 |
 
 ## Values
 
