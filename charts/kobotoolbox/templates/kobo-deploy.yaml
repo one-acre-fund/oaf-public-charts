@@ -1,4 +1,3 @@
-# Sync gateway pod
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -110,7 +109,7 @@ spec:
             {{- include "env_redis" . | nindent 12 }}
             {{- include "env_externals" . | nindent 12 }}
             {{- include "env_kobocat" . | nindent 12 }}
-            {{- include "env_uwsgi" "KC" | nindent 12 }}
+            {{- include "env_uwsgi" . | nindent 12 }}
             {{- include "env_smtp" . | nindent 12 }}
             - name: ENKETO_PROTOCOL
               value: http
@@ -121,6 +120,9 @@ spec:
               value: |-
                 {{- tpl $value $ | nindent 16 }}
             {{- end }}
+          envFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-kobocat-secrets
           volumeMounts:
             # Replace redundant init scripts with empty files
             - name: config
@@ -189,7 +191,9 @@ spec:
               value: |-
                 {{- tpl $value $ | nindent 16 }}
             {{- end }}
-
+          envFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-kpi-secrets
           ports:
             - containerPort: 8003
           volumeMounts:
