@@ -1,6 +1,6 @@
 # apicurio
 
-![Version: 1.0.12](https://img.shields.io/badge/Version-1.0.12-informational?style=flat-square)
+![Version: 1.0.13](https://img.shields.io/badge/Version-1.0.13-informational?style=flat-square)
 
 Apicurio Studio API designer
 
@@ -38,7 +38,7 @@ For more details, see [this ticket](https://github.com/Apicurio/apicurio-studio/
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | postgresql | ~10.1.2 |
+| https://charts.bitnami.com/bitnami | postgresql | ~11.6.6 |
 
 ## Values
 
