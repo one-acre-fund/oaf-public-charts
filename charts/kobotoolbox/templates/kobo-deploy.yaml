@@ -232,14 +232,16 @@ spec:
               port: 8003
             initialDelaySeconds: 30
             periodSeconds: 20
+        {{- if .Values.general.uwsgiExporter.enabled -}}
         - name: uwsgi-exporter
           image: timonwong/uwsgi-exporter:latest
           imagePullPolicy: IfNotPresent
           args:
-            - --stats.uri="http://localhost:8001"
-            - --web.telemetry-path="/metrics"
+            - --stats.uri='http://127.0.0.1:8001'
+            - --web.telemetry-path='/metrics'
           ports:
             - containerPort: 9117
+        {{- end -}}
       volumes:
         - name: nginx-confd
           configMap:
