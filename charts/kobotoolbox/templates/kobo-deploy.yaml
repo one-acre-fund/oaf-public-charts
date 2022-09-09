@@ -39,10 +39,10 @@ spec:
           image: jwilder/dockerize
           # We don't care about having latest...
           imagePullPolicy: IfNotPresent
-          # command:
-          #   - sh
-          #   - -c
-          #   - dockerize -timeout=120s -wait tcp://${KOBO_MONGO_HOST}:${KOBO_MONGO_PORT} -wait tcp://${POSTGRES_HOST}:${POSTGRES_PORT}
+          command:
+            - sh
+            - -c
+            - dockerize -timeout=120s -wait tcp://${KOBO_MONGO_HOST}:${KOBO_MONGO_PORT} -wait tcp://${POSTGRES_HOST}:${POSTGRES_PORT}
           env:
             {{- include "env_mongo" . | nindent 12 }}
             {{- include "env_postgres" . | nindent 12 }}
