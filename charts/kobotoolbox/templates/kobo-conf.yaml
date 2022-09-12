@@ -85,6 +85,8 @@ data:
     [uwsgi]
 
     lazy-apps = True
+    
+    enable-metrics = True
 
     # directory structure
     chdir           = $(KOBOCAT_SRC_DIR)
