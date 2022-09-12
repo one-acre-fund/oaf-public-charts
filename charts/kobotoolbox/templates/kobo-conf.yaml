@@ -7,7 +7,9 @@ data:
   kpi_uwsgi.ini: |
     [uwsgi]
     
-    # lazy-apps = True
+    lazy-apps = True
+    log-5xx = True
+    log-4xx = True
 
     # directory structure
     chdir       = $(KPI_SRC_DIR)
@@ -85,6 +87,8 @@ data:
     [uwsgi]
 
     lazy-apps = True
+    log-5xx = True
+    log-4xx = True
     
     enable-metrics = True
 
