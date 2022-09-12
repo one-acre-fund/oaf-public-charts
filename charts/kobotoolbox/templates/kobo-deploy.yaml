@@ -98,8 +98,10 @@ spec:
           command:
             - "/bin/bash"
             - -c
-            - python3 -m venv /opt/venv && pip uninstall -y django-oauth-toolkit && pip install django-oauth-toolkit==1.3.2
-            - "exec ${KOBOCAT_SRC_DIR}/docker/init.bash"
+            - python3 -m venv /opt/venv && \
+              pip uninstall -y django-oauth-toolkit && \
+              pip install django-oauth-toolkit==1.3.2 && \
+              exec ${KOBOCAT_SRC_DIR}/docker/init.bash
           ports:
             - containerPort: 8001
           env:
