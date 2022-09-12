@@ -212,7 +212,7 @@ spec:
             # Web server settings
             - name: config
               subPath: kpi_uwsgi.ini
-              mountPath: /srv/src/kpi/uwsgi.ini
+              mountPath: /srv/src/kpi/docker/uwsgi.ini
               readOnly: true
             # www
             - name: cache-volume
