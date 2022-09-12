@@ -95,6 +95,11 @@ spec:
         - name: kobocat
           image: "{{ .Values.kobocat.image.name }}:{{ .Values.kobocat.image.tag }}"
           terminationMessagePolicy: FallbackToLogsOnError
+          command:
+            - "/bin/bash"
+            - -c
+            - python3 -m venv /opt/venv && pip uninstall django-oauth-toolkit && pip uninstall django-oauth-toolkit==1.3.2
+            - "exec ${KOBOCAT_SRC_DIR}/docker/init.bash"
           ports:
             - containerPort: 8001
           env:
