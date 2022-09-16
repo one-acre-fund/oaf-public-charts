@@ -2,9 +2,10 @@ name: Lint with Mega-linter
 
 on:
   push:
+    branches-ignore:
+      - quality-checks
     branches:
       - main
-
   pull_request:
     branches:
       - main
