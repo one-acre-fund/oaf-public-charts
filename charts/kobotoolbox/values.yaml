@@ -7,7 +7,7 @@ kobocat:
     name: kobotoolbox/kobocat
     # -- KoboCat docker image tag
     # see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags
-    tag: "beta"
+    tag: "2.021.47"
   # -- DNS subdomain name to serve the form server from
   subdomain: kc
   # -- Dictionary of env variables to pass
@@ -28,7 +28,7 @@ kpi:
     # See https://hub.docker.com/r/kobotoolbox/kpi for list of tags
     name: kobotoolbox/kpi
     # -- kpi docker image tag
-    tag: "beta"
+    tag: "2.021.47"
   # -- DNS subdomain to serve the main UI from
   subdomain: kobo
   # -- Dictionary of env variables to pass
@@ -256,7 +256,6 @@ mongodb:
   enabled: true
   # TODO: support external db
   # For now we only support a db installed with a subchart
-
   auth:
     rootPassword: kobo
     username: kobo
@@ -290,4 +289,8 @@ postgresql:
     postgresPassword: admin
     username: postgres
     password: kobo
-  initdbScriptsConfigMap: "{{ .Release.Name }}-postgres-init"
+  primary:
+    initdb:
+      user: postgres
+      password: admin
+      scriptsConfigMap: "{{ .Release.Name }}-postgres-init"
