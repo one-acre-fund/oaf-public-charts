@@ -12,16 +12,14 @@ spec:
   template:
     metadata:
       annotations:
-        co.elastic.logs/enabled: "true"
         prometheus.io/scrape: "true"
-        prometheus.io/port: "9117"
         prometheus.io/path: "/metrics"
       labels:
         org.kobotoolbox.instance: {{ .Release.Name }}-metrics-exporter
     spec:
       initContainers:
         # Wait for kobocat and kpi
-        - name: wait-db
+        - name: wait-servers
           image: jwilder/dockerize
           imagePullPolicy: IfNotPresent
           command:
@@ -36,9 +34,10 @@ spec:
             - --stats.uri=tcp://{{ .Release.Name }}-kobo:1717
             - --web.telemetry-path=/metrics
             - --log.level={{ .Values.uwsgiExporter.logLevel }}
-            - --web.listen-address=9117
+            - --web.listen-address=:9117
           ports:
-            - containerPort: 9117
+            - name: metrics
+              containerPort: 9117
         - name: kpi-uwsgi-exporter
           image: timonwong/uwsgi-exporter:latest
           imagePullPolicy: IfNotPresent
@@ -46,7 +45,8 @@ spec:
             - --stats.uri=tcp://{{ .Release.Name }}-kobo:1818
             - --web.telemetry-path=/metrics
             - --log.level={{ .Values.uwsgiExporter.logLevel }}
-            - --web.listen-address=9118
+            - --web.listen-address=:9118
           ports:
-            - containerPort: 9118
+            - name: metrics
+              containerPort: 9118
 {{- end }}
