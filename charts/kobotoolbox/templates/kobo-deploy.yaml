@@ -242,7 +242,8 @@ spec:
           imagePullPolicy: IfNotPresent
           args:
             - --stats.uri=http://127.0.0.1:1717
-            - --web.telemetry-path='/metrics'
+            - --web.telemetry-path=/metrics
+            - --log.level=debug
           ports:
             - containerPort: 9117
         {{- end }}
