@@ -50,6 +50,10 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
 redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-master:6379/1
 {{- end -}}
 
+{{- define "mongo_url" -}}
+mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }}@{{ .Release.Name }}-mongodb:27017
+{{- end -}}
+
 {{- define "env_general" -}}
 # Choose between http or https
 - name: PUBLIC_REQUEST_SCHEME
@@ -157,6 +161,8 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
   value: {{ .Values.mongodb.auth.database | quote }}
 - name: KOBOCAT_MONGO_USER
   value: {{ .Values.mongodb.auth.username | quote }}
+- name: MONGO_DB_URL
+  value: {{ include "mongo_url" . | quote }}
 - name: KOBOCAT_MONGO_PASS
   valueFrom:
     secretKeyRef:

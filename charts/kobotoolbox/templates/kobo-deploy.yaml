@@ -78,7 +78,7 @@ spec:
               httpHeaders:
                 - name: Host
                   value: {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}
-            initialDelaySeconds: 10
+            initialDelaySeconds: 120
             periodSeconds: 60
             failureThreshold: 15
           livenessProbe:
@@ -88,17 +88,18 @@ spec:
               httpHeaders:
                 - name: Host
                   value: {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}
-            initialDelaySeconds: 60
+            initialDelaySeconds: 160
+            failureThreshold: 15
             periodSeconds: 30
           {{- end }}
         # Kobocat is the forms API server that Enketo / Collect will connect to
         - name: kobocat
           image: "{{ .Values.kobocat.image.name }}:{{ .Values.kobocat.image.tag }}"
           terminationMessagePolicy: FallbackToLogsOnError
-          command:
-            - "/bin/bash"
-            - -c
-            - python3 -m venv /opt/venv && pip uninstall -y django-oauth-toolkit && pip install django-oauth-toolkit==1.3.2 && exec ${KOBOCAT_SRC_DIR}/docker/init.bash
+          # command:
+          #   - "/bin/bash"
+          #   - -c
+          #   - python3 -m venv /opt/venv && pip uninstall -y django-oauth-toolkit && pip install django-oauth-toolkit==1.3.2 && exec ${KOBOCAT_SRC_DIR}/docker/init.bash
           ports:
             - containerPort: 8001
           env:
@@ -212,7 +213,7 @@ spec:
             # Web server settings
             - name: config
               subPath: kpi_uwsgi.ini
-              mountPath: /srv/src/kpi/docker/uwsgi.ini
+              mountPath: /srv/src/kpi/uwsgi.ini
               readOnly: true
             # www
             - name: cache-volume
@@ -228,19 +229,19 @@ spec:
           readinessProbe:
             tcpSocket:
               port: 8003
-            initialDelaySeconds: 10
+            initialDelaySeconds: 300
             periodSeconds: 20
           livenessProbe:
             tcpSocket:
               port: 8003
-            initialDelaySeconds: 30
+            initialDelaySeconds: 330
             periodSeconds: 20
         {{- if .Values.general.uwsgiExporter.enabled }}
         - name: uwsgi-exporter
           image: timonwong/uwsgi-exporter:latest
           imagePullPolicy: IfNotPresent
           args:
-            - --stats.uri=http://127.0.0.1:8001
+            - --stats.uri=http://127.0.0.1:1717
             - --web.telemetry-path='/metrics'
           ports:
             - containerPort: 9117

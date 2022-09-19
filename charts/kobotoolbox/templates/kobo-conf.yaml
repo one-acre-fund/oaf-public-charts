@@ -6,10 +6,27 @@ metadata:
 data:
   kpi_uwsgi.ini: |
     [uwsgi]
+
+    # load apps in each worker instead of the master
+    lazy-apps = true
+
+    # log requests with a 5xx response
+    log-5xx = true
     
-    lazy-apps = True
-    log-5xx = True
-    log-4xx = True
+    # log requests with a 4xx response
+    log-4xx = true
+
+    # disable request logging
+    disable-logging = false
+
+    # exit if no app can be loaded
+    need-app = true
+    
+    # desired to ensure all options are known
+    strict = false
+
+    # number of threads for each worker
+    threads = 1
 
     # directory structure
     chdir       = $(KPI_SRC_DIR)
@@ -29,7 +46,7 @@ data:
 
     # monitoring (use with `uwsgitop :1717`, for example)
     stats = :1818
-    memory-report = true
+    memory-report = false
 
     # Overrideable default of 2 uWSGI processes.
     if-env = KPI_UWSGI_WORKERS_COUNT
@@ -86,11 +103,26 @@ data:
   kc_uwsgi.ini: |
     [uwsgi]
 
-    lazy-apps = True
-    log-5xx = True
-    log-4xx = True
+    # load apps in each worker instead of the master
+    lazy-apps = true
+
+    # log requests with a 5xx response
+    log-5xx = true
     
-    enable-metrics = True
+    # log requests with a 4xx response
+    log-4xx = true
+
+    # disable request logging
+    disable-logging = false
+
+    # exit if no app can be loaded
+    need-app = true
+    
+    # desired to ensure all options are known
+    strict = false
+
+    # number of threads for each worker
+    threads = 1
 
     # directory structure
     chdir           = $(KOBOCAT_SRC_DIR)
@@ -104,7 +136,7 @@ data:
 
     # monitoring (use with `uwsgitop :1717`, for example)
     stats = :1717
-    memory-report = true
+    memory-report = false
 
     # Overrideable default of 2 uWSGI processes.
     if-env = KC_UWSGI_WORKERS_COUNT
