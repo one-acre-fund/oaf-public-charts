@@ -241,7 +241,7 @@ spec:
           image: timonwong/uwsgi-exporter:latest
           imagePullPolicy: IfNotPresent
           args:
-            - --stats.uri=http://127.0.0.1:1717
+            - --stats.uri=tcp://127.0.0.1:1717
             - --web.telemetry-path=/metrics
             - --log.level=debug
           ports:
