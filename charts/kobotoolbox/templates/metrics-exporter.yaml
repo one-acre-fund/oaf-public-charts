@@ -21,7 +21,7 @@ spec:
     spec:
       initContainers:
         # Wait for kobocat and kpi
-        - name: wait-db
+        - name: wait-servers
           image: jwilder/dockerize
           imagePullPolicy: IfNotPresent
           command:
@@ -36,7 +36,7 @@ spec:
             - --stats.uri=tcp://{{ .Release.Name }}-kobo:1717
             - --web.telemetry-path=/metrics
             - --log.level={{ .Values.uwsgiExporter.logLevel }}
-            - --web.listen-address=9117
+            - --web.listen-address=:9117
           ports:
             - containerPort: 9117
         - name: kpi-uwsgi-exporter
@@ -46,7 +46,7 @@ spec:
             - --stats.uri=tcp://{{ .Release.Name }}-kobo:1818
             - --web.telemetry-path=/metrics
             - --log.level={{ .Values.uwsgiExporter.logLevel }}
-            - --web.listen-address=9118
+            - --web.listen-address=:9118
           ports:
             - containerPort: 9118
 {{- end }}
