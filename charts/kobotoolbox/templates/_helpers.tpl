@@ -419,6 +419,8 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
   value: '120'
 - name: {{ . }}_UWSGI_WORKER_RELOAD_MERCY
   value: '120'
+- name: {{. }}_UWSGI_MAX_REQUESTS
+  value: '1000'
 {{- end -}}
 
 
