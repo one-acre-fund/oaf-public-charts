@@ -102,6 +102,9 @@ spec:
           #   - python3 -m venv /opt/venv && pip uninstall -y django-oauth-toolkit && pip install django-oauth-toolkit==1.3.2 && exec ${KOBOCAT_SRC_DIR}/docker/init.bash
           ports:
             - containerPort: 8001
+            - name: metrics
+              containerPort: 1717
+              protocol: TCP
           env:
             {{- include "env_general" . | nindent 12 }}
             {{- include "env_mongo" . | nindent 12 }}
@@ -196,6 +199,9 @@ spec:
               name: {{ .Release.Name }}-kpi-secrets
           ports:
             - containerPort: 8003
+            - name: metrics
+              containerPort: 1818
+              protocol: TCP
           volumeMounts:
             # Override init scripts with empty ones
             - name: config
@@ -236,17 +242,6 @@ spec:
               port: 8003
             initialDelaySeconds: 330
             periodSeconds: 20
-        {{- if .Values.general.uwsgiExporter.enabled }}
-        - name: uwsgi-exporter
-          image: timonwong/uwsgi-exporter:latest
-          imagePullPolicy: IfNotPresent
-          args:
-            - --stats.uri=tcp://127.0.0.1:1717
-            - --web.telemetry-path=/metrics
-            - --log.level=debug
-          ports:
-            - containerPort: 9117
-        {{- end }}
       volumes:
         - name: nginx-confd
           configMap:

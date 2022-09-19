@@ -193,10 +193,6 @@ general:
     # -- Needs to be ReadWriteMany if you intend to scale to more than 1 pod!
     accessMode: ReadWriteOnce
 
-  # uwsgi exporter
-  uwsgiExporter:
-    enabled: false
-
 ingress:
   # -- Install ingress?
   enabled: false
@@ -294,3 +290,8 @@ postgresql:
       user: postgres
       password: admin
       scriptsConfigMap: "{{ .Release.Name }}-postgres-init"
+
+# uwsgi exporter
+uwsgiExporter:
+  enabled: false
+  logLevel: info
