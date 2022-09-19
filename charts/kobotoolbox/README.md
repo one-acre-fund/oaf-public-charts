@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -70,14 +70,13 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | ingress.annotations | object | `{}` | Ingress annotations |
 | ingress.enabled | bool | `false` | Install ingress? |
 | ingress.tls | object | `{}` | Ingress TLS settings |
-| kobocat.extraEnv | object | `{"AZURE_ACCOUNT_KEY":"secrettoken","AZURE_ACCOUNT_NAME":"storage-account-name","AZURE_CONTAINER":"storage-container-name","AZURE_URL_EXPIRATION_SECS":"3600","KOBOCAT_DEFAULT_FILE_STORAGE":"kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"}` | Dictionary of env variables to pass |
-| kobocat.extraEnv.KOBOCAT_DEFAULT_FILE_STORAGE | string | `"kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"` | Azure blob storage credentials |
-| kobocat.extraSecretEnv.AZURE_ACCOUNT_KEY | string | `"secrettoken"` |  |
+| kobocat.extraEnv | object | `{}` | Dictionary of env variables to pass |
+| kobocat.extraSecretEnv | object | `{}` |  |
 | kobocat.image.name | string | `"kobotoolbox/kobocat"` | KoboCat docker image name |
 | kobocat.image.tag | string | `"2.021.47"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
 | kobocat.subdomain | string | `"kc"` | DNS subdomain name to serve the form server from |
-| kpi.extraEnv | object | `{"AZURE_ACCOUNT_NAME":"storage-account-name","AZURE_CONTAINER":"storage-container-name","AZURE_URL_EXPIRATION_SECS":"3600","DJANGO_LANGUAGE_CODES":"en fr es ar zh-hans hi ku","KOBO_SUPPORT_URL":"http://support.kobotoolbox.org/","KPI_DEFAULT_FILE_STORAGE":"kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"}` | Dictionary of env variables to pass |
-| kpi.extraSecretEnv.AZURE_ACCOUNT_KEY | string | `"secrettoken"` |  |
+| kpi.extraEnv | object | `{}` | Dictionary of env variables to pass |
+| kpi.extraSecretEnv | object | `{}` |  |
 | kpi.image.name | string | `"kobotoolbox/kpi"` | kpi docker image name See https://hub.docker.com/r/kobotoolbox/kpi for list of tags |
 | kpi.image.tag | string | `"2.021.47"` | kpi docker image tag |
 | kpi.subdomain | string | `"kobo"` | DNS subdomain to serve the main UI from |
