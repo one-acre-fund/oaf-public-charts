@@ -83,7 +83,7 @@ data:
     reload-on-rss = %(_)
     endif =
     if-not-env = KPI_UWSGI_RELOAD_ON_RSS_MB
-    reload-on-rss = 512
+    reload-on-rss = 1024
     endif =
 
     socket          = 0.0.0.0:8003
@@ -173,7 +173,7 @@ data:
     reload-on-rss = %(_)
     endif =
     if-not-env = KC_UWSGI_RELOAD_ON_RSS_MB
-    reload-on-rss = 512
+    reload-on-rss = 1024
     endif =
 
     socket          = 0.0.0.0:8001
