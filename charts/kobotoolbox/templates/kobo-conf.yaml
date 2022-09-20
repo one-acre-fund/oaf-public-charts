@@ -7,8 +7,9 @@ data:
   kpi_uwsgi.ini: |
     [uwsgi]
 
-    # load apps in each worker instead of the master
-    lazy-apps = true
+    # load apps in each worker instead of the master, this also increases 
+    # memory consumption
+    # lazy-apps = true
 
     # log requests with a 5xx response
     log-5xx = true
@@ -109,7 +110,8 @@ data:
     [uwsgi]
 
     # load apps in each worker instead of the master
-    lazy-apps = true
+    # This also increases memory consumption
+    # lazy-apps = true
 
     # log requests with a 5xx response
     log-5xx = true
