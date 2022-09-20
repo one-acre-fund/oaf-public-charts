@@ -7,8 +7,9 @@ data:
   kpi_uwsgi.ini: |
     [uwsgi]
 
-    # load apps in each worker instead of the master
-    lazy-apps = true
+    # load apps in each worker instead of the master, this also increases 
+    # memory consumption
+    # lazy-apps = true
 
     # log requests with a 5xx response
     log-5xx = true
@@ -86,6 +87,11 @@ data:
     reload-on-rss = 1024
     endif =
 
+    # respawn workers only after they have run for at leat min-worker-lifetime
+    if-env = KPI_UWSGI_MIN_WORKER_LIFTIME
+    min-worker-lifetime = %(_)
+    endif =
+
     socket          = 0.0.0.0:8003
     buffer-size     = 32768
     listen          = @(/proc/sys/net/core/somaxconn)
@@ -104,7 +110,8 @@ data:
     [uwsgi]
 
     # load apps in each worker instead of the master
-    lazy-apps = true
+    # This also increases memory consumption
+    # lazy-apps = true
 
     # log requests with a 5xx response
     log-5xx = true
@@ -174,6 +181,11 @@ data:
     endif =
     if-not-env = KC_UWSGI_RELOAD_ON_RSS_MB
     reload-on-rss = 1024
+    endif =
+
+    # respawn workers only after they have run for at leat min-worker-lifetime
+    if-env = KC_UWSGI_MIN_WORKER_LIFTIME
+    min-worker-lifetime = %(_)
     endif =
 
     socket          = 0.0.0.0:8001
