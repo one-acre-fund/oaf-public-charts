@@ -410,7 +410,7 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
 - name: {{ . }}_UWSGI_MAX_REQUESTS
   value: '512'
 - name: {{ . }}_UWSGI_WORKERS_COUNT
-  value: '2'
+  value: '3'
 - name: {{ . }}_UWSGI_CHEAPER_RSS_LIMIT_SOFT
   value: '134217728'
 - name: {{ . }}_UWSGI_CHEAPER_WORKERS_COUNT
