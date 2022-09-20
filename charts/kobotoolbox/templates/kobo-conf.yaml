@@ -27,7 +27,10 @@ data:
     strict = false
 
     # number of threads for each worker
-    threads = 1
+    threads = 2
+
+    # cleanup sockets on worker reload
+    vacuum = true
 
     # directory structure
     chdir       = $(KPI_SRC_DIR)
@@ -77,6 +80,7 @@ data:
     # respawn processes after serving KPI_UWSGI_MAX_REQUESTS requests (default 5000)
     if-env = KPI_UWSGI_MAX_REQUESTS
     max-requests = %(_)
+    max-requests-delta = 2
     endif =
 
     # respawn workers when their memory consumption grows too large
@@ -129,7 +133,10 @@ data:
     strict = false
 
     # number of threads for each worker
-    threads = 1
+    threads = 2
+
+    # cleanup sockets on worker reload
+    vacuum = true
 
     # directory structure
     chdir           = $(KOBOCAT_SRC_DIR)
@@ -173,6 +180,7 @@ data:
     # respawn processes after serving KC_UWSGI_MAX_REQUESTS requests (default 5000)
     if-env = KC_UWSGI_MAX_REQUESTS
     max-requests = %(_)
+    max-requests-delta = 2
     endif =
 
     # respawn individual workers when their memory consumption grows too large
