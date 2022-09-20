@@ -422,7 +422,7 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
 - name: {{. }}_UWSGI_MAX_REQUESTS
   value: '500'
 - name: {{. }}_UWSGI_MIN_WORKER_LIFTIME
-  value: '3600'
+  value: '1800'
 {{- end -}}
 
 

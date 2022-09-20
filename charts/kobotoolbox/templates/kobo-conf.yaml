@@ -27,7 +27,10 @@ data:
     strict = false
 
     # number of threads for each worker
-    threads = 1
+    threads = 2
+
+    # cleanup sockets on worker reload
+    vacuum = true
 
     # directory structure
     chdir       = $(KPI_SRC_DIR)
@@ -129,7 +132,10 @@ data:
     strict = false
 
     # number of threads for each worker
-    threads = 1
+    threads = 2
+
+    # cleanup sockets on worker reload
+    vacuum = true
 
     # directory structure
     chdir           = $(KOBOCAT_SRC_DIR)
