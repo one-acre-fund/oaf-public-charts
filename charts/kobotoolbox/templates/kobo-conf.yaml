@@ -7,8 +7,9 @@ data:
   kpi_uwsgi.ini: |
     [uwsgi]
 
-    # load apps in each worker instead of the master
-    lazy-apps = true
+    # load apps in each worker instead of the master, this also increases 
+    # memory consumption
+    # lazy-apps = true
 
     # log requests with a 5xx response
     log-5xx = true
@@ -26,7 +27,10 @@ data:
     strict = false
 
     # number of threads for each worker
-    threads = 1
+    threads = 2
+
+    # cleanup sockets on worker reload
+    vacuum = true
 
     # directory structure
     chdir       = $(KPI_SRC_DIR)
@@ -37,7 +41,6 @@ data:
     # This supersedes `wsgi-file = $(KPI_SRC_DIR)/kobo/wsgi.py`.
     manage-script-name = true
     mount              = $(KPI_PREFIX)=$(KPI_SRC_DIR)/kobo/wsgi.py
-
 
     # process related settings
     master              = true
@@ -56,34 +59,43 @@ data:
     workers = 2
     endif =
 
-    # activate cheaper mode
-    if-env = KPI_UWSGI_CHEAPER_WORKERS_COUNT
-    cheaper-algo = spare
-    cheaper = %(_)
-    cheaper-initial = %(_)
-    cheaper-step = 2
-    cheaper-overload = 1
-    endif =
+    # # activate cheaper mode
+    # if-env = KPI_UWSGI_CHEAPER_WORKERS_COUNT
+    # cheaper-algo = spare
+    # cheaper = %(_)
+    # cheaper-initial = %(_)
+    # cheaper-step = 2
+    # cheaper-overload = 1
+    # endif =
 
-    # stop spawning new workers if total memory consumption grows too large
-    if-env = KPI_UWSGI_CHEAPER_RSS_LIMIT_SOFT
-    cheaper-rss-limit-soft = %(_)
-    endif =
-    if-not-env = KPI_UWSGI_CHEAPER_RSS_LIMIT_SOFT
-    cheaper-rss-limit-soft = %(2 * 1024 * 1024 * 1024)
-    endif =
+    # # stop spawning new workers if total memory consumption grows too large
+    # if-env = KPI_UWSGI_CHEAPER_RSS_LIMIT_SOFT
+    # cheaper-rss-limit-soft = %(_)
+    # endif =
+    # if-not-env = KPI_UWSGI_CHEAPER_RSS_LIMIT_SOFT
+    # cheaper-rss-limit-soft = %(2 * 1024 * 1024 * 1024)
+    # endif =
 
-    # respawn processes after serving KPI_UWSGI_MAX_REQUESTS requests (default 5000)
-    if-env = KPI_UWSGI_MAX_REQUESTS
-    max-requests = %(_)
-    endif =
+    # # respawn processes after serving KPI_UWSGI_MAX_REQUESTS requests (default 5000)
+    # if-env = KPI_UWSGI_MAX_REQUESTS
+    # max-requests = %(_)
+    # max-requests-delta = 2
+    # endif =
 
-    # respawn workers when their memory consumption grows too large
-    if-env = KPI_UWSGI_RELOAD_ON_RSS_MB
-    reload-on-rss = %(_)
+    # # respawn workers when their memory consumption grows too large
+    # if-env = KPI_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = %(_)
+    # endif =
+    # if-not-env = KPI_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = 512
+    # endif =
+
+    # respawn workers only after they have run for at leat min-worker-lifetime
+    if-env = KPI_UWSGI_MIN_WORKER_LIFTIME
+    min-worker-lifetime = %(_)
     endif =
-    if-not-env = KPI_UWSGI_RELOAD_ON_RSS_MB
-    reload-on-rss = 512
+    if-not-env = KPI_UWSGI_MIN_WORKER_LIFTIME
+    min-worker-lifetime = 120
     endif =
 
     socket          = 0.0.0.0:8003
@@ -104,7 +116,8 @@ data:
     [uwsgi]
 
     # load apps in each worker instead of the master
-    lazy-apps = true
+    # This also increases memory consumption
+    # lazy-apps = true
 
     # log requests with a 5xx response
     log-5xx = true
@@ -122,7 +135,10 @@ data:
     strict = false
 
     # number of threads for each worker
-    threads = 1
+    threads = 2
+
+    # cleanup sockets on worker reload
+    vacuum = true
 
     # directory structure
     chdir           = $(KOBOCAT_SRC_DIR)
@@ -146,34 +162,43 @@ data:
     workers = 2
     endif =
 
-    # activate cheaper mode
-    if-env = KC_UWSGI_CHEAPER_WORKERS_COUNT
-    cheaper-algo = spare
-    cheaper = %(_)
-    cheaper-initial = %(_)
-    cheaper-step = 2
-    cheaper-overload = 1
-    endif =
+    # # activate cheaper mode
+    # if-env = KC_UWSGI_CHEAPER_WORKERS_COUNT
+    # cheaper-algo = spare
+    # cheaper = %(_)
+    # cheaper-initial = %(_)
+    # cheaper-step = 2
+    # cheaper-overload = 1
+    # endif =
 
-    # stop spawning new workers if total memory consumption grows too large
-    if-env = KC_UWSGI_CHEAPER_RSS_LIMIT_SOFT
-    cheaper-rss-limit-soft = %(_)
-    endif =
-    if-not-env = KC_UWSGI_CHEAPER_RSS_LIMIT_SOFT
-    cheaper-rss-limit-soft = %(2 * 1024 * 1024 * 1024)
-    endif =
+    # # stop spawning new workers if total memory consumption grows too large
+    # if-env = KC_UWSGI_CHEAPER_RSS_LIMIT_SOFT
+    # cheaper-rss-limit-soft = %(_)
+    # endif =
+    # if-not-env = KC_UWSGI_CHEAPER_RSS_LIMIT_SOFT
+    # cheaper-rss-limit-soft = %(2 * 1024 * 1024 * 1024)
+    # endif =
 
-    # respawn processes after serving KC_UWSGI_MAX_REQUESTS requests (default 5000)
-    if-env = KC_UWSGI_MAX_REQUESTS
-    max-requests = %(_)
-    endif =
+    # # respawn processes after serving KC_UWSGI_MAX_REQUESTS requests (default 5000)
+    # if-env = KC_UWSGI_MAX_REQUESTS
+    # max-requests = %(_)
+    # max-requests-delta = 2
+    # endif =
 
-    # respawn individual workers when their memory consumption grows too large
-    if-env = KC_UWSGI_RELOAD_ON_RSS_MB
-    reload-on-rss = %(_)
+    # # respawn individual workers when their memory consumption grows too large
+    # if-env = KC_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = %(_)
+    # endif =
+    # if-not-env = KC_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = 512
+    # endif =
+
+    # respawn workers only after they have run for at leat min-worker-lifetime
+    if-env = KC_UWSGI_MIN_WORKER_LIFTIME
+    min-worker-lifetime = %(_)
     endif =
-    if-not-env = KC_UWSGI_RELOAD_ON_RSS_MB
-    reload-on-rss = 512
+    if-not-env = KC_UWSGI_MIN_WORKER_LIFTIME
+    min-worker-lifetime = 120
     endif =
 
     socket          = 0.0.0.0:8001

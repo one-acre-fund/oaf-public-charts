@@ -1,0 +1,52 @@
+{{- if .Values.uwsgiExporter.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-metrics-exporter
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      org.kobotoolbox.instance: {{ .Release.Name }}-metrics-exporter
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+      labels:
+        org.kobotoolbox.instance: {{ .Release.Name }}-metrics-exporter
+    spec:
+      initContainers:
+        # Wait for kobocat and kpi
+        - name: wait-servers
+          image: jwilder/dockerize
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - dockerize -timeout=120s -wait tcp://{{ .Release.Name }}-kobo:1717 -wait tcp://{{ .Release.Name }}-kobo:1818
+      containers:
+        - name: kc-uwsgi-exporter
+          image: timonwong/uwsgi-exporter:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - --stats.uri=tcp://{{ .Release.Name }}-kobo:1717
+            - --web.telemetry-path=/metrics
+            - --log.level={{ .Values.uwsgiExporter.logLevel }}
+            - --web.listen-address=:9117
+          ports:
+            - name: metrics
+              containerPort: 9117
+        - name: kpi-uwsgi-exporter
+          image: timonwong/uwsgi-exporter:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - --stats.uri=tcp://{{ .Release.Name }}-kobo:1818
+            - --web.telemetry-path=/metrics
+            - --log.level={{ .Values.uwsgiExporter.logLevel }}
+            - --web.listen-address=:9118
+          ports:
+            - name: metrics
+              containerPort: 9118
+{{- end }}

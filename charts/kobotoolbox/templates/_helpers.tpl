@@ -408,7 +408,7 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
 
 {{- define "env_uwsgi" -}}
 - name: {{ . }}_UWSGI_MAX_REQUESTS
-  value: '512'
+  value: '1000'
 - name: {{ . }}_UWSGI_WORKERS_COUNT
   value: '2'
 - name: {{ . }}_UWSGI_CHEAPER_RSS_LIMIT_SOFT
@@ -419,6 +419,10 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
   value: '120'
 - name: {{ . }}_UWSGI_WORKER_RELOAD_MERCY
   value: '120'
+- name: {{. }}_UWSGI_RELOAD_ON_RSS_MB
+  value: '1024'
+- name: {{. }}_UWSGI_MIN_WORKER_LIFTIME
+  value: '3600'
 {{- end -}}
 
 
