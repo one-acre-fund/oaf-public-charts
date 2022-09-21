@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -72,12 +72,12 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | kobocat.extraEnv | object | `{}` | Dictionary of env variables to pass |
 | kobocat.extraSecretEnv | object | `{}` |  |
 | kobocat.image.name | string | `"kobotoolbox/kobocat"` | KoboCat docker image name |
-| kobocat.image.tag | string | `"2.021.47"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
+| kobocat.image.tag | string | `"2.022.08"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
 | kobocat.subdomain | string | `"kc"` | DNS subdomain name to serve the form server from |
 | kpi.extraEnv | object | `{}` | Dictionary of env variables to pass |
 | kpi.extraSecretEnv | object | `{}` |  |
 | kpi.image.name | string | `"kobotoolbox/kpi"` | kpi docker image name See https://hub.docker.com/r/kobotoolbox/kpi for list of tags |
-| kpi.image.tag | string | `"2.021.47"` | kpi docker image tag |
+| kpi.image.tag | string | `"2.022.08"` | kpi docker image tag |
 | kpi.subdomain | string | `"kobo"` | DNS subdomain to serve the main UI from |
 | mongodb | object | see `values.yaml` | Standard MongoDB values See https://artifacthub.io/packages/helm/bitnami/mongodb for doc |
 | mongodb.enabled | bool | `true` | Install MongoDB? |
