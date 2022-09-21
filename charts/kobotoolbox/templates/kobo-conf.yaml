@@ -76,19 +76,19 @@ data:
     # cheaper-rss-limit-soft = %(2 * 1024 * 1024 * 1024)
     # endif =
 
-    # respawn processes after serving KPI_UWSGI_MAX_REQUESTS requests (default 5000)
-    if-env = KPI_UWSGI_MAX_REQUESTS
-    max-requests = %(_)
-    max-requests-delta = 2
-    endif =
+    # # respawn processes after serving KPI_UWSGI_MAX_REQUESTS requests (default 5000)
+    # if-env = KPI_UWSGI_MAX_REQUESTS
+    # max-requests = %(_)
+    # max-requests-delta = 2
+    # endif =
 
-    # respawn workers when their memory consumption grows too large
-    if-env = KPI_UWSGI_RELOAD_ON_RSS_MB
-    reload-on-rss = %(_)
-    endif =
-    if-not-env = KPI_UWSGI_RELOAD_ON_RSS_MB
-    reload-on-rss = 512
-    endif =
+    # # respawn workers when their memory consumption grows too large
+    # if-env = KPI_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = %(_)
+    # endif =
+    # if-not-env = KPI_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = 512
+    # endif =
 
     # respawn workers only after they have run for at leat min-worker-lifetime
     if-env = KPI_UWSGI_MIN_WORKER_LIFTIME
@@ -179,19 +179,19 @@ data:
     # cheaper-rss-limit-soft = %(2 * 1024 * 1024 * 1024)
     # endif =
 
-    # respawn processes after serving KC_UWSGI_MAX_REQUESTS requests (default 5000)
-    if-env = KC_UWSGI_MAX_REQUESTS
-    max-requests = %(_)
-    max-requests-delta = 2
-    endif =
+    # # respawn processes after serving KC_UWSGI_MAX_REQUESTS requests (default 5000)
+    # if-env = KC_UWSGI_MAX_REQUESTS
+    # max-requests = %(_)
+    # max-requests-delta = 2
+    # endif =
 
-    # respawn individual workers when their memory consumption grows too large
-    if-env = KC_UWSGI_RELOAD_ON_RSS_MB
-    reload-on-rss = %(_)
-    endif =
-    if-not-env = KC_UWSGI_RELOAD_ON_RSS_MB
-    reload-on-rss = 512
-    endif =
+    # # respawn individual workers when their memory consumption grows too large
+    # if-env = KC_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = %(_)
+    # endif =
+    # if-not-env = KC_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = 512
+    # endif =
 
     # respawn workers only after they have run for at leat min-worker-lifetime
     if-env = KC_UWSGI_MIN_WORKER_LIFTIME
