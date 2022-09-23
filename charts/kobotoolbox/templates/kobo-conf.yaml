@@ -11,5 +11,4 @@ data:
   # Dummy script to drop in place of various init scripts to disable...
   empty_script: |
     #!/bin/bash
-    set -e
     echo Skipping $0
