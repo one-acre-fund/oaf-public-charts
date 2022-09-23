@@ -15,7 +15,7 @@ postgis://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.post
 {{- end -}}
 
 {{- define "mongo_db_url" -}}
-{{ printf "mongodb://%s:%s@%s:%d/%s" .Values.mongodb.auth.username .Values.mongodb.auth.password (cat .Release.Name "-mongodb") "27017" .Values.mongodb.auth.database }}
+{{ printf "mongodb://%s:%s@%s:%s/%s" .Values.mongodb.auth.username .Values.mongodb.auth.password (cat .Release.Name "-mongodb") "27017" .Values.mongodb.auth.database }}
 {{- end -}}
 
 {{- define "internal_domain" -}}
