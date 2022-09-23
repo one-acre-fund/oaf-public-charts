@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.6.4](https://img.shields.io/badge/Version-0.6.4-informational?style=flat-square)
+![Version: 0.6.5](https://img.shields.io/badge/Version-0.6.5-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -70,7 +70,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | ingress.enabled | bool | `false` | Install ingress? |
 | ingress.tls | object | `{}` | Ingress TLS settings |
 | kobocat.extraEnv | object | see `values.yaml` | Dictionary of env variables to pass |
-| kobocat.extraSecretEnv | object | `{}` | Azure blob storage credentials   KOBOCAT_DEFAULT_FILE_STORAGE: "kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"   AZURE_ACCOUNT_NAME: "storage-account-name"   AZURE_CONTAINER: "storage-container-name"   AZURE_URL_EXPIRATION_SECS: "3600"   AZURE_ACCOUNT_KEY: "secrettoken" |
+| kobocat.extraSecretEnv | object | `{}` | Azure blob storage credentials   KOBOCAT_DEFAULT_FILE_STORAGE: "kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"   AZURE_ACCOUNT_NAME: "storage-account-name"   AZURE_CONTAINER: "storage-container-name"   AZURE_URL_EXPIRATION_SECS: "3600" |
 | kobocat.image.name | string | `"kobotoolbox/kobocat"` | KoboCat docker image name |
 | kobocat.image.tag | string | `"2.022.24a"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
 | kobocat.subdomain | string | `"kc"` | DNS subdomain name to serve the form server from |

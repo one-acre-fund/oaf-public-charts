@@ -43,7 +43,6 @@ kobocat:
   #   AZURE_ACCOUNT_NAME: "storage-account-name"
   #   AZURE_CONTAINER: "storage-container-name"
   #   AZURE_URL_EXPIRATION_SECS: "3600"
-  #   AZURE_ACCOUNT_KEY: "secrettoken"
   extraSecretEnv: {}
   #   AZURE_ACCOUNT_KEY: secrettoken
   # -- UWSGI Config for KoboCat

@@ -71,6 +71,15 @@ spec:
               subPath: kpi_media
               mountPath: /srv/kpi_media
           {{- if .Values.probes.enabled }}
+          startupProbe:
+            httpGet:
+              path: /api/v2/
+              port: 80
+              httpHeaders:
+                - name: Host
+                  value: {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}
+            periodSeconds: 10
+            failureThreshold: 30
           readinessProbe:
             httpGet:
               path: /api/v2/
@@ -78,9 +87,8 @@ spec:
               httpHeaders:
                 - name: Host
                   value: {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}
-            initialDelaySeconds: 120
-            periodSeconds: 60
-            failureThreshold: 15
+            periodSeconds: 5
+            failureThreshold: 5
           livenessProbe:
             httpGet:
               path: /api/v2/
@@ -88,9 +96,8 @@ spec:
               httpHeaders:
                 - name: Host
                   value: {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}
-            initialDelaySeconds: 160
-            failureThreshold: 15
-            periodSeconds: 30
+            failureThreshold: 5
+            periodSeconds: 5
           {{- end }}
         # Kobocat is the forms API server that Enketo / Collect will connect to
         - name: kobocat
@@ -157,16 +164,21 @@ spec:
               subPath: static/kobocat
               mountPath: /srv/static
           {{- if .Values.probes.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: 8001
+            failureThreshold: 30
+            periodSeconds: 10
           readinessProbe:
             tcpSocket:
               port: 8001
-            initialDelaySeconds: 10
-            periodSeconds: 20
+            failureThreshold: 5
+            periodSeconds: 5
           livenessProbe:
             tcpSocket:
               port: 8001
-            initialDelaySeconds: 30
-            periodSeconds: 20
+            failureThreshold: 5
+            periodSeconds: 5
           {{- end }}
         # KPI is the main User Interface and admin API
         - name: kpi
