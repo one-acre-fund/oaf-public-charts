@@ -21,6 +21,7 @@ kobocat:
   # -- DNS subdomain name to serve the form server from
   subdomain: kc
   # -- Dictionary of env variables to pass
+  # @default -- see `values.yaml`
   extraEnv:
     USE_X_FORWARDED_HOST: "False"
     ENKETO_PROTOCOL: http
@@ -45,6 +46,8 @@ kobocat:
   #   AZURE_ACCOUNT_KEY: "secrettoken"
   extraSecretEnv: {}
   #   AZURE_ACCOUNT_KEY: secrettoken
+  # -- UWSGI Config for KoboCat
+  # @default -- see `values.yaml`
   uwsgi_conf: |
     [uwsgi]
 
@@ -160,6 +163,7 @@ kpi:
   # -- DNS subdomain to serve the main UI from
   subdomain: kobo
   # -- Dictionary of env variables to pass
+  # @default -- see `values.yaml`
   extraEnv:
     DJANGO_LANGUAGE_CODES: ar cs de-DE en es fr hi ku pl pt tr zh-hans
     KOBO_SUPPORT_URL: "http://support.kobotoolbox.org/"
@@ -190,6 +194,8 @@ kpi:
   extraSecretEnv:
     {}
     # AZURE_ACCOUNT_KEY: secrettoken
+  # -- UWSGI Config for KPI
+  # @default -- see `values.yaml`
   uwsgi_conf: |
     [uwsgi]
 
