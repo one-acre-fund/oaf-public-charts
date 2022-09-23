@@ -28,7 +28,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | mongodb | ~12.1.20 |
-| https://charts.bitnami.com/bitnami | postgresql | ~11.6.6 |
+| https://charts.bitnami.com/bitnami | postgresql | ~11.9.1 |
 | https://charts.bitnami.com/bitnami | redismain(redis) | ~16.12.2 |
 | https://charts.bitnami.com/bitnami | rediscache(redis) | ~16.12.2 |
 
@@ -69,18 +69,22 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | ingress.annotations | object | `{}` | Ingress annotations |
 | ingress.enabled | bool | `false` | Install ingress? |
 | ingress.tls | object | `{}` | Ingress TLS settings |
-| kobocat.extraEnv | object | `{}` | Dictionary of env variables to pass |
-| kobocat.extraSecretEnv | object | `{}` |  |
+| kobocat.extraEnv | object | see `values.yaml` | Dictionary of env variables to pass |
+| kobocat.extraSecretEnv | object | `{}` | Azure blob storage credentials   KOBOCAT_DEFAULT_FILE_STORAGE: "kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"   AZURE_ACCOUNT_NAME: "storage-account-name"   AZURE_CONTAINER: "storage-container-name"   AZURE_URL_EXPIRATION_SECS: "3600"   AZURE_ACCOUNT_KEY: "secrettoken" |
 | kobocat.image.name | string | `"kobotoolbox/kobocat"` | KoboCat docker image name |
-| kobocat.image.tag | string | `"2.022.08"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
+| kobocat.image.tag | string | `"2.022.24a"` | KoboCat docker image tag see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags |
 | kobocat.subdomain | string | `"kc"` | DNS subdomain name to serve the form server from |
-| kpi.extraEnv | object | `{}` | Dictionary of env variables to pass |
+| kobocat.uwsgi_conf | string | see `values.yaml` | UWSGI Config for KoboCat |
+| kpi.extraEnv | object | see `values.yaml` | Dictionary of env variables to pass |
 | kpi.extraSecretEnv | object | `{}` |  |
 | kpi.image.name | string | `"kobotoolbox/kpi"` | kpi docker image name See https://hub.docker.com/r/kobotoolbox/kpi for list of tags |
-| kpi.image.tag | string | `"2.022.08"` | kpi docker image tag |
+| kpi.image.tag | string | `"2.022.24d"` | kpi docker image tag |
 | kpi.subdomain | string | `"kobo"` | DNS subdomain to serve the main UI from |
+| kpi.uwsgi_conf | string | see `values.yaml` | UWSGI Config for KPI |
 | mongodb | object | see `values.yaml` | Standard MongoDB values See https://artifacthub.io/packages/helm/bitnami/mongodb for doc |
 | mongodb.enabled | bool | `true` | Install MongoDB? |
+| nginx.image.name | string | `"nginx"` |  |
+| nginx.image.tag | string | `"1.21"` |  |
 | postgresql | object | see `values.yaml` | Standard postgres chart values See https://artifacthub.io/packages/helm/bitnami/postgresql for docs |
 | postgresql.enabled | bool | `true` | Install Postgres? |
 | postgresql.kobocatDatabase | string | `"kobocat"` | DB name for the form server |
@@ -92,6 +96,8 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | redismain.architecture | string | `"standalone"` |  |
 | redismain.enabled | bool | `true` |  |
 | redismain.usePassword | bool | `true` |  |
+| shared.extraEnv.BACKUPS_DIR | string | `"/srv/backups"` |  |
+| shared.extraSecretEnv | object | `{}` |  |
 | smtp.from | string | `""` | SMTP "from" address |
 | smtp.host | string | `"smtp.gmail.com"` | SMTP Host |
 | smtp.password | string | `""` | SMTP Password |

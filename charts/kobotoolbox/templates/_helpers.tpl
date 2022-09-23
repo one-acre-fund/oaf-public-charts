@@ -2,12 +2,20 @@
 
 # TODO: move passwords to secrets...
 
+{{- define "postgres_host" -}}
+{{ tpl .Values.postgresql.auth.host . }}
+{{- end -}}
+
 {{- define "kc_dburl" -}}
-postgis://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.postgresPassword }}@{{ .Values.postgresql.auth.host }}:5432/{{ .Values.postgresql.kobocatDatabase }}
+postgis://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.postgresPassword }}@{{ include "postgres_host" . }}:5432/{{ .Values.postgresql.kobocatDatabase }}
 {{- end -}}
 
 {{- define "kpi_dburl" -}}
-postgis://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.postgresPassword }}@{{ .Values.postgresql.auth.host }}:5432/{{ .Values.postgresql.kpiDatabase }}
+postgis://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.postgresPassword }}@{{ include "postgres_host" . }}:5432/{{ .Values.postgresql.kpiDatabase }}
+{{- end -}}
+
+{{- define "mongo_db_url" -}}
+{{ printf "mongodb://%s:%s@%s:%d/%s" .Values.mongodb.auth.username .Values.mongodb.auth.password (cat .Release.Name "-mongodb") "27017" .Values.mongodb.auth.database }}
 {{- end -}}
 
 {{- define "internal_domain" -}}
@@ -42,6 +50,10 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-rediscache-mast
 redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-rediscache-master:6379/3
 {{- end -}}
 
+{{- define "redis_url_cache" -}}
+redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-rediscache-master:6379/5
+{{- end -}}
+
 {{- define "redis_url_kobobroker" -}}
 redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-master:6379/2
 {{- end -}}
@@ -62,7 +74,7 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
 - name: PUBLIC_DOMAIN_NAME
   value: {{ .Values.general.externalDomain }}
 - name: SESSION_COOKIE_DOMAIN
-  value: .{{ .Values.general.externalDomain }}
+  value: ".{{ .Values.general.externalDomain }}"
 # The private domain used in docker network. Useful for communication between containers without passing through
 # a load balancer. No need to be resolved by a public DNS.
 - name: INTERNAL_DOMAIN_NAME
@@ -76,58 +88,14 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
 # The publicly-accessible subdomain for the Enketo Express web forms (e.g. enketo).
 - name: ENKETO_EXPRESS_PUBLIC_SUBDOMAIN
   value: {{ .Values.enketo.subdomain }}
-
-# For now, you must set ENKETO_API_TOKEN, used by KPI and KoBoCAT, to the same
-# value as ENKETO_API_KEY. Eventually, KPI and KoBoCAT will also read
-# ENKETO_API_KEY and the duplication will no longer be necessary.
-#  For a description of this setting, see "api key" here:
-#  https://github.com/kobotoolbox/enketo-express/tree/master/config#linked-form-and-data-server.
-- name: ENKETO_API_KEY
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: ENKETO_API_KEY
-- name: ENKETO_API_TOKEN
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: ENKETO_API_KEY
-
-# Canonically a 50-character random string. For Django 1.8.13, see https://docs.djangoproject.com/en/1.8/ref/settings/#secret-key and https://github.com/django/django/blob/4022b2c306e88a4ab7f80507e736ce7ac7d01186/django/core/management/commands/startproject.py#L29-L31.
-# To generate a secret key in the same way as `django-admin startproject` you can run:
-# docker-compose run --rm kpi python -c 'from django.utils.crypto import get_random_string; print(get_random_string(50, "abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)"))'
-- name: DJANGO_SECRET_KEY
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: DJANGO_SECRET_KEY
-
-- name: ENKETO_ENCRYPTION_KEY
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: ENKETO_ENCRYPTION_KEY
-
 # The initial superuser's username.
 - name: KOBO_SUPERUSER_USERNAME
   value: {{ .Values.general.superUser.username | quote }}
-# The initial superuser's password.
-- name: KOBO_SUPERUSER_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: KOBO_SUPERUSER_PASSWORD
-
 # The e-mail address where your users can contact you.
 - name: KOBO_SUPPORT_EMAIL
   value: {{ .Values.general.supportEmail | quote }}
-
-- name: BACKUPS_DIR
-  value: /srv/backups
-
 - name: DJANGO_ALLOWED_HOSTS
   value: ".{{ .Values.general.externalDomain }} .{{ include "internal_domain" . }} localhost"
-
 {{- end -}}
 
 {{- define "env_mongo" -}}
@@ -137,103 +105,25 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
   value: {{ .Release.Name }}-mongodb
 - name: MONGO_INITDB_ROOT_USERNAME
   value: root
-- name: MONGO_INITDB_ROOT_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: MONGO_INITDB_ROOT_PASSWORD
 - name: MONGO_INITDB_DATABASE
+  value: {{ .Values.mongodb.auth.database | quote }}
+- name: MONGO_DB_NAME
   value: {{ .Values.mongodb.auth.database | quote }}
 - name: KOBO_MONGO_USERNAME
   value: {{ .Values.mongodb.auth.username | quote }}
-- name: KOBO_MONGO_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: KOBO_MONGO_PASSWORD
-
-# No idea why these need to be duplicated...
-- name: KOBOCAT_MONGO_HOST
-  value: {{ .Release.Name }}-mongodb
-- name: KOBOCAT_MONGO_PORT
-  value: '27017'
-- name: KOBOCAT_MONGO_NAME
-  value: {{ .Values.mongodb.auth.database | quote }}
-- name: KOBOCAT_MONGO_USER
-  value: {{ .Values.mongodb.auth.username | quote }}
-- name: MONGO_DB_URL
-  value: {{ include "mongo_url" . | quote }}
-- name: KOBOCAT_MONGO_PASS
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: KOBOCAT_MONGO_PASS
-
-- name: KPI_MONGO_HOST
-  value: {{ .Release.Name }}-mongodb
-- name: KPI_MONGO_PORT
-  value: '27017'
-- name: KPI_MONGO_NAME
-  value: {{ .Values.mongodb.auth.database | quote }}
-- name: KPI_MONGO_USER
-  value: {{ .Values.mongodb.auth.username | quote }}
-- name: KPI_MONGO_PASS
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: KPI_MONGO_PASS
 {{- end -}}
 
 {{- define "env_postgres" -}}
-# These `KOBO_POSTGRES_` settings only affect the postgres container itself and the
-# `wait_for_postgres.bash` init script that runs within the kpi and kobocat
-# containers. To control Django database connections, please see the
-# `DATABASE_URL` environment variable.
 - name: POSTGRES_PORT
   value: '5432'
 - name: POSTGRES_HOST
-  value: {{ .Values.postgresql.auth.host | quote }}
+  value: {{ include "postgres_host" . | quote }}
 - name: POSTGRES_USER
   value: {{ .Values.postgresql.auth.username | quote }}
-- name: POSTGRES_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: POSTGRES_PASSWORD
 - name: KC_POSTGRES_DB
   value: {{ .Values.postgresql.kobocatDatabase | quote }}
 - name: KPI_POSTGRES_DB
   value: {{ .Values.postgresql.kpiDatabase | quote }}
-
-# Postgres database used by kpi and kobocat Django apps
-- name: KC_DATABASE_URL
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: KC_DATABASE_URL
-- name: KPI_DATABASE_URL
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: KPI_DATABASE_URL
-{{- end -}}
-
-{{- define "env_redis" -}}
-- name: REDIS_SESSION_URL
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: REDIS_SESSION_URL
-- name: REDIS_LOCK_URL
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: REDIS_LOCK_URL
-- name: REDIS_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: REDIS_PASSWORD
 {{- end -}}
 
 {{- define "env_enketo" -}}
@@ -265,29 +155,6 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
   value: {{ include "boolean2str" .Values.general.debug | quote }}
 - name: TEMPLATE_DEBUG
   value: {{ include "boolean2str" .Values.general.debug | quote }}
-- name: USE_X_FORWARDED_HOST
-  value: 'False'
-
-# - name: DJANGO_SETTINGS_MODULE
-#   value: onadata.settings.kc_environ
-- name: ENKETO_VERSION
-  value: Express
-
-- name: KOBOCAT_BROKER_URL
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: KOBOCAT_BROKER_URL
-
-- name: KOBOCAT_CELERY_LOG_FILE
-  value: /srv/logs/celery.log
-
-- name: ENKETO_OFFLINE_SURVEYS
-  value: 'True'
-
-- name: KOBOCAT_MONGO_HOST
-  value: {{ .Release.Name }}-mongodb
-
 - name: KOBOFORM_URL
   value: {{ include "kpi_url" . | quote }}
 - name: KOBOFORM_INTERNAL_URL
@@ -296,23 +163,8 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
   value: {{ include "kobocat_url" . | quote }}
 - name: ENKETO_URL
   value: {{ include "enketo_url" . | quote }}
-  
-
-# DATABASE
-- name: DATABASE_URL
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: KC_DATABASE_URL
 - name: POSTGRES_DB
   value: {{ .Values.postgresql.kobocatDatabase | quote }}
-
-# OTHER
-- name: KPI_URL
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: KPI_URL
 - name: KPI_INTERNAL_URL
   value: "http://{{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}"
 - name: DJANGO_DEBUG
@@ -326,35 +178,6 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
   value: {{ include "boolean2str" .Values.general.debug | quote }}
 - name: TEMPLATE_DEBUG
   value: {{ include "boolean2str" .Values.general.debug | quote }}
-- name: USE_X_FORWARDED_HOST
-  value: 'False'
-
-- name: ENKETO_VERSION
-  value: Express
-- name: KPI_PREFIX
-  value: /
-- name: KPI_BROKER_URL
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: KPI_BROKER_URL
-
-- name: KPI_MONGO_HOST
-  value: {{ .Release.Name }}-mongodb
-
-- name: DKOBO_PREFIX
-  value: 'False'
-- name: KOBO_SURVEY_PREVIEW_EXPIRATION
-  value: '24'
-- name: SKIP_CELERY
-  value: 'False'
-- name: EMAIL_FILE_PATH
-  value: ./emails
-- name: SYNC_KOBOCAT_XFORMS_PERIOD_MINUTES
-  value: '30'
-- name: KPI_UWSGI_PROCESS_COUNT
-  value: '2'
-
 - name: KOBOFORM_URL
   value: {{ include "kpi_url" . | quote }}
 - name: ENKETO_URL
@@ -365,16 +188,8 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
   value: {{ include "kobocat_url" . | quote }}
 - name: KOBOCAT_INTERNAL_URL
   value: "http://{{ .Values.kobocat.subdomain }}.{{ include "internal_domain" . }}"
-
-# DATABASE
-- name: DATABASE_URL
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: KPI_DATABASE_URL
 - name: POSTGRES_DB
   value: {{ .Values.postgresql.kpiDatabase | quote }}
-
 # OTHER
 - name: DJANGO_DEBUG
   value: {{ include "boolean2str" .Values.general.debug | quote }}
@@ -395,34 +210,10 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
   value: {{ .Values.smtp.port | quote }}
 - name: EMAIL_HOST_USER
   value: {{ .Values.smtp.user | quote }}
-- name: EMAIL_HOST_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: {{ .Release.Name }}-secrets
-      key: EMAIL_HOST_PASSWORD
 - name: EMAIL_USE_TLS
   value: {{ include "boolean2str" .Values.smtp.tls | quote }}
 - name: DEFAULT_FROM_EMAIL
   value: {{ .Values.smtp.from | quote }}
-{{- end -}}
-
-{{- define "env_uwsgi" -}}
-- name: {{ . }}_UWSGI_MAX_REQUESTS
-  value: '1000'
-- name: {{ . }}_UWSGI_WORKERS_COUNT
-  value: '2'
-- name: {{ . }}_UWSGI_CHEAPER_RSS_LIMIT_SOFT
-  value: '134217728'
-- name: {{ . }}_UWSGI_CHEAPER_WORKERS_COUNT
-  value: '1'
-- name: {{ . }}_UWSGI_HARAKIRI
-  value: '120'
-- name: {{ . }}_UWSGI_WORKER_RELOAD_MERCY
-  value: '120'
-- name: {{. }}_UWSGI_RELOAD_ON_RSS_MB
-  value: '1024'
-- name: {{. }}_UWSGI_MIN_WORKER_LIFTIME
-  value: '3600'
 {{- end -}}
 
 
@@ -437,6 +228,9 @@ gzip_disable "msie6";
 server {
   listen 80 default_server;
   listen [::]:80 default_server;
+  # Make sure we use the k8s resolver and not nginx custom logic
+  # Disabling ipv6 due to https://stackoverflow.com/questions/66386139/nginx-forward-proxy-config-is-causing-upstream-server-temporarily-disabled-whil
+  resolver 127.0.0.1 ipv6=off;
 
   root /var/www/html;
 
@@ -452,7 +246,6 @@ server {
 
   # Proxy ELB status
   location ~ /elb/([^/]*)/(.*)$ {
-    resolver 127.0.0.1;
     proxy_pass http://127.0.0.1/$2;
     proxy_set_header Host $1;
     proxy_intercept_errors on;
@@ -473,7 +266,7 @@ server {
   location / {
     uwsgi_read_timeout 130;
     uwsgi_send_timeout 130;
-    uwsgi_pass localhost:8001;
+    uwsgi_pass 127.0.0.1:8001;
     # For setting HTTP headers, see http://stackoverflow.com/a/14133533/1877326.
     uwsgi_param HTTP_X_REAL_IP $remote_addr;
     uwsgi_param HTTP_X_FORWARDED_FOR $remote_addr;
@@ -544,7 +337,7 @@ server {
   location / {
     uwsgi_read_timeout 130;
     uwsgi_send_timeout 130;
-    uwsgi_pass localhost:8003;
+    uwsgi_pass 127.0.0.1:8003;
     # For setting HTTP headers, see http://stackoverflow.com/a/14133533/1877326.
     uwsgi_param HTTP_X_REAL_IP $remote_addr;
     uwsgi_param HTTP_X_FORWARDED_FOR $remote_addr;
