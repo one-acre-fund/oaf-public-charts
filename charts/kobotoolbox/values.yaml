@@ -1,26 +1,157 @@
 probes:
   enabled: true
 
+nginx:
+  image:
+    name: nginx
+    tag: "1.21"
+
+shared:
+  extraEnv:
+    BACKUPS_DIR: /srv/backups
+  extraSecretEnv: {}
+
 kobocat:
   image:
     # -- KoboCat docker image name
     name: kobotoolbox/kobocat
     # -- KoboCat docker image tag
     # see https://hub.docker.com/r/kobotoolbox/kobocat for latest tags
-    tag: "2.022.08"
+    tag: "2.022.24a"
   # -- DNS subdomain name to serve the form server from
   subdomain: kc
   # -- Dictionary of env variables to pass
-  extraEnv: {}
+  # @default -- see `values.yaml`
+  extraEnv:
+    USE_X_FORWARDED_HOST: "False"
+    ENKETO_PROTOCOL: http
+    ENKETO_VERSION: Express
+    KOBOCAT_CELERY_LOG_FILE: /srv/logs/celery.log
+    ENKETO_OFFLINE_SURVEYS: "True"
+    KC_UWSGI_PROCESS_COUNT: "2"
+    KC_UWSGI_MAX_REQUESTS: "512"
+    KC_UWSGI_WORKERS_COUNT: "2"
+    KC_UWSGI_CHEAPER_RSS_LIMIT_SOFT: "134217728"
+    KC_UWSGI_CHEAPER_WORKERS_COUNT: "1"
+    KC_UWSGI_HARAKIRI: "120"
+    KC_UWSGI_WORKER_RELOAD_MERCY: "120"
+    KC_UWSGI_RELOAD_ON_RSS_MB: "1024"
+    KC_UWSGI_MIN_WORKER_LIFTIME: "3600"
+    KC_UWSGI_MAX_WORKER_LIFTIME: ""
   # -- Azure blob storage credentials
   #   KOBOCAT_DEFAULT_FILE_STORAGE: "kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"
   #   AZURE_ACCOUNT_NAME: "storage-account-name"
   #   AZURE_CONTAINER: "storage-container-name"
   #   AZURE_URL_EXPIRATION_SECS: "3600"
   #   AZURE_ACCOUNT_KEY: "secrettoken"
-
   extraSecretEnv: {}
   #   AZURE_ACCOUNT_KEY: secrettoken
+  # -- UWSGI Config for KoboCat
+  # @default -- see `values.yaml`
+  uwsgi_conf: |
+    [uwsgi]
+
+    # load apps in each worker instead of the master
+    # This also increases memory consumption
+    # lazy-apps = true
+
+    # log requests with a 5xx response
+    log-5xx = true
+
+    # log requests with a 4xx response
+    log-4xx = true
+
+    # disable request logging
+    disable-logging = false
+
+    # exit if no app can be loaded
+    need-app = true
+
+    # desired to ensure all options are known
+    strict = false
+
+    # number of threads for each worker
+    threads = 2
+
+    # cleanup sockets on worker reload
+    vacuum = true
+
+    # directory structure
+    chdir           = $(KOBOCAT_SRC_DIR)
+    module          = onadata.apps.main.wsgi
+    # logto           = $(KOBOCAT_LOGS_DIR)/uwsgi.log
+
+    # process related settings
+    master              = true
+    harakiri            = $(KC_UWSGI_HARAKIRI)
+    worker-reload-mercy = $(KC_UWSGI_WORKER_RELOAD_MERCY)
+
+    # monitoring (use with `uwsgitop :1717`, for example)
+    stats = :1717
+    memory-report = false
+
+    # Overrideable default of 2 uWSGI processes.
+    if-env = KC_UWSGI_WORKERS_COUNT
+    workers = %(_)
+    endif =
+    if-not-env = KC_UWSGI_WORKERS_COUNT
+    workers = 2
+    endif =
+
+    # # activate cheaper mode
+    # if-env = KC_UWSGI_CHEAPER_WORKERS_COUNT
+    # cheaper-algo = spare
+    # cheaper = %(_)
+    # cheaper-initial = %(_)
+    # cheaper-step = 2
+    # cheaper-overload = 1
+    # endif =
+
+    # # stop spawning new workers if total memory consumption grows too large
+    # if-env = KC_UWSGI_CHEAPER_RSS_LIMIT_SOFT
+    # cheaper-rss-limit-soft = %(_)
+    # endif =
+    # if-not-env = KC_UWSGI_CHEAPER_RSS_LIMIT_SOFT
+    # cheaper-rss-limit-soft = %(2 * 1024 * 1024 * 1024)
+    # endif =
+
+    # # respawn processes after serving KC_UWSGI_MAX_REQUESTS requests (default 5000)
+    # if-env = KC_UWSGI_MAX_REQUESTS
+    # max-requests = %(_)
+    # max-requests-delta = 2
+    # endif =
+
+    # # respawn individual workers when their memory consumption grows too large
+    # if-env = KC_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = %(_)
+    # endif =
+    # if-not-env = KC_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = 512
+    # endif =
+
+    # respawn workers only after they have run for at leat min-worker-lifetime
+    if-env = KC_UWSGI_MIN_WORKER_LIFTIME
+    min-worker-lifetime = %(_)
+    endif =
+    if-not-env = KC_UWSGI_MIN_WORKER_LIFTIME
+    min-worker-lifetime = 120
+    endif =
+
+    # respawn workers only after they have run for at leat min-worker-lifetime
+    if-env = KC_UWSGI_MAX_WORKER_LIFTIME
+    max-worker-lifetime = %(_)
+    endif =
+
+    socket          = [::]:8001
+    buffer-size     = 32768
+    listen          = @(/proc/sys/net/core/somaxconn)
+
+    uid             = $(UWSGI_USER)
+    gid             = $(UWSGI_GROUP)
+    die-on-term     = false
+
+    # Required for Raven/Sentry
+    enable-threads  = false
 
 kpi:
   image:
@@ -28,20 +159,155 @@ kpi:
     # See https://hub.docker.com/r/kobotoolbox/kpi for list of tags
     name: kobotoolbox/kpi
     # -- kpi docker image tag
-    tag: "2.022.08"
+    tag: "2.022.24d"
   # -- DNS subdomain to serve the main UI from
   subdomain: kobo
   # -- Dictionary of env variables to pass
-  extraEnv: {}
-    # DJANGO_LANGUAGE_CODES: en fr es ar zh-hans hi ku
-    # KOBO_SUPPORT_URL: "http://support.kobotoolbox.org/"
+  # @default -- see `values.yaml`
+  extraEnv:
+    DJANGO_LANGUAGE_CODES: ar cs de-DE en es fr hi ku pl pt tr zh-hans
+    KOBO_SUPPORT_URL: "http://support.kobotoolbox.org/"
+    SYNC_KOBOCAT_XFORMS: "True"
+    C_FORCE_ROOT: "True"
+    USE_X_FORWARDED_HOST: "False"
+    ENKETO_VERSION: Express
+    KPI_PREFIX: /
+    DKOBO_PREFIX: "False"
+    KOBO_SURVEY_PREVIEW_EXPIRATION: "24"
+    SKIP_CELERY: "False"
+    EMAIL_FILE_PATH: ./emails
+    SYNC_KOBOCAT_XFORMS_PERIOD_MINUTES: "30"
+    KPI_UWSGI_PROCESS_COUNT: "2"
+    KPI_UWSGI_MAX_REQUESTS: "512"
+    KPI_UWSGI_WORKERS_COUNT: "2"
+    KPI_UWSGI_CHEAPER_RSS_LIMIT_SOFT: "134217728"
+    KPI_UWSGI_CHEAPER_WORKERS_COUNT: "1"
+    KPI_UWSGI_HARAKIRI: "120"
+    KPI_UWSGI_WORKER_RELOAD_MERCY: "120"
+    KPI_UWSGI_RELOAD_ON_RSS_MB: "1024"
+    KPI_UWSGI_MIN_WORKER_LIFTIME: "3600"
+    KPI_UWSGI_MAX_WORKER_LIFTIME: ""
     # KPI_DEFAULT_FILE_STORAGE: "kobo.apps.storage_backends.private_azure_storage.PrivateAzureStorage"
     # AZURE_ACCOUNT_NAME: "storage-account-name"
     # AZURE_CONTAINER: "storage-container-name"
     # AZURE_URL_EXPIRATION_SECS: "3600"
-
-  extraSecretEnv: {}
+  extraSecretEnv:
+    {}
     # AZURE_ACCOUNT_KEY: secrettoken
+  # -- UWSGI Config for KPI
+  # @default -- see `values.yaml`
+  uwsgi_conf: |
+    [uwsgi]
+
+    # load apps in each worker instead of the master, this also increases
+    # memory consumption
+    lazy-apps = true
+
+    # log requests with a 5xx response
+    log-5xx = true
+
+    # log requests with a 4xx response
+    log-4xx = true
+
+    # disable request logging
+    disable-logging = false
+
+    # exit if no app can be loaded
+    need-app = true
+
+    # desired to ensure all options are known
+    strict = false
+
+    # number of threads for each worker
+    threads = 2
+
+    # cleanup sockets on worker reload
+    vacuum = true
+
+    # directory structure
+    chdir       = $(KPI_SRC_DIR)
+    # logto       = $(KPI_LOGS_DIR)/uwsgi.log
+
+    # Run the application at a non-root URL path, e.g. http://hostname/KPI_PREFIX.
+    # See http://uwsgi-docs.readthedocs.org/en/latest/Nginx.html#hosting-multiple-apps-in-the-same-process-aka-managing-script-name-and-path-info
+    # This supersedes `wsgi-file = $(KPI_SRC_DIR)/kobo/wsgi.py`.
+    manage-script-name = true
+    mount              = $(KPI_PREFIX)=$(KPI_SRC_DIR)/kobo/wsgi.py
+
+    # process related settings
+    master              = true
+    harakiri            = $(KPI_UWSGI_HARAKIRI)
+    worker-reload-mercy = $(KPI_UWSGI_WORKER_RELOAD_MERCY)
+
+    # monitoring (use with `uwsgitop :1717`, for example)
+    stats = :1818
+    memory-report = false
+
+    # Overrideable default of 2 uWSGI processes.
+    if-env = KPI_UWSGI_WORKERS_COUNT
+    workers = %(_)
+    endif =
+    if-not-env = KPI_UWSGI_WORKERS_COUNT
+    workers = 2
+    endif =
+
+    # # activate cheaper mode
+    # if-env = KPI_UWSGI_CHEAPER_WORKERS_COUNT
+    # cheaper-algo = spare
+    # cheaper = %(_)
+    # cheaper-initial = %(_)
+    # cheaper-step = 2
+    # cheaper-overload = 1
+    # endif =
+
+    # # stop spawning new workers if total memory consumption grows too large
+    # if-env = KPI_UWSGI_CHEAPER_RSS_LIMIT_SOFT
+    # cheaper-rss-limit-soft = %(_)
+    # endif =
+    # if-not-env = KPI_UWSGI_CHEAPER_RSS_LIMIT_SOFT
+    # cheaper-rss-limit-soft = %(2 * 1024 * 1024 * 1024)
+    # endif =
+
+    # # respawn processes after serving KPI_UWSGI_MAX_REQUESTS requests (default 5000)
+    # if-env = KPI_UWSGI_MAX_REQUESTS
+    # max-requests = %(_)
+    # max-requests-delta = 2
+    # endif =
+
+    # # respawn workers when their memory consumption grows too large
+    # if-env = KPI_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = %(_)
+    # endif =
+    # if-not-env = KPI_UWSGI_RELOAD_ON_RSS_MB
+    # reload-on-rss = 512
+    # endif =
+
+    # respawn workers only after they have run for at leat min-worker-lifetime
+    if-env = KPI_UWSGI_MIN_WORKER_LIFTIME
+    min-worker-lifetime = %(_)
+    endif =
+    if-not-env = KPI_UWSGI_MIN_WORKER_LIFTIME
+    min-worker-lifetime = 120
+    endif =
+
+    # respawn workers only after they have run for at leat min-worker-lifetime
+    if-env = KPI_UWSGI_MAX_WORKER_LIFTIME
+    max-worker-lifetime = %(_)
+    endif =
+
+    socket          = [::]:8003
+    buffer-size     = 32768
+    listen          = @(/proc/sys/net/core/somaxconn)
+
+    #uid             = wsgi
+    #gid             = wsgi
+    die-on-term      = false
+
+    # uWSGI does not pass locale information to the application by default
+    env = LC_ALL=en_US.UTF-8
+
+    # Required for Raven/Sentry
+    enable-threads  = false
 
 enketo:
   image:
@@ -287,8 +553,6 @@ postgresql:
     password: kobo
   primary:
     initdb:
-      user: postgres
-      password: admin
       scriptsConfigMap: "{{ .Release.Name }}-postgres-init"
 
 # uwsgi exporter

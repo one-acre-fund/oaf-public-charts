@@ -51,7 +51,7 @@ spec:
       containers:
         # Nginx does the host-based routing for all containers
         - name: nginx
-          image: nginx:1.21
+          image: "{{ .Values.nginx.image.name }}:{{ .Values.nginx.image.tag }}"
           volumeMounts:
             # Config
             - name: nginx-confd
@@ -109,13 +109,9 @@ spec:
             {{- include "env_general" . | nindent 12 }}
             {{- include "env_mongo" . | nindent 12 }}
             {{- include "env_postgres" . | nindent 12 }}
-            {{- include "env_redis" . | nindent 12 }}
             {{- include "env_externals" . | nindent 12 }}
             {{- include "env_kobocat" . | nindent 12 }}
-            {{- include "env_uwsgi" "KC" | nindent 12 }}
             {{- include "env_smtp" . | nindent 12 }}
-            - name: ENKETO_PROTOCOL
-              value: http
             - name: KPI_PORT
               value: '8003'
             {{- range $key, $value := .Values.kobocat.extraEnv }}
@@ -123,9 +119,21 @@ spec:
               value: |-
                 {{- tpl $value $ | nindent 16 }}
             {{- end }}
+            {{- range $key, $value := .Values.shared.extraEnv }}
+            - name: {{ $key | quote }}
+              value: |-
+                {{- tpl $value $ | nindent 16 }}
+            {{- end }}
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: KC_DATABASE_URL
           envFrom:
           - secretRef:
               name: {{ .Release.Name }}-kobocat-secrets
+          - secretRef:
+              name: {{ .Release.Name }}-secrets
           volumeMounts:
             # Replace redundant init scripts with empty files
             - name: config
@@ -159,7 +167,7 @@ spec:
               port: 8001
             initialDelaySeconds: 30
             periodSeconds: 20
-        {{- end }}
+          {{- end }}
         # KPI is the main User Interface and admin API
         - name: kpi
           image: "{{ .Values.kpi.image.name }}:{{ .Values.kpi.image.tag }}"
@@ -170,6 +178,7 @@ spec:
           #   - -c
           #   - |
           #     # Init log files so we can pipe them
+          #     sleep infinity
           #     touch /srv/logs/celery_beat.log && touch /srv/logs/celery.log && touch /srv/logs/celery_sync_kobocat_xforms.log
 
           #     # Run with dockerize
@@ -180,23 +189,29 @@ spec:
             {{- include "env_general" . | nindent 12 }}
             {{- include "env_mongo" . | nindent 12 }}
             {{- include "env_postgres" . | nindent 12 }}
-            {{- include "env_redis" . | nindent 12 }}
             {{- include "env_externals" . | nindent 12 }}
             {{- include "env_kpi" . | nindent 12 }}
-            {{- include "env_uwsgi" "KPI" | nindent 12 }}
             {{- include "env_smtp" . | nindent 12 }}
-            - name: SYNC_KOBOCAT_XFORMS
-              value: 'True'
-            - name: C_FORCE_ROOT
-              value: 'True'
             {{- range $key, $value := .Values.kpi.extraEnv }}
             - name: {{ $key | quote }}
               value: |-
                 {{- tpl $value $ | nindent 16 }}
             {{- end }}
+            {{- range $key, $value := .Values.shared.extraEnv }}
+            - name: {{ $key | quote }}
+              value: |-
+                {{- tpl $value $ | nindent 16 }}
+            {{- end }}
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: KPI_DATABASE_URL
           envFrom:
           - secretRef:
               name: {{ .Release.Name }}-kpi-secrets
+          - secretRef:
+              name: {{ .Release.Name }}-secrets
           ports:
             - containerPort: 8003
             - name: metrics
@@ -232,6 +247,7 @@ spec:
             - name: media
               subPath: kobocat_media_uploads
               mountPath: /srv/src/kobocat/media
+          {{- if .Values.probes.enabled }}
           readinessProbe:
             tcpSocket:
               port: 8003
@@ -242,6 +258,7 @@ spec:
               port: 8003
             initialDelaySeconds: 330
             periodSeconds: 20
+          {{- end }}
       volumes:
         - name: nginx-confd
           configMap:
