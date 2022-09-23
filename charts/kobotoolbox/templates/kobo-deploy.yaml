@@ -248,16 +248,21 @@ spec:
               subPath: kobocat_media_uploads
               mountPath: /srv/src/kobocat/media
           {{- if .Values.probes.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: 8003
+            failureThreshold: 40
+            periodSeconds: 10
           readinessProbe:
             tcpSocket:
               port: 8003
-            initialDelaySeconds: 300
-            periodSeconds: 20
+            failureThreshold: 5
+            periodSeconds: 5
           livenessProbe:
             tcpSocket:
               port: 8003
-            initialDelaySeconds: 330
-            periodSeconds: 20
+            failureThreshold: 5
+            periodSeconds: 5
           {{- end }}
       volumes:
         - name: nginx-confd
