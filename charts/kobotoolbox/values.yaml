@@ -199,6 +199,7 @@ kpi:
   # @default -- see `values.yaml`
   uwsgi_conf: |
     [uwsgi]
+    memory-report
 
     # load apps in each worker instead of the master, this also increases
     # memory consumption
