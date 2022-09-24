@@ -46,6 +46,9 @@ spec:
           env:
             {{- include "env_mongo" . | nindent 12 }}
             {{- include "env_postgres" . | nindent 12 }}
+        {{- if .Values.shared.initContainers }}
+        {{ tpl (toYaml .Values.shared.initContainers) . | nindent 8 }}
+        {{- end }}
       # All containers need to be in the same pod since they share volumes!
       # This also means they probably can't be scaled up... (?)
       containers:
@@ -276,6 +279,9 @@ spec:
             failureThreshold: 5
             periodSeconds: 5
           {{- end }}
+        {{- if .Values.shared.sidecarContainers }}
+        {{- tpl (toYaml .Values.shared.sidecarContainers) $ | nindent 8 }}
+        {{- end }}
       volumes:
         - name: nginx-confd
           configMap:

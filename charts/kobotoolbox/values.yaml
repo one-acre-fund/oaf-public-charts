@@ -10,6 +10,8 @@ shared:
   extraEnv:
     BACKUPS_DIR: /srv/backups
   extraSecretEnv: {}
+  initContainers: []
+  sidecarContainers: []
 
 kobocat:
   image:

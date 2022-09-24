@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.6.6](https://img.shields.io/badge/Version-0.6.6-informational?style=flat-square)
+![Version: 0.6.7](https://img.shields.io/badge/Version-0.6.7-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -98,6 +98,8 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | redismain.usePassword | bool | `true` |  |
 | shared.extraEnv.BACKUPS_DIR | string | `"/srv/backups"` |  |
 | shared.extraSecretEnv | object | `{}` |  |
+| shared.initContainers | list | `[]` |  |
+| shared.sidecarContainers | list | `[]` |  |
 | smtp.from | string | `""` | SMTP "from" address |
 | smtp.host | string | `"smtp.gmail.com"` | SMTP Host |
 | smtp.password | string | `""` | SMTP Password |
