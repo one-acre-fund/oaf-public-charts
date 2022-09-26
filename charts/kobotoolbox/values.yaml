@@ -154,6 +154,14 @@ kobocat:
     # Required for Raven/Sentry
     enable-threads  = false
 
+    # Custom tweaks
+    single-interpreter = true
+    post-buffering = true
+    ignore-sigpipe = true
+    ignore-write-errors = true
+    disable-write-exception = true
+    vacuum = true
+
 kpi:
   image:
     # -- kpi docker image name
@@ -199,8 +207,6 @@ kpi:
   # @default -- see `values.yaml`
   uwsgi_conf: |
     [uwsgi]
-    memory-report
-
     # load apps in each worker instead of the master, this also increases
     # memory consumption
     lazy-apps = true
@@ -243,7 +249,7 @@ kpi:
 
     # monitoring (use with `uwsgitop :1717`, for example)
     stats = :1818
-    memory-report = false
+    memory-report = true
 
     # Overrideable default of 2 uWSGI processes.
     if-env = KPI_UWSGI_WORKERS_COUNT
@@ -253,13 +259,16 @@ kpi:
     workers = 2
     endif =
 
-    # # activate cheaper mode
+    # activate cheaper mode
     # if-env = KPI_UWSGI_CHEAPER_WORKERS_COUNT
-    # cheaper-algo = spare
+    # cheaper-algo = busyness
     # cheaper = %(_)
     # cheaper-initial = %(_)
-    # cheaper-step = 2
-    # cheaper-overload = 1
+    # cheaper-step = 1
+    # cheaper-overload = 30
+    # cheaper-busyness-max = 50
+    # cheaper-busyness-min = 25
+    # cheaper-busyness-multiplier = 20
     # endif =
 
     # # stop spawning new workers if total memory consumption grows too large
@@ -301,15 +310,23 @@ kpi:
     buffer-size     = 32768
     listen          = @(/proc/sys/net/core/somaxconn)
 
-    #uid             = wsgi
-    #gid             = wsgi
+    uid             = $(UWSGI_USER)
+    gid             = $(UWSGI_GROUP)
     die-on-term      = false
 
     # uWSGI does not pass locale information to the application by default
     env = LC_ALL=en_US.UTF-8
 
     # Required for Raven/Sentry
-    enable-threads  = false
+    enable-threads  = true
+
+    # Custom tweaks
+    single-interpreter = true
+    post-buffering = true
+    ignore-sigpipe = true
+    ignore-write-errors = true
+    disable-write-exception = true
+    vacuum = true
 
 enketo:
   image:
