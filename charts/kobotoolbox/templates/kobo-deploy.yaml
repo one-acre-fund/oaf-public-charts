@@ -156,7 +156,7 @@ spec:
               readOnly: true
             # Config
             - name: config
-              mountPath: /srv/src/kobocat/docker/kobocat.ini
+              mountPath: /srv/src/kobocat/docker/uwsgi.ini
               subPath: kc_uwsgi.ini
               readOnly: true
             # Store uploaded media in PVC
