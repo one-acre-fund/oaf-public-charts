@@ -106,10 +106,10 @@ spec:
         - name: kobocat
           image: "{{ .Values.kobocat.image.name }}:{{ .Values.kobocat.image.tag }}"
           terminationMessagePolicy: FallbackToLogsOnError
-          # command:
-          #   - "/bin/bash"
-          #   - -c
-          #   - python3 -m venv /opt/venv && pip uninstall -y django-oauth-toolkit && pip install django-oauth-toolkit==1.3.2 && exec ${KOBOCAT_SRC_DIR}/docker/init.bash
+          {{- if .Values.kobocat.command }}
+          command:
+            {{- .Values.kobocat.command | toYaml | nindent 12 }}
+          {{- end }}
           ports:
             - containerPort: 8001
             - name: metrics
@@ -187,19 +187,10 @@ spec:
         - name: kpi
           image: "{{ .Values.kpi.image.name }}:{{ .Values.kpi.image.tag }}"
           terminationMessagePolicy: FallbackToLogsOnError
-          # Override entrypoint to redirect logs to stdout
-          # command:
-          #   - sh
-          #   - -c
-          #   - |
-          #     # Init log files so we can pipe them
-          #     sleep infinity
-          #     touch /srv/logs/celery_beat.log && touch /srv/logs/celery.log && touch /srv/logs/celery_sync_kobocat_xforms.log
-
-          #     # Run with dockerize
-          #     dockerize -stdout /srv/logs/celery_beat.log -stdout /srv/logs/celery.log -stdout /srv/logs/celery_sync_kobocat_xforms.log /srv/src/kpi/docker/init.bash
-          # - cat
-          # tty: true
+          {{- if .Values.kpi.command }}
+          command:
+            {{- .Values.kpi.command | toYaml | nindent 12 }}
+          {{- end }}
           env:
             {{- include "env_general" . | nindent 12 }}
             {{- include "env_mongo" . | nindent 12 }}
