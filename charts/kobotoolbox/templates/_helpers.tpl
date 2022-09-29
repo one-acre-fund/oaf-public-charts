@@ -1,7 +1,3 @@
-# WARNING: LOTS of duplication here, needs cleanup!
-
-# TODO: move passwords to secrets...
-
 {{- define "postgres_host" -}}
 {{ tpl .Values.postgresql.auth.host . }}
 {{- end -}}
@@ -313,13 +309,11 @@ server {
     alias /srv/www/kobocat;
   }
 
-  {{- if .Values.general.mediaStorage.enabled }}
   # media files
   location /protected/ {
     internal;
     alias /media/;
   }
-  {{- end }}
 
   {{- include "s3-routing" . | nindent 2 }}
 }
@@ -362,12 +356,10 @@ server {
       application/xml+rss;
   }
 
-  {{- if .Values.general.mediaStorage.enabled }}
   # public media, e.g. custom logos (KPI `ConfigurationFile`s)
   location /media/__public {
       alias /srv/kpi_media/__public;
   }
-  {{- end }}
 
   error_page 418 = /static/html/Offline.html;
 
