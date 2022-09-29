@@ -471,6 +471,8 @@ general:
   # Useful for troubleshooting, but won't work if the public scheme is https
   forceInternal: false
   mediaStorage:
+    # -- Should we enable media volume (can be disabled if using online storage)
+    enabled: true
     # -- Storage size for uploaded media volume
     size: 10Gi
     # -- Storage class will default to global.storageClass if provided, but can be specifically overridden here

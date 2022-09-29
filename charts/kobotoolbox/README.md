@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.6.12](https://img.shields.io/badge/Version-0.6.12-informational?style=flat-square)
+![Version: 0.6.13](https://img.shields.io/badge/Version-0.6.13-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -57,6 +57,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | general.externalScheme | string | `"http"` | Public URL scheme |
 | general.forceInternal | bool | `false` | Set this to true in order to force internal resolution of external domains, in case those aren't reachable from inside the containers. Useful for troubleshooting, but won't work if the public scheme is https |
 | general.mediaStorage.accessMode | string | `"ReadWriteOnce"` | Needs to be ReadWriteMany if you intend to scale to more than 1 pod! |
+| general.mediaStorage.enabled | bool | `true` | Should we enable media volume (can be disabled if using online storage) |
 | general.mediaStorage.size | string | `"10Gi"` | Storage size for uploaded media volume |
 | general.mediaStorage.storageClass | string | `""` | Storage class will default to global.storageClass if provided, but can be specifically overridden here |
 | general.replicas | int | `1` | Replica for the kpi+kobocat pod. __WARNING__: if using more than 1 replicas, you NEED to use a ReadWriteMany accessmode in mediaStorage.accessMode, and a storage class that supports it! |

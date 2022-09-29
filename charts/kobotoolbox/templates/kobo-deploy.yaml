@@ -148,10 +148,12 @@ spec:
               mountPath: /srv/src/kobocat/docker/uwsgi.ini
               subPath: kc_uwsgi.ini
               readOnly: true
+            {{- if .Values.general.mediaStorage.enabled -}}
             # Store uploaded media in PVC
             - name: media
               subPath: kobocat_media_uploads
               mountPath: /srv/src/kobocat/media
+            {{- end -}}
             - name: cache-volume
               subPath: static/kobocat
               mountPath: /srv/static
@@ -235,6 +237,7 @@ spec:
             - name: cache-volume
               subPath: static/kpi
               mountPath: /srv/static
+            {{- if .Values.general.mediaStorage.enabled -}}
             # media
             - name: media
               subPath: kpi_media
@@ -242,6 +245,7 @@ spec:
             - name: media
               subPath: kobocat_media_uploads
               mountPath: /srv/src/kobocat/media
+            {{- end -}}
           {{- if .Values.probes.enabled }}
           startupProbe:
             tcpSocket:
@@ -274,10 +278,12 @@ spec:
         - name: kobo-assets
           configMap:
             name: {{ .Release.Name }}-assets
+        {{- if .Values.general.mediaStorage.enabled -}}
         # This volume will host uploaded media. If the pod is scaled to more than 1 replica, it needs to be ReadWriteMany
         - name: media
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-kobo-media
+        {{- end -}}
         # Using an emptyDir to cache compiled statics... it will survive container crashes, but not pod restarts
         - name: cache-volume
           emptyDir: {}
