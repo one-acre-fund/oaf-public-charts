@@ -1,5 +1,5 @@
-# PVC for media uploads
 {{- if .Values.general.mediaStorage.enabled -}}
+# PVC for media uploads
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

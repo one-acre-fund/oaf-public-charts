@@ -255,8 +255,6 @@ charset     utf-8;
 gzip on;
 gzip_disable "msie6";
 
-# TODO: explore if we can use paths instead of subdomains...?
-
 # Default configuration
 server {
   listen 80 default_server;
@@ -315,11 +313,13 @@ server {
     alias /srv/www/kobocat;
   }
 
+  {{- if .Values.general.mediaStorage.enabled }}
   # media files
   location /protected/ {
     internal;
     alias /media/;
   }
+  {{- end }}
 
   {{- include "s3-routing" . | nindent 2 }}
 }
@@ -362,10 +362,12 @@ server {
       application/xml+rss;
   }
 
+  {{- if .Values.general.mediaStorage.enabled }}
   # public media, e.g. custom logos (KPI `ConfigurationFile`s)
   location /media/__public {
       alias /srv/kpi_media/__public;
   }
+  {{- end }}
 
   error_page 418 = /static/html/Offline.html;
 
