@@ -30,6 +30,24 @@ spec:
       serviceAccountName: {{ include "n8n.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.communityNodes }}
+      initContainers:
+        - name: installer
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          volumeMounts:
+            - name: data
+              mountPath: /root/.n8n
+          command:
+            - sh
+            - -c
+            - |
+              cd /root/.n8n
+              mkdir -p nodes
+              cd nodes
+            {{- range .Values.communityNodes }}
+              npm install --save {{ . }}
+            {{- end }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
