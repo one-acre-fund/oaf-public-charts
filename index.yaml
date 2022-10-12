@@ -3990,6 +3990,31 @@ entries:
   n8n:
   - apiVersion: v2
     appVersion: 0.173.1
+    created: "2022-10-12T18:45:08.224671785Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~15.7.5
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: A Helm chart for Kubernetes
+    digest: b06e5564509ea8ad8bbe758e34db7ed06d62a5793e6fe0b60b3938dc50bac366
+    icon: https://avatars.githubusercontent.com/u/45487711?s=400&v=4
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: n8n
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/n8n-0.1.38/n8n-0.1.38.tgz
+    version: 0.1.38
+  - apiVersion: v2
+    appVersion: 0.173.1
     created: "2022-10-05T11:38:23.911056767Z"
     dependencies:
     - condition: redis.enabled
@@ -4728,4 +4753,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2022-10-05T11:38:23.91209581Z"
+generated: "2022-10-12T18:45:08.225598389Z"
