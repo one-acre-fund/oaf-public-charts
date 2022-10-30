@@ -1188,6 +1188,43 @@ entries:
     version: 0.1.1
   kobotoolbox:
   - apiVersion: v2
+    created: "2022-10-30T07:33:51.70620531Z"
+    dependencies:
+    - alias: redismain
+      condition: redismain.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~16.12.2
+    - alias: rediscache
+      condition: rediscache.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~16.12.2
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.9.1
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: ~12.1.20
+    description: KoboToolbox field data collection solution
+    digest: f5a0a8bc1f98c8bab5b6ff9ea20d823455f3380e2cdba2adacb170c65e688852
+    home: https://www.kobotoolbox.org/
+    icon: https://avatars.githubusercontent.com/u/5543677?s=400&v=4
+    keywords:
+    - survey
+    - field
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: kobotoolbox
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/kobotoolbox
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/kobotoolbox-0.6.16/kobotoolbox-0.6.16.tgz
+    version: 0.6.16
+  - apiVersion: v2
     created: "2022-09-29T21:47:16.146621777Z"
     dependencies:
     - alias: redismain
@@ -4753,4 +4790,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2022-10-12T18:45:08.225598389Z"
+generated: "2022-10-30T07:33:51.707236319Z"
