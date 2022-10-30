@@ -66,6 +66,7 @@ spec:
             - name: cache-volume
               subPath: static
               mountPath: /srv/www
+            {{- if .Values.general.mediaStorage.enabled }}
             - name: media
               subPath: kobocat_media_uploads
               mountPath: /media
@@ -73,6 +74,7 @@ spec:
             - name: media
               subPath: kpi_media
               mountPath: /srv/kpi_media
+            {{- end }}
           {{- if .Values.probes.enabled }}
           startupProbe:
             httpGet:
@@ -149,12 +151,14 @@ spec:
               subPath: kc_uwsgi.ini
               readOnly: true
             # Store uploaded media in PVC
+            {{- if .Values.general.mediaStorage.enabled }}
             - name: media
               subPath: kobocat_media_uploads
               mountPath: /srv/src/kobocat/media
             - name: cache-volume
               subPath: static/kobocat
               mountPath: /srv/static
+            {{- end }}
           {{- if .Values.probes.enabled }}
           startupProbe:
             tcpSocket:
@@ -236,12 +240,14 @@ spec:
               subPath: static/kpi
               mountPath: /srv/static
             # media
+            {{- if .Values.general.mediaStorage.enabled }}
             - name: media
               subPath: kpi_media
               mountPath: /srv/src/kpi/media
             - name: media
               subPath: kobocat_media_uploads
               mountPath: /srv/src/kobocat/media
+            {{- end }}
           {{- if .Values.probes.enabled }}
           startupProbe:
             tcpSocket:
@@ -276,6 +282,7 @@ spec:
             name: {{ .Release.Name }}-assets
         # This volume will host uploaded media. If the pod is scaled to more than 1 replica, it needs to be ReadWriteMany
         - name: media
+
         {{- if .Values.general.mediaStorage.enabled }}
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-kobo-media
