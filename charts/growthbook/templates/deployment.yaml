@@ -57,6 +57,15 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 5
           env:
+            {{ if .Values.growthbook.sso.enabled }}
+            - name: LICENSE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "growthbook.fullname" . }}
+                  key: LICENSE_KEY
+            - name: SSO_CONFIG
+              value: {{ .Values.growthbook.sso.ssoConfig | toJson | quote }}
+            {{ end }}
             {{- range $key, $value := .Values.growthbook.extraEnvVars }}
             - name: {{ $key }}
               value: |-

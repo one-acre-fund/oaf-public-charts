@@ -27,6 +27,27 @@ serviceAccount:
   name: ""
 
 growthbook:
+  sso:
+    enabled: false
+    # Licence key
+    licenceKey:
+    # To configure Single-Sign-On
+    # ssoConfig contains Single-Sign-On config json object
+    # {
+    #  "clientId": "CLIENT_ID",
+    #  "clientSecret": "CLIENT_SECRET",
+    #  "emailDomain": "EMAIL_DOMAIN",
+    #  "additionalScope": "offline_access",
+    #  "metadata": {
+    #    "issuer": "BASE_URL",
+    #    "authorization_endpoint": "BASE_URL/oauth2/v1/authorize",
+    #    "id_token_signing_alg_values_supported":["RS256"],
+    #    "jwks_uri": "BASE_URL/oauth2/v1/keys",
+    #    "token_endpoint": "BASE_URL/oauth2/v1/token",
+    #    "code_challenge_methods_supported":["S256"]
+    #  }
+    # }
+    ssoConfig: {}
   extraEnvVars:
     NODE_ENV: production
     APP_ORIGIN: https://my-app-origin.io:443
