@@ -31,7 +31,8 @@ growthbook:
     enabled: false
     # Licence key
     licenceKey:
-    # ssoConfig contains single-sign-on config json object
+    # To configure Single-Sign-On
+    # ssoConfig contains Single-Sign-On config json object
     # {
     #  "clientId": "CLIENT_ID",
     #  "clientSecret": "CLIENT_SECRET",
@@ -46,7 +47,7 @@ growthbook:
     #    "code_challenge_methods_supported":["S256"]
     #  }
     # }
-    ssoConfig:
+    ssoConfig: {}
   extraEnvVars:
     NODE_ENV: production
     APP_ORIGIN: https://my-app-origin.io:443
