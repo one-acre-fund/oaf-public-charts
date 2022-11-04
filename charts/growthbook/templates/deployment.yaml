@@ -96,7 +96,10 @@ spec:
             - name: EMAIL_HOST_USER
               value: {{ .Values.growthbook.email.hostUser }}
             - name: EMAIL_HOST_PASSWORD
-              value: {{ .Values.growthbook.email.hostPassword }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "growthbook.fullname" . }}
+                  key: EMAIL_HOST_PASSWORD
             - name: EMAIL_FROM
               value: {{ .Values.growthbook.email.senderEmail }}
             - name: SITE_MANAGER_EMAIL
