@@ -64,7 +64,10 @@ spec:
                   name: {{ include "growthbook.fullname" . }}
                   key: LICENSE_KEY
             - name: SSO_CONFIG
-              value: {{ .Values.growthbook.sso.ssoConfig | toJson | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "growthbook.fullname" . }}
+                  key: SSO_CONFIG
             {{ end }}
             {{- range $key, $value := .Values.growthbook.extraEnvVars }}
             - name: {{ $key }}
