@@ -149,4 +149,3 @@ mongodb:
     grant-role.js: |
       db = db.getSiblingDB('{{ .Values.auth.database }}')
       db.grantRolesToUser("{{ .Values.auth.username }}", [{ role: 'readWrite', db: "{{ .Values.auth.database }}" }])
-
