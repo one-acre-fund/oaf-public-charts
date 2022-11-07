@@ -1,6 +1,6 @@
 # growthbook
 
-![Version: 0.1.8](https://img.shields.io/badge/Version-0.1.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.10](https://img.shields.io/badge/Version-0.1.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for Growthbook
 
@@ -17,7 +17,6 @@ A Helm chart for Growthbook
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami/ | mongodb | ~11.1.0 |
-| https://gogatekeeper.github.io/helm-gogatekeeper | gatekeeper | ~0.1.14 |
 
 ## Values
 
@@ -30,8 +29,6 @@ A Helm chart for Growthbook
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | autoscaling.targetMemoryUtilizationPercentage | int | `80` |  |
 | fullnameOverride | string | `""` |  |
-| gatekeeper.config.enable-metrics | bool | `false` | Setting this enables the prometheus metrics collector at `/oauth/metrics` |
-| gatekeeper.enabled | bool | `false` |  |
 | growthbook.datasource.google.clientId | string | `nil` |  |
 | growthbook.datasource.google.clientSecret | string | `nil` |  |
 | growthbook.datasource.google.enabled | bool | `false` |  |
