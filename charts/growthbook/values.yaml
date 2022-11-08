@@ -29,8 +29,8 @@ serviceAccount:
 growthbook:
   sso:
     enabled: false
-    # Licence key
-    licenceKey:
+    # License key
+    licenseKey:
     # To configure Single-Sign-On
     # ssoConfig contains Single-Sign-On config json object
     # {

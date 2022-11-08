@@ -50,7 +50,7 @@ A Helm chart for Growthbook
 | growthbook.persistence.storage | string | `"3Gi"` |  |
 | growthbook.persistence.type | string | `"emptyDir"` |  |
 | growthbook.sso.enabled | bool | `false` |  |
-| growthbook.sso.licenceKey | string | `nil` |  |
+| growthbook.sso.licenseKey | string | `nil` |  |
 | growthbook.sso.ssoConfig | object | `{}` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"growthbook/growthbook"` |  |
