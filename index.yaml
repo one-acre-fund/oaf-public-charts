@@ -1006,6 +1006,28 @@ entries:
   growthbook:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-11-08T12:05:08.550685227Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami/
+      version: ~11.1.0
+    description: A Helm chart for Growthbook
+    digest: 7ca9b8da8c2f17a01da62f365700dc079d37635f37ae48baeadc77701c0a8c5d
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    - email: jean.poutcheu@gmail.com
+      name: Nzeugaa
+    name: growthbook
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/growthbook-0.1.10/growthbook-0.1.10.tgz
+    version: 0.1.10
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-11-04T14:05:19.070451865Z"
     dependencies:
     - condition: mongodb.enabled
@@ -4842,4 +4864,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2022-11-04T14:05:19.073128915Z"
+generated: "2022-11-08T12:05:08.551450521Z"
