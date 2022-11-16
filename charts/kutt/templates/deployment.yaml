@@ -36,7 +36,7 @@ spec:
           env:
           {{- range $key, $val := .Values.env }}
           - name : {{ $key }}
-            value: {{ $val }}
+            value: {{ $val | quote }}
           {{- end }}
           - name: DB_PASSWORD
             valueFrom:
