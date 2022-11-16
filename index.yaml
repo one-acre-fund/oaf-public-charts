@@ -3959,6 +3959,29 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/kobotoolbox-0.1.1/kobotoolbox-0.1.1.tgz
     version: 0.1.1
+  kutt:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-11-16T11:22:37.376005624Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~12.1.2
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~17.3.11
+    description: A Helm chart for Kubernetes
+    digest: 5b6d7f4384e0f52d86c66fb06d5a87f3556f03ad062fbf63364a249b66b7cf82
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: kutt
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/kutt-0.1.0/kutt-0.1.0.tgz
+    version: 0.1.0
   metabase:
   - apiVersion: v2
     created: "2022-09-08T20:13:09.371475501Z"
@@ -4864,4 +4887,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2022-11-08T12:05:08.551450521Z"
+generated: "2022-11-16T11:22:37.376893837Z"
