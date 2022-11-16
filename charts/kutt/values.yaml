@@ -123,3 +123,22 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+podAnnotations:
+    co.elastic.logs/enabled: "true"
+    co.elastic.logs/multiline.pattern: '^\d{2}.\d{3}'
+    co.elastic.logs/multiline.negate: 'true'
+    co.elastic.logs/multiline.match: after
+
+config:
+  client-secret: "$(PROXY_CLIENT_SECRET)"
+  discovery-url: "$(DISCOVER_URL)"
+  client-id: "$(CLIENT_ID)"
+  upstream-url: "$(UPSTREAM_URL)"
+  encryption-key: "$(PROXY_ENCRYPTION_KEY)"
+  redirection-url: "$(PROXY_REDIRECTION_URL)"
+  enable-refresh-tokens: true
+  enable-default-deny: false
+  resources:
+    - uri: /*
+      white-listed: true
