@@ -33,6 +33,21 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          {{- range $key, $val := .Values.env }}
+          - name : {{ $key }}
+            value: {{ $val }}
+          {{- end }}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: kutt-postgresql
+                key: postgres-password
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: kutt-redis
+                key: redis-password
           ports:
             - name: http
               containerPort: 80
