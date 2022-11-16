@@ -38,7 +38,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 10195
 
 ingress:
   enabled: false
@@ -69,28 +69,29 @@ resources: {}
   #   memory: 128Mi
 
 secretEnv:
-  GOOGLE_ANALYTICS: ""
-  GOOGLE_ANALYTICS_UNIVERSAL: ""
-  GOOGLE_SAFE_BROWSING_KEY: ""
-  MAIL_PASSWORD: ""
-  MAIL_USER: ""
-  RECAPTCHA_SECRET_KEY: ""
-  RECAPTCHA_SITE_KEY: ""
+  GOOGLE_ANALYTICS: "xxx"
+  GOOGLE_ANALYTICS_UNIVERSAL: "xxx"
+  GOOGLE_SAFE_BROWSING_KEY: "xxx"
+  MAIL_PASSWORD: "xxx"
+  MAIL_USER: "xxx"
+  RECAPTCHA_SECRET_KEY: "xxx"
+  RECAPTCHA_SITE_KEY: "xxx"
+  JWT_SECRET: "xxx"
 
 env:
-  ADMIN_EMAILS: "$(ADMIN_EMAILS)"
-  CONTACT_EMAIL: "$(SMTP_EMAIL)"
+  ADMIN_EMAILS: "admin@gmail.com"
+  CONTACT_EMAIL: "admin@gmail.com"
   CUSTOM_DOMAIN_USE_HTTPS: false
-  DEFAULT_DOMAIN: "$(KUTT_DOMAIN)"
+  DEFAULT_DOMAIN: "local"
   DEFAULT_MAX_STATS_PER_LINK: 5000
   DISALLOW_ANONYMOUS_LINKS: false
   DISALLOW_REGISTRATION: false
   LINK_LENGTH: 6
-  MAIL_FROM: ""
-  MAIL_HOST: ""
-  MAIL_PORT: ""
+  MAIL_FROM: "admin@gmail.com"
+  MAIL_HOST: "smtp.gmail.com"
+  MAIL_PORT: "865"
   MAIL_SECURE: "true"
-  REPORT_EMAIL: ""
+  REPORT_EMAIL: "admin@gmail.com"
   SITE_NAME: "kutt"
   USER_LIMIT_PER_DAY: 50
   DB_HOST: "kutt-postgresql"
