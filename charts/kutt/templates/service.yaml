@@ -8,8 +8,8 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: main
       protocol: TCP
-      name: http
+      name: main
   selector:
     {{- include "kutt.selectorLabels" . | nindent 4 }}
