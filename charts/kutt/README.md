@@ -1,6 +1,6 @@
 # kutt
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -26,27 +26,27 @@ A Helm chart for Kubernetes
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
-| env.ADMIN_EMAILS | string | `"$(ADMIN_EMAILS)"` |  |
-| env.CONTACT_EMAIL | string | `"$(SMTP_EMAIL)"` |  |
+| env.ADMIN_EMAILS | string | `"admin@gmail.com"` |  |
+| env.CONTACT_EMAIL | string | `"admin@gmail.com"` |  |
 | env.CUSTOM_DOMAIN_USE_HTTPS | bool | `false` |  |
 | env.DB_HOST | string | `"kutt-postgresql"` |  |
 | env.DB_NAME | string | `"redis"` |  |
 | env.DB_PASSWORD.secretKeyRef.key | string | `"postgres-password"` |  |
 | env.DB_PASSWORD.secretKeyRef.name | string | `"kutt-postgresql"` |  |
 | env.DB_USER | string | `"postgres"` |  |
-| env.DEFAULT_DOMAIN | string | `"$(KUTT_DOMAIN)"` |  |
+| env.DEFAULT_DOMAIN | string | `"local"` |  |
 | env.DEFAULT_MAX_STATS_PER_LINK | int | `5000` |  |
 | env.DISALLOW_ANONYMOUS_LINKS | bool | `false` |  |
 | env.DISALLOW_REGISTRATION | bool | `false` |  |
 | env.LINK_LENGTH | int | `6` |  |
-| env.MAIL_FROM | string | `""` |  |
-| env.MAIL_HOST | string | `""` |  |
-| env.MAIL_PORT | string | `""` |  |
+| env.MAIL_FROM | string | `"admin@gmail.com"` |  |
+| env.MAIL_HOST | string | `"smtp.gmail.com"` |  |
+| env.MAIL_PORT | string | `"865"` |  |
 | env.MAIL_SECURE | string | `"true"` |  |
 | env.REDIS_HOST | string | `"kutt-redis-master"` |  |
 | env.REDIS_PASSWORD.secretKeyRef.key | string | `"redis-password"` |  |
 | env.REDIS_PASSWORD.secretKeyRef.name | string | `"kutt-redis"` |  |
-| env.REPORT_EMAIL | string | `""` |  |
+| env.REPORT_EMAIL | string | `"admin@gmail.com"` |  |
 | env.SITE_NAME | string | `"kutt"` |  |
 | env.USER_LIMIT_PER_DAY | int | `50` |  |
 | fullnameOverride | string | `""` |  |
@@ -73,15 +73,16 @@ A Helm chart for Kubernetes
 | redis.existingSecret | string | `"redis"` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
-| secretEnv.GOOGLE_ANALYTICS | string | `""` |  |
-| secretEnv.GOOGLE_ANALYTICS_UNIVERSAL | string | `""` |  |
-| secretEnv.GOOGLE_SAFE_BROWSING_KEY | string | `""` |  |
-| secretEnv.MAIL_PASSWORD | string | `""` |  |
-| secretEnv.MAIL_USER | string | `""` |  |
-| secretEnv.RECAPTCHA_SECRET_KEY | string | `""` |  |
-| secretEnv.RECAPTCHA_SITE_KEY | string | `""` |  |
+| secretEnv.GOOGLE_ANALYTICS | string | `"xxx"` |  |
+| secretEnv.GOOGLE_ANALYTICS_UNIVERSAL | string | `"xxx"` |  |
+| secretEnv.GOOGLE_SAFE_BROWSING_KEY | string | `"xxx"` |  |
+| secretEnv.JWT_SECRET | string | `"xxx"` |  |
+| secretEnv.MAIL_PASSWORD | string | `"xxx"` |  |
+| secretEnv.MAIL_USER | string | `"xxx"` |  |
+| secretEnv.RECAPTCHA_SECRET_KEY | string | `"xxx"` |  |
+| secretEnv.RECAPTCHA_SITE_KEY | string | `"xxx"` |  |
 | securityContext | object | `{}` |  |
-| service.port | int | `80` |  |
+| service.port | int | `10195` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.create | bool | `true` |  |
