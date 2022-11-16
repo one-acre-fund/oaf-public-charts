@@ -97,15 +97,7 @@ env:
   DB_HOST: "kutt-postgresql"
   DB_USER: postgres
   DB_NAME: redis
-  DB_PASSWORD:
-    secretKeyRef:
-      name: kutt-postgresql
-      key: postgres-password
   REDIS_HOST: "kutt-redis-master"
-  REDIS_PASSWORD:
-    secretKeyRef:
-      name: kutt-redis
-      key: redis-password
 
 # Enabled redis
 redis:

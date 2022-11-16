@@ -1,6 +1,6 @@
 # kutt
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -31,8 +31,6 @@ A Helm chart for Kubernetes
 | env.CUSTOM_DOMAIN_USE_HTTPS | bool | `false` |  |
 | env.DB_HOST | string | `"kutt-postgresql"` |  |
 | env.DB_NAME | string | `"redis"` |  |
-| env.DB_PASSWORD.secretKeyRef.key | string | `"postgres-password"` |  |
-| env.DB_PASSWORD.secretKeyRef.name | string | `"kutt-postgresql"` |  |
 | env.DB_USER | string | `"postgres"` |  |
 | env.DEFAULT_DOMAIN | string | `"local"` |  |
 | env.DEFAULT_MAX_STATS_PER_LINK | int | `5000` |  |
@@ -44,8 +42,6 @@ A Helm chart for Kubernetes
 | env.MAIL_PORT | string | `"865"` |  |
 | env.MAIL_SECURE | string | `"true"` |  |
 | env.REDIS_HOST | string | `"kutt-redis-master"` |  |
-| env.REDIS_PASSWORD.secretKeyRef.key | string | `"redis-password"` |  |
-| env.REDIS_PASSWORD.secretKeyRef.name | string | `"kutt-redis"` |  |
 | env.REPORT_EMAIL | string | `"admin@gmail.com"` |  |
 | env.SITE_NAME | string | `"kutt"` |  |
 | env.USER_LIMIT_PER_DAY | int | `50` |  |
