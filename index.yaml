@@ -3962,6 +3962,28 @@ entries:
   kutt:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-11-17T07:39:11.423147793Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~12.1.2
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~17.3.11
+    description: A Helm chart for Kubernetes
+    digest: 186bd439155158fd90461f376bd30e5849faea48e4c838006a79f157f4894894
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: kutt
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/kutt-0.1.8/kutt-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-11-16T15:37:09.343756193Z"
     dependencies:
     - condition: postgresql.enabled
@@ -5041,4 +5063,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2022-11-16T15:37:09.344738297Z"
+generated: "2022-11-17T07:39:11.424102605Z"
