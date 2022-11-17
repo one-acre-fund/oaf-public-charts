@@ -55,9 +55,6 @@ spec:
             - name: http
               containerPort: 3000
               protocol: TCP
-            - name: main
-              containerPort: 10195
-              protocol: TCP
           livenessProbe:
             httpGet:
               path: /
