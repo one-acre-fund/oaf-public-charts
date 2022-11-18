@@ -222,6 +222,18 @@ tolerations: []
 
 affinity: {}
 
+master:
+  command:
+    - sh
+    - -c
+    - n8n
+
+worker:
+  command:
+    - sh
+    - -c
+    - n8n worker
+
 redis:
   enabled: true
   architecture: standalone
