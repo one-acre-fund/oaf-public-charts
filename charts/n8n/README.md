@@ -1,6 +1,6 @@
 # n8n
 
-![Version: 0.1.41](https://img.shields.io/badge/Version-0.1.41-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.173.1](https://img.shields.io/badge/AppVersion-0.173.1-informational?style=flat-square)
+![Version: 0.1.42](https://img.shields.io/badge/Version-0.1.42-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.173.1](https://img.shields.io/badge/AppVersion-0.173.1-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -46,6 +46,24 @@ A Helm chart for Kubernetes
 | master.command[0] | string | `"sh"` |  |
 | master.command[1] | string | `"-c"` |  |
 | master.command[2] | string | `"n8n"` |  |
+| master.probes.livenessProbe.failureThreshold | int | `5` |  |
+| master.probes.livenessProbe.httpGet.path | string | `"/healthz"` |  |
+| master.probes.livenessProbe.httpGet.port | string | `"http"` |  |
+| master.probes.livenessProbe.periodSeconds | int | `10` |  |
+| master.probes.livenessProbe.successThreshold | int | `1` |  |
+| master.probes.livenessProbe.timeoutSeconds | int | `2` |  |
+| master.probes.readinessProbe.failureThreshold | int | `5` |  |
+| master.probes.readinessProbe.httpGet.path | string | `"/healthz"` |  |
+| master.probes.readinessProbe.httpGet.port | string | `"http"` |  |
+| master.probes.readinessProbe.periodSeconds | int | `5` |  |
+| master.probes.readinessProbe.successThreshold | int | `1` |  |
+| master.probes.readinessProbe.timeoutSeconds | int | `2` |  |
+| master.probes.startupProbe.failureThreshold | int | `30` |  |
+| master.probes.startupProbe.httpGet.path | string | `"/healthz"` |  |
+| master.probes.startupProbe.httpGet.port | string | `"http"` |  |
+| master.probes.startupProbe.periodSeconds | int | `10` |  |
+| master.probes.startupProbe.successThreshold | int | `1` |  |
+| master.probes.startupProbe.timeoutSeconds | int | `2` |  |
 | n8n.encryption_key | string | `nil` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |

@@ -62,14 +62,7 @@ spec:
             - name: http
               containerPort: {{ get .Values.config "port" | default 5678 }}
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: http
+          {{- toYaml .Values.master.probes | nindent 10 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
