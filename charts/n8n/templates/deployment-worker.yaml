@@ -30,7 +30,7 @@ spec:
       serviceAccountName: {{ include "n8n.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- if .Values.communityNodes }}
+      {{- if and .Values.communityNodes .Values.persistence.enabled }}
       initContainers:
         - name: installer
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -61,8 +61,10 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+            {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: /root/.n8n
+            {{- end }}
             {{- if .Values.config }}
             - name: config-volume
               mountPath: /n8n-config
@@ -84,8 +86,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: data
-          emptyDir: {}
+        {{- if .Values.persistence.enabled }}
+        - name: "data"
+          {{ include "n8n.pvc" . }}
+        {{- end }}
         {{- if .Values.config }}
         - name: config-volume
           configMap:
