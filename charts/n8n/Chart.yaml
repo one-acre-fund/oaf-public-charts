@@ -20,7 +20,7 @@ version: 0.1.44
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
-appVersion: 0.173.1
+appVersion: 0.173.2
 
 icon: https://avatars.githubusercontent.com/u/45487711?s=400&v=4
 

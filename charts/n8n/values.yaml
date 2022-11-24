@@ -222,6 +222,43 @@ tolerations: []
 
 affinity: {}
 
+master:
+  command:
+    - sh
+    - -c
+    - n8n
+  probes:
+    startupProbe:
+      timeoutSeconds: 2
+      periodSeconds: 10
+      successThreshold: 1
+      failureThreshold: 30
+      httpGet:
+        path: /healthz
+        port: http
+    livenessProbe:
+      timeoutSeconds: 2
+      periodSeconds: 10
+      successThreshold: 1
+      failureThreshold: 5
+      httpGet:
+        path: /healthz
+        port: http
+    readinessProbe:
+      timeoutSeconds: 2
+      periodSeconds: 5
+      successThreshold: 1
+      failureThreshold: 5
+      httpGet:
+        path: /healthz
+        port: http
+
+worker:
+  command:
+    - sh
+    - -c
+    - n8n worker
+
 redis:
   enabled: true
   architecture: standalone

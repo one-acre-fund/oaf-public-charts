@@ -30,7 +30,7 @@ spec:
       serviceAccountName: {{ include "n8n.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- if .Values.communityNodes }}
+      {{- if and .Values.communityNodes .Values.persistence.enabled }}
       initContainers:
         - name: installer
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -47,6 +47,7 @@ spec:
             {{- range .Values.communityNodes }}
               npm install --save {{ . }}
             {{- end }}
+          {{- include "n8n.env" . | nindent 10 }}
       {{- end }}
       containers:
         - name: "{{ .Chart.Name }}-worker"
@@ -54,29 +55,16 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: 
-            - sh
-            - -c
-            - n8n worker
-          env:
-            {{- range $key, $value := .Values.extraEnv }}
-            - name: {{ $key }}
-              value: {{ $value | quote}}
-            {{ end }}
-            - name: "N8N_PORT" #! we better set the port once again as ENV Var, see: https://community.n8n.io/t/default-config-is-not-set-or-the-port-to-be-more-precise/3158/3?u=vad1mo
-              value: {{ get .Values.config "port" | default "5678" | quote }}
-            {{- if or .Values.config .Values.secret }}
-            - name: "N8N_CONFIG_FILES"
-              value: {{ include "n8n.configFiles" . | quote }}
-            {{ end }}
-          envFrom:
-            - secretRef:
-                name: {{ include "n8n.fullname" . | quote }}
+          command:
+            {{- toYaml .Values.worker.command | nindent 12 }}
+          {{- include "n8n.env" . | nindent 10 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+            {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: /root/.n8n
+            {{- end }}
             {{- if .Values.config }}
             - name: config-volume
               mountPath: /n8n-config
@@ -98,8 +86,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: data
-          emptyDir: {}
+        {{- if .Values.persistence.enabled }}
+        - name: "data"
+          {{ include "n8n.pvc" . }}
+        {{- end }}
         {{- if .Values.config }}
         - name: config-volume
           configMap:
