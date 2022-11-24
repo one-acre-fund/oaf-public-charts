@@ -75,8 +75,6 @@ secretEnv:
   MAIL_PASSWORD: ""
   MAIL_USER: ""
   JWT_SECRET: ""
-  RECAPTCHA_SECRET_KEY: ""
-  RECAPTCHA_SITE_KEY: ""
 
 env:
   ADMIN_EMAILS: "admin@gmail.com"
