@@ -1,6 +1,6 @@
 # kutt
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -43,6 +43,8 @@ A Helm chart for Kubernetes
 | env.MAIL_SECURE | string | `"true"` |  |
 | env.REDIS_HOST | string | `"kutt-redis-master"` |  |
 | env.REPORT_EMAIL | string | `"admin@gmail.com"` |  |
+| env.SENTRY_PRIVATE_DSN | string | `""` |  |
+| env.SENTRY_PUBLIC_DSN | string | `""` |  |
 | env.SITE_NAME | string | `"kutt"` |  |
 | env.USER_LIMIT_PER_DAY | int | `50` |  |
 | fullnameOverride | string | `""` |  |
@@ -77,8 +79,6 @@ A Helm chart for Kubernetes
 | secretEnv.MAIL_USER | string | `""` |  |
 | secretEnv.RECAPTCHA_SECRET_KEY | string | `""` |  |
 | secretEnv.RECAPTCHA_SITE_KEY | string | `""` |  |
-| secretEnv.SENTRY_PRIVATE_DSN | string | `""` |  |
-| secretEnv.SENTRY_PUBLIC_DSN | string | `""` |  |
 | securityContext | object | `{}` |  |
 | service.port | int | `10195` |  |
 | service.type | string | `"ClusterIP"` |  |
