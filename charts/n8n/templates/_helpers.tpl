@@ -6,11 +6,7 @@ Expand the name of the chart.
 {{- end }}
 
 {{- define "n8n-worker.name" -}}
-{{- printf "%s-%s" .Chart.Name "-worker" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{- define "n8n-proxy.name" -}}
-{{- printf "%s-%s" .Chart.Name "-proxy" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" .Chart.Name "worker" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -32,11 +28,7 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{- define "n8n-worker.fullname" -}}
-{{- printf "%s-%s" .Release.Name "-worker" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{- define "n8n-proxy.fullname" -}}
-{{- printf "%s-%s" .Release.Name "-proxy" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" .Release.Name "worker" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -63,10 +55,6 @@ app.kubernetes.io/role: "n8n-master"
 app.kubernetes.io/role: "n8n-worker"
 {{- end }}
 
-{{- define "n8n-proxy.labels" -}}
-app.kubernetes.io/role: "n8n-proxy"
-{{- end }}
-
 {{/*
 Selector labels
 */}}
@@ -78,11 +66,6 @@ app.kubernetes.io/role: "n8n-master"
 
 {{- define "n8n-worker.selectorLabels" -}}
 app.kubernetes.io/role: "n8n-worker"
-{{- end }}
-
-
-{{- define "n8n-proxy.selectorLabels" -}}
-app.kubernetes.io/role: "n8n-proxy"
 {{- end }}
 
 {{/*
