@@ -1,6 +1,6 @@
 # kutt
 
-![Version: 0.1.8](https://img.shields.io/badge/Version-0.1.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -69,14 +69,16 @@ A Helm chart for Kubernetes
 | redis.existingSecret | string | `"redis"` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
-| secretEnv.GOOGLE_ANALYTICS | string | `"xxx"` |  |
-| secretEnv.GOOGLE_ANALYTICS_UNIVERSAL | string | `"xxx"` |  |
-| secretEnv.GOOGLE_SAFE_BROWSING_KEY | string | `"xxx"` |  |
-| secretEnv.JWT_SECRET | string | `"xxx"` |  |
-| secretEnv.MAIL_PASSWORD | string | `"xxx"` |  |
-| secretEnv.MAIL_USER | string | `"xxx"` |  |
-| secretEnv.RECAPTCHA_SECRET_KEY | string | `"xxx"` |  |
-| secretEnv.RECAPTCHA_SITE_KEY | string | `"xxx"` |  |
+| secretEnv.GOOGLE_ANALYTICS | string | `""` |  |
+| secretEnv.GOOGLE_ANALYTICS_UNIVERSAL | string | `""` |  |
+| secretEnv.GOOGLE_SAFE_BROWSING_KEY | string | `""` |  |
+| secretEnv.JWT_SECRET | string | `""` |  |
+| secretEnv.MAIL_PASSWORD | string | `""` |  |
+| secretEnv.MAIL_USER | string | `""` |  |
+| secretEnv.RECAPTCHA_SECRET_KEY | string | `""` |  |
+| secretEnv.RECAPTCHA_SITE_KEY | string | `""` |  |
+| secretEnv.SENTRY_PRIVATE_DSN | string | `""` |  |
+| secretEnv.SENTRY_PUBLIC_DSN | string | `""` |  |
 | securityContext | object | `{}` |  |
 | service.port | int | `10195` |  |
 | service.type | string | `"ClusterIP"` |  |
