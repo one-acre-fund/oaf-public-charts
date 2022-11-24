@@ -1006,6 +1006,28 @@ entries:
   growthbook:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-11-24T07:52:58.267247432Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami/
+      version: ~11.1.0
+    description: A Helm chart for Growthbook
+    digest: 7c43b4aa9e000e2f873500602b33c005500ef6332d9b92b4ff8c726adcbb45f6
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    - email: jean.poutcheu@gmail.com
+      name: Nzeugaa
+    name: growthbook
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/growthbook-0.1.11/growthbook-0.1.11.tgz
+    version: 0.1.11
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-11-08T12:05:08.550685227Z"
     dependencies:
     - condition: mongodb.enabled
@@ -3999,6 +4021,28 @@ entries:
   kutt:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-11-24T07:52:58.422854286Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~12.1.2
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~17.3.11
+    description: A Helm chart for Kubernetes
+    digest: 8231b61e4984948719962bfc711b6715ad6fb9935f3f6b8ce43c722017fcff1e
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: kutt
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/kutt-0.2.0/kutt-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-11-17T07:39:11.423147793Z"
     dependencies:
     - condition: postgresql.enabled
@@ -4335,6 +4379,31 @@ entries:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/metabase-0.1.0/metabase-0.1.0.tgz
     version: 0.1.0
   n8n:
+  - apiVersion: v2
+    appVersion: 0.173.2
+    created: "2022-11-24T07:52:58.579537659Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~15.7.5
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: A Helm chart for Kubernetes
+    digest: 6d4a62d91c8141ef4943c38c13f6a6cd76041ed06cf277be0d8866953135f3f5
+    icon: https://avatars.githubusercontent.com/u/45487711?s=400&v=4
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: n8n
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/n8n-0.1.44/n8n-0.1.44.tgz
+    version: 0.1.44
   - apiVersion: v2
     appVersion: 0.173.1
     created: "2022-11-19T09:28:00.072542616Z"
@@ -4975,6 +5044,24 @@ entries:
   nocodb:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2022-11-24T07:52:58.729568414Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: A Helm chart for Kubernetes
+    digest: 6cd2ec83651686107edf22a6325476b0da6a18a6ecb7d0a929d482e833c21318
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: nocodb
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.2.8/nocodb-0.2.8.tgz
+    version: 0.2.8
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-09-08T20:13:09.69684683Z"
     dependencies:
     - condition: postgresql.enabled
@@ -5225,4 +5312,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2022-11-19T09:28:00.073595582Z"
+generated: "2022-11-24T07:52:58.730778335Z"
