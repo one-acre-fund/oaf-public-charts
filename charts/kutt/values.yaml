@@ -75,8 +75,6 @@ secretEnv:
   MAIL_PASSWORD: ""
   MAIL_USER: ""
   JWT_SECRET: ""
-  SENTRY_PRIVATE_DSN: ""
-  SENTRY_PUBLIC_DSN: ""
   RECAPTCHA_SECRET_KEY: ""
   RECAPTCHA_SITE_KEY: ""
 
@@ -100,6 +98,8 @@ env:
   DB_USER: postgres
   DB_NAME: redis
   REDIS_HOST: "kutt-redis-master"
+  SENTRY_PRIVATE_DSN: https://sentry/dsn
+  SENTRY_PUBLIC_DSN: https://sentry/dsn
 
 # Enabled redis
 redis:
