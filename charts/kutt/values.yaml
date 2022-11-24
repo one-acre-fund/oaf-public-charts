@@ -69,12 +69,9 @@ resources: {}
   #   memory: 128Mi
 
 secretEnv:
-  GOOGLE_ANALYTICS: ""
-  GOOGLE_ANALYTICS_UNIVERSAL: ""
-  GOOGLE_SAFE_BROWSING_KEY: ""
-  MAIL_PASSWORD: ""
-  MAIL_USER: ""
-  JWT_SECRET: ""
+  MAIL_PASSWORD: "mailpassword"
+  MAIL_USER: "admin@mail.com"
+  JWT_SECRET: "verysecret"
 
 env:
   ADMIN_EMAILS: "admin@gmail.com"
