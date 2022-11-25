@@ -1,6 +1,8 @@
 probes:
   enabled: true
 
+priorityClass: system-cluster-critical
+
 nginx:
   image:
     name: nginx
