@@ -22,6 +22,7 @@ spec:
       labels:
         org.kobotoolbox.instance: {{ .Release.Name }}-kobo
     spec:
+      priorityClassName: {{ .Values.priorityClass }}
       # Define internal host names since we're doing host-based routing
       hostAliases:
         - ip: "127.0.0.1"
