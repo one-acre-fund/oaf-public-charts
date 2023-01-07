@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.6.19](https://img.shields.io/badge/Version-0.6.19-informational?style=flat-square)
+![Version: 0.6.20](https://img.shields.io/badge/Version-0.6.20-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -27,7 +27,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | mongodb | ~12.1.20 |
+| https://charts.bitnami.com/bitnami | mongodb | ~13.6.1 |
 | https://charts.bitnami.com/bitnami | postgresql | ~11.9.1 |
 | https://charts.bitnami.com/bitnami | redismain(redis) | ~16.12.2 |
 | https://charts.bitnami.com/bitnami | rediscache(redis) | ~16.12.2 |
