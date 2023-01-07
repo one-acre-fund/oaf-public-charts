@@ -481,6 +481,8 @@ general:
     storageClass: ""
     # -- Needs to be ReadWriteMany if you intend to scale to more than 1 pod!
     accessMode: ReadWriteOnce
+  sentry:
+    environment: development
 
 ingress:
   # -- Install ingress?

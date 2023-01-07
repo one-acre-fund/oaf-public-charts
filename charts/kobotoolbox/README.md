@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.6.18](https://img.shields.io/badge/Version-0.6.18-informational?style=flat-square)
+![Version: 0.6.19](https://img.shields.io/badge/Version-0.6.19-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -61,6 +61,7 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | general.mediaStorage.size | string | `"10Gi"` | Storage size for uploaded media volume |
 | general.mediaStorage.storageClass | string | `""` | Storage class will default to global.storageClass if provided, but can be specifically overridden here |
 | general.replicas | int | `1` | Replica for the kpi+kobocat pod. __WARNING__: if using more than 1 replicas, you NEED to use a ReadWriteMany accessmode in mediaStorage.accessMode, and a storage class that supports it! |
+| general.sentry.environment | string | `"development"` |  |
 | general.serviceType | string | `"ClusterIP"` | Service type to expose |
 | general.superUser.password | string | `"kobo"` | Admin user password |
 | general.superUser.username | string | `"kobo"` | Admin user name - This user will have access to kobotoolbox UI but also the built-in Django admin interface (/admin) |

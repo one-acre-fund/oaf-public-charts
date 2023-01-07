@@ -92,6 +92,8 @@ mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }
   value: {{ .Values.general.supportEmail | quote }}
 - name: DJANGO_ALLOWED_HOSTS
   value: ".{{ .Values.general.externalDomain }} .{{ include "internal_domain" . }} localhost"
+- name: SENTRY_ENVIRONMENT
+  value: {{ .Values.general.sentry.environment }}
 {{- end -}}
 
 {{- define "env_mongo" -}}
