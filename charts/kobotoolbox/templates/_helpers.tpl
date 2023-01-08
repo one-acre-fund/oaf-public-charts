@@ -58,6 +58,10 @@ redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-maste
 redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-redismain-master:6379/1
 {{- end -}}
 
+{{- define "redis_service_account_url" -}}
+redis://:{{ .Values.global.redis.password }}@{{ .Release.Name }}-rediscache-master:6379/6
+{{- end -}}
+
 {{- define "mongo_url" -}}
 mongodb://{{ .Values.mongodb.auth.username }}:{{ .Values.mongodb.auth.password }}@{{ .Release.Name }}-mongodb:27017
 {{- end -}}
