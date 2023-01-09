@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.6.21](https://img.shields.io/badge/Version-0.6.21-informational?style=flat-square)
+![Version: 0.6.22](https://img.shields.io/badge/Version-0.6.22-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
