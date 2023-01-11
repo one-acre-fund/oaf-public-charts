@@ -1,0 +1,99 @@
+{{- if .Values.flower.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-flower
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      org.kobotoolbox.instance: {{ .Release.Name }}-flower
+  template:
+    metadata:
+      annotations:
+        # Add a checksum to force the re-creation of the pods on every config update
+        checksum/config: {{ .Values | toString | sha256sum }}
+      labels:
+        org.kobotoolbox.instance: {{ .Release.Name }}-flower
+    spec:
+      initContainers:
+      # Wait for redis broker
+        - name: wait-redis
+          image: jwilder/dockerize
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - dockerize -timeout=120s -wait tcp://${REDIS_HOST}:${REDIS_PORT}
+          env:
+          - name: REDIS_HOST
+            value: {{ .Release.Name }}-redismain-master
+          - name: REDIS_PORT
+            value: 6379
+      containers:
+        - name: kpi-flower
+          image: "{{ .Values.kpi.image.name }}:{{ .Values.kpi.image.tag }}"
+          command:
+            - sh
+            - '-c'
+            {{- if .Values.flower.auth.enabled }}
+            - pip install flower && celery -A kobo flower --port={{ .Values.flower.ports.kpi }} --auth={{ .Values.flower.auth.authenticatedEmails }}
+            {{- else }}
+            - pip install flower && celery -A kobo flower --port={{ .Values.flower.ports.kpi }}"
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.flower.ports.kpi }}
+              protocol: TCP
+          env:
+            - name: FLOWER_OAUTH2_KEY
+              value: {{ .Values.flower.auth.oauthKey }}
+            - name: FLOWER_OAUTH2_SECRET
+              value: {{ .Values.flower.auth.oauthSecret }}
+            - name: FLOWER_OAUTH2_REDIRECT_URI
+              value: {{ .Values.flower.auth.redirectUrl.kpi }}
+          envFrom:
+            - secretRef:
+                name: kobo-secrets
+        - name: kobocat-flower
+          image: "{{ .Values.kobocat.image.name }}:{{ .Values.kobocat.image.tag }}"
+          command:
+            - sh
+            - '-c'
+            {{- if .Values.flower.auth.enabled }}
+            - pip install flower && celery -A onadata flower --port={{ .Values.flower.ports.kobocat }} --auth={{ .Values.flower.auth.authenticatedEmails }}
+            {{- else }}
+            - pip install flower && celery -A onadata flower --port={{ .Values.flower.ports.kobocat }}"
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.flower.ports.kobocat }}
+              protocol: TCP
+          env:
+            - name: FLOWER_OAUTH2_KEY
+              value: {{ .Values.flower.auth.oauthKey }}
+            - name: FLOWER_OAUTH2_SECRET
+              value: {{ .Values.flower.auth.oauthSecret }}
+            - name: FLOWER_OAUTH2_REDIRECT_URI
+              value: {{ .Values.flower.auth.redirectUrl.kobocat }}
+          envFrom:
+            - secretRef:
+                name: kobo-secrets
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-flower
+spec:
+  selector:
+    org.kobotoolbox.instance: {{ .Release.Name }}-flower
+  ports:
+    - targetPort: {{ .Values.flower.ports.kpi }}
+      port: {{ .Values.flower.ports.kpi }}
+      name: kpi-http
+    - targetPort: {{ .Values.flower.ports.kobocat }}
+      port: {{ .Values.flower.ports.kobocat }}
+      name: kobo-http
+{{- end }}

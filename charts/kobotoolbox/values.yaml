@@ -584,3 +584,17 @@ postgresql:
 uwsgiExporter:
   enabled: false
   logLevel: info
+
+flower:
+  enabled: false
+  ports:
+    kpi: 5566
+    kobocat: 5577
+  auth:
+    enabled: false
+    oauthKey: auth-key
+    oauthSecret: auth-secret
+    redirectUrl:
+      kpi: http://flower.kpi.com/login
+      kobocat: http://flower.kobocat.com/login
+    authenticatedEmails: "me@gmail.com|you@gmail.com"
