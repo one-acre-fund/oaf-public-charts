@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.6.22](https://img.shields.io/badge/Version-0.6.22-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -50,6 +50,15 @@ $ helm install my-release one-acre-fund/kobotoolbox
 | external.ravenDSN.kobocat | string | `""` |  |
 | external.ravenDSN.kpi | string | `""` |  |
 | external.ravenDSN.kpiJs | string | `""` |  |
+| flower.auth.authenticatedEmails | string | `"me@gmail.com|you@gmail.com"` |  |
+| flower.auth.enabled | bool | `false` |  |
+| flower.auth.oauthKey | string | `"auth-key"` |  |
+| flower.auth.oauthSecret | string | `"auth-secret"` |  |
+| flower.auth.redirectUrl.kobocat | string | `"http://flower.kobocat.com/login"` |  |
+| flower.auth.redirectUrl.kpi | string | `"http://flower.kpi.com/login"` |  |
+| flower.enabled | bool | `false` |  |
+| flower.ports.kobocat | int | `5577` |  |
+| flower.ports.kpi | int | `5566` |  |
 | general.debug | bool | `false` | Enable various debug flags? |
 | general.djangoSecret | string | `"EKMvRtT2RFB3xDvFty4SVCsTyaQAHS9aA2mkRqtTp9zQYz48fp"` | Random Django secret |
 | general.externalDomain | string | `"example.com"` | Parent domain to serve all apps from __WARNING__: The subdomains MUST be reachable since the application will try to call itself at this address |

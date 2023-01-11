@@ -594,7 +594,7 @@ flower:
     enabled: false
     oauthKey: auth-key
     oauthSecret: auth-secret
-    redirectUrl: 
+    redirectUrl:
       kpi: http://flower.kpi.com/login
       kobocat: http://flower.kobocat.com/login
     authenticatedEmails: "me@gmail.com|you@gmail.com"
