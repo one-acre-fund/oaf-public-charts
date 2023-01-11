@@ -25,7 +25,7 @@ spec:
           command:
             - sh
             - -c
-            - dockerize -timeout=120s -wait tcp://${REDIS_HOST}:7379
+            - dockerize -timeout=120s -wait tcp://${REDIS_HOST}:6379
           env:
           - name: REDIS_HOST
             value: {{ .Release.Name }}-redismain-master
