@@ -25,12 +25,10 @@ spec:
           command:
             - sh
             - -c
-            - dockerize -timeout=120s -wait tcp://${REDIS_HOST}:${REDIS_PORT}
+            - dockerize -timeout=120s -wait tcp://${REDIS_HOST}:7379
           env:
           - name: REDIS_HOST
             value: {{ .Release.Name }}-redismain-master
-          - name: REDIS_PORT
-            value: 6379
       containers:
         - name: kpi-flower
           image: "{{ .Values.kpi.image.name }}:{{ .Values.kpi.image.tag }}"
@@ -38,7 +36,7 @@ spec:
             - sh
             - '-c'
             {{- if .Values.flower.auth.enabled }}
-            - pip install flower && celery -A kobo flower --port={{ .Values.flower.ports.kpi }} --auth={{ .Values.flower.auth.authenticatedEmails }}
+            - pip install flower && celery -A kobo flower --port={{ .Values.flower.ports.kpi }} --auth={{ .Values.flower.auth.authenticatedEmails | quote }}
             {{- else }}
             - pip install flower && celery -A kobo flower --port={{ .Values.flower.ports.kpi }}"
             {{- end }}
@@ -50,7 +48,10 @@ spec:
             - name: FLOWER_OAUTH2_KEY
               value: {{ .Values.flower.auth.oauthKey }}
             - name: FLOWER_OAUTH2_SECRET
-              value: {{ .Values.flower.auth.oauthSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: FLOWER_OAUTH2_SECRET
             - name: FLOWER_OAUTH2_REDIRECT_URI
               value: {{ .Values.flower.auth.redirectUrl.kpi }}
           envFrom:
@@ -62,7 +63,7 @@ spec:
             - sh
             - '-c'
             {{- if .Values.flower.auth.enabled }}
-            - pip install flower && celery -A onadata flower --port={{ .Values.flower.ports.kobocat }} --auth={{ .Values.flower.auth.authenticatedEmails }}
+            - pip install flower && celery -A onadata flower --port={{ .Values.flower.ports.kobocat }} --auth={{ .Values.flower.auth.authenticatedEmails | quote }}
             {{- else }}
             - pip install flower && celery -A onadata flower --port={{ .Values.flower.ports.kobocat }}"
             {{- end }}
@@ -74,7 +75,10 @@ spec:
             - name: FLOWER_OAUTH2_KEY
               value: {{ .Values.flower.auth.oauthKey }}
             - name: FLOWER_OAUTH2_SECRET
-              value: {{ .Values.flower.auth.oauthSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: FLOWER_OAUTH2_SECRET
             - name: FLOWER_OAUTH2_REDIRECT_URI
               value: {{ .Values.flower.auth.redirectUrl.kobocat }}
           envFrom:
