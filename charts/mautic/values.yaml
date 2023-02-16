@@ -55,6 +55,8 @@ strategy:
 
 # -- See https://hub.docker.com/r/mautic/mautic
 extraEnvs: {}
+# -- See https://hub.docker.com/r/mautic/mautic
+extraSecretEnvs: {}
 #  MAUTIC_CONFIG_DEBUG: "1"
 
 #  MAUTIC_DB_HOST: ... (defaults to the IP and port of the linked mysql container)
@@ -79,6 +81,20 @@ extraEnvs: {}
 #  MAUTIC_ADMIN_USERNAME: The username of your initial admin user
 #  MAUTIC_ADMIN_FIRSTNAME: The first name of your initial admin user
 #  MAUTIC_ADMIN_LASTNAME: The last name of your initial admin user
+
+probes:
+  startupProbe:
+    httpGet:
+      path: /
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
 
 mariadb:
   enabled: true

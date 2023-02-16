@@ -26,8 +26,10 @@ extraEnvs:
 
   MAUTIC_URL: https://mautic.example.com
   MAUTIC_ADMIN_EMAIL: yann.jouanique@oneacrefund.org
-  MAUTIC_ADMIN_PASSWORD: password123
   #  MAUTIC_INSTALL_FORCE: If the URL used above is HTTP instead of HTTPS, automated installation will fail. Set to true to allow this.
   MAUTIC_ADMIN_USERNAME: Admin
   MAUTIC_ADMIN_FIRSTNAME: Yann
   MAUTIC_ADMIN_LASTNAME: Jouanique
+
+extraSecretEnvs:
+  MAUTIC_ADMIN_PASSWORD: password123
