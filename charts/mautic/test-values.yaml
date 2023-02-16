@@ -18,6 +18,7 @@ extraEnvs:
 
   #  MAUTIC_RUN_CRON_JOBS: ... (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
   #  MAUTIC_RUN_MIGRATIONS: ... (defaults to false - disabled) If set to true runs database migrations automatically on startup.
+  MAUTIC_TRUSTED_PROXIES: '["0.0.0.0/0"]'
 
   #  PHP_INI_DATE_TIMEZONE: ... (defaults to UTC) Set PHP timezone
   #  PHP_MEMORY_LIMIT: ... (defaults to 256M) Set PHP memory limit
@@ -25,8 +26,8 @@ extraEnvs:
   #  PHP_MAX_EXECUTION_TIME: ... (defaults to 300) Set PHP max execution time
 
   MAUTIC_URL: https://mautic.example.com
-  MAUTIC_ADMIN_EMAIL: yann.jouanique@oneacrefund.org
-  #  MAUTIC_INSTALL_FORCE: If the URL used above is HTTP instead of HTTPS, automated installation will fail. Set to true to allow this.
+  MAUTIC_ADMIN_EMAIL: "yann.jouanique@oneacrefund.org"
+  MAUTIC_INSTALL_FORCE: "true"
   MAUTIC_ADMIN_USERNAME: Admin
   MAUTIC_ADMIN_FIRSTNAME: Yann
   MAUTIC_ADMIN_LASTNAME: Jouanique

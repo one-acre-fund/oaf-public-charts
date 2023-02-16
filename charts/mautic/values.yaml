@@ -2,6 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# -- WARNING: if using multiple nodes, you will need to use a ReadWriteMany storage class
 replicaCount: 1
 
 image:
@@ -29,6 +30,19 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+
+volume:
+  enabled: true
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: "1Gi"
+    # storageClassName: ""
+
+persistence:
+  existingClaim: ""
 
 resources:
   {}
@@ -67,6 +81,7 @@ extraSecretEnvs: {}
 
 #  MAUTIC_RUN_CRON_JOBS: ... (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
 #  MAUTIC_RUN_MIGRATIONS: ... (defaults to false - disabled) If set to true runs database migrations automatically on startup.
+#  MAUTIC_TRUSTED_PROXIES: ... (defaults to empty) If Mautic sits behind a reverse proxy, you can set a json array of CIDR network addresses here, and mautic will set those addresses as trusted proxies. You can use ["0.0.0.0/0"] or See documentation
 
 #  PHP_INI_DATE_TIMEZONE: ... (defaults to UTC) Set PHP timezone
 #  PHP_MEMORY_LIMIT: ... (defaults to 256M) Set PHP memory limit
@@ -83,18 +98,19 @@ extraSecretEnvs: {}
 #  MAUTIC_ADMIN_LASTNAME: The last name of your initial admin user
 
 probes:
-  startupProbe:
-    httpGet:
-      path: /
-      port: http
-  readinessProbe:
-    httpGet:
-      path: /
-      port: http
-  livenessProbe:
-    httpGet:
-      path: /
-      port: http
+  {}
+  # startupProbe:
+  #   httpGet:
+  #     path: /
+  #     port: http
+  # readinessProbe:
+  #   httpGet:
+  #     path: /
+  #     port: http
+  # livenessProbe:
+  #   httpGet:
+  #     path: /
+  #     port: http
 
 mariadb:
   enabled: true
