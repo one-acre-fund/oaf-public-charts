@@ -1,0 +1,33 @@
+mariadb:
+  auth:
+    rootPassword: toto
+    username: mautic
+    password: mautic123
+
+ingress:
+  enabled: false
+
+extraEnvs:
+  MAUTIC_CONFIG_DEBUG: "1"
+
+  #  MAUTIC_DB_HOST: ... (defaults to the IP and port of the linked mysql container)
+  #  MAUTIC_DB_USER: ... (defaults to "root")
+  #  MAUTIC_DB_PASSWORD: ... (defaults to the value of the MYSQL_ROOT_PASSWORD environment variable from the linked mysql container)
+  #  MAUTIC_DB_NAME: ... (defaults to "mautic")
+  #  MAUTIC_DB_TABLE_PREFIX: ... (defaults to empty) Add prefix do Mautic Tables. Very useful when migrate existing databases from another server to docker.
+
+  #  MAUTIC_RUN_CRON_JOBS: ... (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
+  #  MAUTIC_RUN_MIGRATIONS: ... (defaults to false - disabled) If set to true runs database migrations automatically on startup.
+
+  #  PHP_INI_DATE_TIMEZONE: ... (defaults to UTC) Set PHP timezone
+  #  PHP_MEMORY_LIMIT: ... (defaults to 256M) Set PHP memory limit
+  #  PHP_MAX_UPLOAD: ... (defaults to 20M) Set PHP upload max file size
+  #  PHP_MAX_EXECUTION_TIME: ... (defaults to 300) Set PHP max execution time
+
+  MAUTIC_URL: https://mautic.example.com
+  MAUTIC_ADMIN_EMAIL: yann.jouanique@oneacrefund.org
+  MAUTIC_ADMIN_PASSWORD: password123
+  #  MAUTIC_INSTALL_FORCE: If the URL used above is HTTP instead of HTTPS, automated installation will fail. Set to true to allow this.
+  MAUTIC_ADMIN_USERNAME: Admin
+  MAUTIC_ADMIN_FIRSTNAME: Yann
+  MAUTIC_ADMIN_LASTNAME: Jouanique
