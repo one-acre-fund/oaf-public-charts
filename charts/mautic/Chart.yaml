@@ -1,0 +1,19 @@
+apiVersion: v2
+appVersion: "1.0"
+description: A Helm chart for Mautic, a marketing automation tool
+name: mautic
+version: 0.1.0
+keywords:
+  - marketing
+  - mautic
+  - crm
+sources:
+  - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/mautic
+maintainers:
+  - name: Yann-J
+    email: yann.jouanique@gmail.com
+dependencies:
+  - name: mariadb
+    version: ~11.4.6
+    repository: https://charts.bitnami.com/bitnami
+    condition: mariadb.enabled

@@ -1,0 +1,12 @@
+{{- if .Values.volume.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "mautic.name" .}}-var-www-html
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "mautic.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  {{- toYaml .Values.volume.spec | nindent 2 }}
+{{- end }}

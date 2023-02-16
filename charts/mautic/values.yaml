@@ -1,0 +1,121 @@
+# Default values for mautic.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- WARNING: if using multiple nodes, you will need to use a ReadWriteMany storage class
+replicaCount: 1
+
+image:
+  repository: mautic/mautic
+  tag: v4-apache
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations:
+    # kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: mautic.example.com
+      paths:
+        - "/"
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+volume:
+  enabled: true
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: "1Gi"
+    # storageClassName: ""
+
+persistence:
+  existingClaim: ""
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+strategy:
+  # -- Since we are mounting a volume, using Recreate to avoid double-mounting
+  type: Recreate
+
+# -- See https://hub.docker.com/r/mautic/mautic
+extraEnvs: {}
+# -- See https://hub.docker.com/r/mautic/mautic
+extraSecretEnvs: {}
+#  MAUTIC_CONFIG_DEBUG: "1"
+
+#  MAUTIC_DB_HOST: ... (defaults to the IP and port of the linked mysql container)
+#  MAUTIC_DB_USER: ... (defaults to "root")
+#  MAUTIC_DB_PASSWORD: ... (defaults to the value of the MYSQL_ROOT_PASSWORD environment variable from the linked mysql container)
+#  MAUTIC_DB_NAME: ... (defaults to "mautic")
+#  MAUTIC_DB_TABLE_PREFIX: ... (defaults to empty) Add prefix do Mautic Tables. Very useful when migrate existing databases from another server to docker.
+
+#  MAUTIC_RUN_CRON_JOBS: ... (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
+#  MAUTIC_RUN_MIGRATIONS: ... (defaults to false - disabled) If set to true runs database migrations automatically on startup.
+#  MAUTIC_TRUSTED_PROXIES: ... (defaults to empty) If Mautic sits behind a reverse proxy, you can set a json array of CIDR network addresses here, and mautic will set those addresses as trusted proxies. You can use ["0.0.0.0/0"] or See documentation
+
+#  PHP_INI_DATE_TIMEZONE: ... (defaults to UTC) Set PHP timezone
+#  PHP_MEMORY_LIMIT: ... (defaults to 256M) Set PHP memory limit
+#  PHP_MAX_UPLOAD: ... (defaults to 20M) Set PHP upload max file size
+#  PHP_MAX_EXECUTION_TIME: ... (defaults to 300) Set PHP max execution time
+
+#  MAUTIC_URL: The URL at which your mautic instance will be accessed
+#  MAUTIC_ADMIN_EMAIL: The email address of your initial admin user
+#  MAUTIC_ADMIN_PASSWORD: The password of your initial admin user
+
+#  MAUTIC_INSTALL_FORCE: If the URL used above is HTTP instead of HTTPS, automated installation will fail. Set to true to allow this.
+#  MAUTIC_ADMIN_USERNAME: The username of your initial admin user
+#  MAUTIC_ADMIN_FIRSTNAME: The first name of your initial admin user
+#  MAUTIC_ADMIN_LASTNAME: The last name of your initial admin user
+
+probes:
+  {}
+  # startupProbe:
+  #   httpGet:
+  #     path: /
+  #     port: http
+  # readinessProbe:
+  #   httpGet:
+  #     path: /
+  #     port: http
+  # livenessProbe:
+  #   httpGet:
+  #     path: /
+  #     port: http
+
+mariadb:
+  enabled: true
+  auth:
+    database: mautic
+    #   rootPassword:
+    #   username:
+    #   password:
