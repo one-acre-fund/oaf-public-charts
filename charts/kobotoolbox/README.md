@@ -1,6 +1,6 @@
 # kobotoolbox
 
-![Version: 0.7.2](https://img.shields.io/badge/Version-0.7.2-informational?style=flat-square)
+![Version: 0.7.3](https://img.shields.io/badge/Version-0.7.3-informational?style=flat-square)
 
 KoboToolbox field data collection solution
 
@@ -17,6 +17,8 @@ KoboToolbox field data collection solution
 * <https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/kobotoolbox>
 
 ## TL;DR;
+
+[KoboToolbox](https://www.kobotoolbox.org/) is an open-source field data collection tool optimised to build offline form-based apps.
 
 ```console
 $ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
