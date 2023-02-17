@@ -47,6 +47,10 @@ $ helm install my-release one-acre-fund/metabase
 | metabase.image.tag | string | `"latest"` | Metabase image tag |
 | metabase.replicas | int | `1` | Replica count |
 | postgresql | object | see `values.yaml` | Postgres config See https://artifacthub.io/packages/helm/bitnami/postgresql for docs |
+| postgresql.auth.database | string | `"metabase"` | Database to create and use |
+| postgresql.auth.password | string | `"ciJ8KfiMUK"` | Application password |
+| postgresql.auth.postgresPassword | string | `"H55Djpc7Vs"` | Password for the `postgres` user |
+| postgresql.auth.username | string | `"metabase"` | Application username |
 | postgresql.enabled | bool | `true` | Install postgres? |
 | postgresql.service.port | int | `5432` | Postgres port |
 | resources | object | `{}` |  |
