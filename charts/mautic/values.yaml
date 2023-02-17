@@ -103,19 +103,19 @@ extraSecretEnvs: {}
 probes:
   startupProbe:
     httpGet:
-      path: /
+      path: /mtc.js
       port: http
     failureThreshold: 30
     periodSeconds: 10
   readinessProbe:
     httpGet:
-      path: /
+      path: /mtc.js
       port: http
     failureThreshold: 5
     periodSeconds: 5
   livenessProbe:
     httpGet:
-      path: /
+      path: /mtc.js
       port: http
     failureThreshold: 5
     periodSeconds: 5
