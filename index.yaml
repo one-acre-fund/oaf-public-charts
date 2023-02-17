@@ -4672,6 +4672,31 @@ entries:
   mautic:
   - apiVersion: v2
     appVersion: v4-apache
+    created: "2023-02-17T12:17:53.213456213Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.4.6
+    description: A Helm chart for Mautic, a marketing automation tool
+    digest: 2296d4b3f7b32937004f55f6e8d45599aca74959321583f6c8c6508d819666be
+    home: https://www.mautic.org/
+    icon: https://secure.gravatar.com/avatar/a946d764bc1e4a7a39664099febfc9b2.png?s=400
+    keywords:
+    - marketing
+    - mautic
+    - crm
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: mautic
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/mautic
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/mautic-0.1.4/mautic-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: v4-apache
     created: "2023-02-17T09:59:28.866184531Z"
     dependencies:
     - condition: mariadb.enabled
@@ -5910,4 +5935,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2023-02-17T12:13:02.420315773Z"
+generated: "2023-02-17T12:17:53.214827626Z"
