@@ -1006,6 +1006,29 @@ entries:
   growthbook:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2023-02-17T09:59:28.301838165Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami/
+      version: ~13.6.1
+    description: A Helm chart for Growthbook
+    digest: 2d7d0e0f8f2084a26a649de46b2bb925d0c517524e57d096cbcc8e2d7027586d
+    icon: https://cdn.svgporn.com/logos/growth-book-icon.svg
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    - email: jean.poutcheu@gmail.com
+      name: Nzeugaa
+    name: growthbook
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/growthbook-0.1.14/growthbook-0.1.14.tgz
+    version: 0.1.14
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2023-01-07T19:15:20.103966198Z"
     dependencies:
     - condition: mongodb.enabled
@@ -1305,6 +1328,43 @@ entries:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/growthbook-0.1.1/growthbook-0.1.1.tgz
     version: 0.1.1
   kobotoolbox:
+  - apiVersion: v2
+    created: "2023-02-17T09:59:28.508862039Z"
+    dependencies:
+    - alias: redismain
+      condition: redismain.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~16.12.3
+    - alias: rediscache
+      condition: rediscache.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~16.12.3
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.9.13
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami
+      version: ~12.1.31
+    description: KoboToolbox field data collection solution
+    digest: aba97e31f1372ffd9982645b53424c11008df8789cb18acbea5bbc77ca40dfb6
+    home: https://www.kobotoolbox.org/
+    icon: https://avatars.githubusercontent.com/u/5543677?s=400&v=4
+    keywords:
+    - survey
+    - field
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: kobotoolbox
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/kobotoolbox
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/kobotoolbox-0.7.3/kobotoolbox-0.7.3.tgz
+    version: 0.7.3
   - apiVersion: v2
     created: "2023-01-12T09:43:48.735670954Z"
     dependencies:
@@ -4302,6 +4362,29 @@ entries:
   kutt:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2023-02-17T09:59:28.685899147Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~12.1.2
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~17.3.11
+    description: A Helm chart for Kubernetes
+    digest: b409927b23d41ce8a2fcf10149863f99ab9867351becf1bb02620259932db866
+    icon: https://raw.githubusercontent.com/thedevs-network/kutt/9d1c873897c3f5b9a1bd0c74dc5d23f2ed01f2ec/static/images/logo-github.png
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: kutt
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/kutt-0.2.5/kutt-0.2.5.tgz
+    version: 0.2.5
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2022-11-24T11:05:41.765498984Z"
     dependencies:
     - condition: postgresql.enabled
@@ -4587,6 +4670,31 @@ entries:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/kutt-0.1.0/kutt-0.1.0.tgz
     version: 0.1.0
   mautic:
+  - apiVersion: v2
+    appVersion: v4-apache
+    created: "2023-02-17T09:59:28.866184531Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.4.6
+    description: A Helm chart for Mautic, a marketing automation tool
+    digest: 46d32cdab4d29268f85f59d098e33927a4aa3cbbdf12d18ba328b3b87c899418
+    home: https://www.mautic.org/
+    icon: https://secure.gravatar.com/avatar/a946d764bc1e4a7a39664099febfc9b2.png?s=400
+    keywords:
+    - marketing
+    - mautic
+    - crm
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: mautic
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/mautic
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/mautic-0.1.3/mautic-0.1.3.tgz
+    version: 0.1.3
   - apiVersion: v2
     appVersion: v4-apache
     created: "2023-02-17T07:43:12.436128177Z"
@@ -5489,6 +5597,25 @@ entries:
     version: 0.1.10
   nocodb:
   - apiVersion: v2
+    appVersion: 1.16.1
+    created: "2023-02-17T09:59:29.090006172Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: A Helm chart for Kubernetes
+    digest: 61dcb8e3c0e949d556464854c74959dcdcf69ffa068151b09ac511722ff308c3
+    icon: https://cdn.svgporn.com/logos/nocodb.svg
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: nocodb
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.2.9/nocodb-0.2.9.tgz
+    version: 0.2.9
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2022-11-24T07:52:58.729568414Z"
     dependencies:
@@ -5758,4 +5885,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2023-02-17T07:43:12.437284639Z"
+generated: "2023-02-17T09:59:29.09152696Z"
