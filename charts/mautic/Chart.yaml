@@ -2,8 +2,8 @@ apiVersion: v2
 appVersion: "v4-apache"
 description: A Helm chart for Mautic, a marketing automation tool
 name: mautic
-version: 0.1.1
-icon: https://avatars.githubusercontent.com/u/5543677?s=400&v=4
+version: 0.1.2
+icon: https://secure.gravatar.com/avatar/a946d764bc1e4a7a39664099febfc9b2.png?s=400
 home: https://www.mautic.org/
 keywords:
   - marketing
