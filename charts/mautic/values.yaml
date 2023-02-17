@@ -1,8 +1,4 @@
-# Default values for mautic.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-# -- WARNING: if using multiple nodes, you will need to use a ReadWriteMany storage class
+# -- __WARNING__: if using multiple nodes, you will need to use a ReadWriteMany storage class
 replicaCount: 1
 
 image:
@@ -16,7 +12,10 @@ service:
   type: ClusterIP
   port: 80
 
+# -- Ingress definition
+# @default -- see `values.yaml`
 ingress:
+  # -- Enable ingress?
   enabled: true
   annotations:
     # kubernetes.io/ingress.class: nginx
@@ -67,10 +66,12 @@ strategy:
   # -- Since we are mounting a volume, using Recreate to avoid double-mounting
   type: Recreate
 
-# -- See https://hub.docker.com/r/mautic/mautic
+# -- Dictionary of env vars, see https://hub.docker.com/r/mautic/mautic for possible values
 extraEnvs: {}
-# -- See https://hub.docker.com/r/mautic/mautic
+
+# -- Same as `extraEnvs` but passed as a secret
 extraSecretEnvs: {}
+
 #  MAUTIC_CONFIG_DEBUG: "1"
 
 #  MAUTIC_DB_HOST: ... (defaults to the IP and port of the linked mysql container)
@@ -97,22 +98,32 @@ extraSecretEnvs: {}
 #  MAUTIC_ADMIN_FIRSTNAME: The first name of your initial admin user
 #  MAUTIC_ADMIN_LASTNAME: The last name of your initial admin user
 
+# -- Probes definitions
+# @default -- See `values.yaml`
 probes:
-  {}
-  # startupProbe:
-  #   httpGet:
-  #     path: /
-  #     port: http
-  # readinessProbe:
-  #   httpGet:
-  #     path: /
-  #     port: http
-  # livenessProbe:
-  #   httpGet:
-  #     path: /
-  #     port: http
+  startupProbe:
+    httpGet:
+      path: /
+      port: http
+    failureThreshold: 30
+    periodSeconds: 10
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+    failureThreshold: 5
+    periodSeconds: 5
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+    failureThreshold: 5
+    periodSeconds: 5
 
+# -- Mariadb subchart configuration, see https://artifacthub.io/packages/helm/bitnami/mariadb for docs
+# @default -- see `values.yaml`
 mariadb:
+  # -- Enable Mariadb chart?
   enabled: true
   auth:
     database: mautic
