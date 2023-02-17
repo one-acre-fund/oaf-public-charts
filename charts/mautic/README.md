@@ -1,6 +1,6 @@
 # mautic
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square)
 
 A Helm chart for Mautic, a marketing automation tool
 
@@ -49,11 +49,11 @@ $ helm install my-release one-acre-fund/mautic
 | nodeSelector | object | `{}` |  |
 | persistence.existingClaim | string | `""` |  |
 | probes | object | See `values.yaml` | Probes definitions |
-| replicaCount | int | `1` | __WARNING__: if using multiple nodes, you will need to use a ReadWriteMany storage class |
+| replicaCount | int | `1` | __WARNING__: if using multiple nodes, you will need to use a `ReadWriteMany` storage class |
 | resources | object | `{}` |  |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
-| strategy.type | string | `"Recreate"` | Since we are mounting a volume, using Recreate to avoid double-mounting |
+| strategy.type | string | `"Recreate"` | Since we are mounting a volume, using `Recreate` to avoid double-mounting |
 | tolerations | list | `[]` |  |
 | volume.enabled | bool | `true` |  |
 | volume.spec.accessModes[0] | string | `"ReadWriteOnce"` |  |
