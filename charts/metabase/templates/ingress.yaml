@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}-metabase
@@ -7,15 +7,20 @@ metadata:
   annotations:
     {{- .Values.ingress.annotations | toYaml | nindent 4 }}
 spec:
+  {{- if .Values.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  {{- end }}
   rules:
   - host: {{ .Values.ingress.domain }}
     http:
       paths:
       - backend:
-          serviceName: {{ .Release.Name }}-metabase
-          servicePort: 3000
+          service:
+            name: {{ .Release.Name }}-metabase
+            port:
+              number: 3000
         path: /
         pathType: Prefix
   tls:
-  {{ .Values.ingress.tls | toYaml | nindent 2 }}
+    {{- .Values.ingress.tls | toYaml | nindent 4 }}
 {{- end -}}
