@@ -1,5 +1,5 @@
 {{- define "secrets" -}}
-db-password: {{ .Values.postgresql.postgresqlPassword | b64enc }}
+db-password: {{ .Values.postgresql.auth.password | b64enc }}
 {{- end -}}
 
 {{- define "dbHost" -}}
@@ -7,5 +7,5 @@ db-password: {{ .Values.postgresql.postgresqlPassword | b64enc }}
 {{- end -}}
 
 {{- define "dbUrl" -}}
-{{ printf "postgresql://%s:%s@%s:%s/%s" .Values.postgresql.postgresqlUsername .Values.postgresql.postgresqlPassword (include "dbHost" .) ( toString .Values.postgresql.service.port ) .Values.postgresql.postgresqlDatabase }}
+{{ printf "postgresql://%s:%s@%s:%s/%s" .Values.postgresql.auth.username .Values.postgresql.auth.password (include "dbHost" .) ( toString .Values.postgresql.service.port ) .Values.postgresql.auth.database }}
 {{- end -}}

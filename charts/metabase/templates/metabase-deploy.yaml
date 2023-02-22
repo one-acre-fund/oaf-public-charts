@@ -62,11 +62,11 @@ spec:
         - name: MB_DB_TYPE
           value: postgres
         - name: MB_DB_DBNAME
-          value: {{ .Values.postgresql.postgresqlDatabase | quote }}
+          value: {{ .Values.postgresql.auth.database | quote }}
         - name: MB_DB_PORT
           value: {{ .Values.postgresql.service.port | quote }}
         - name: MB_DB_USER
-          value: {{ .Values.postgresql.postgresqlUsername | quote }}
+          value: {{ .Values.postgresql.auth.username | quote }}
         - name: MB_DB_PASS
           valueFrom:
             secretKeyRef:
@@ -76,7 +76,7 @@ spec:
           value: {{ include "dbHost" . | quote }}
         {{- if .Values.javaOpts }}
         - name: JAVA_OPTS
-          value: {{ .Values.javaOpts |quote }}
+          value: {{ .Values.javaOpts | quote }}
         {{- end }}
 
         ports:

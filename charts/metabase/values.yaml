@@ -28,14 +28,15 @@ postgresql:
   # Specify an external host here if desired - otherwise we will use the subchart dependency
   host: ""
 
-  # -- Password for the `postgres` user
-  postgresqlPostgresPassword: H55Djpc7Vs
-  # -- Database to create and use
-  postgresqlDatabase: metabase
-  # -- Application username
-  postgresqlUsername: metabase
-  # -- Application password
-  postgresqlPassword: ciJ8KfiMUK
+  auth:
+    # -- Password for the `postgres` user
+    postgresPassword: H55Djpc7Vs
+    # -- Database to create and use
+    database: metabase
+    # -- Application username
+    username: metabase
+    # -- Application password
+    password: ciJ8KfiMUK
   service:
     # -- Postgres port
     port: 5432
@@ -43,10 +44,14 @@ postgresql:
 ingress:
   # -- Install ingress?
   enabled: false
+  # -- Host to use for ingress (required)
+  domain: metabase.example.com
+  # -- ingressClassName of the ingress you want to use. Leave empty to use default
+  ingressClassName: ""
   # -- Dictionary of ingress annotations
   annotations: {}
   # -- Ingress TLS settings, passed directly to ingress definition
-  tls: {}
+  tls: []
 
 resources: {}
 
