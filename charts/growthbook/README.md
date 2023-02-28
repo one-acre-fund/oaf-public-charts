@@ -25,7 +25,7 @@ $ helm install my-release one-acre-fund/growthbook
 
 | Repository | Name | Version |
 |------------|------|---------|
-| <https://charts.bitnami.com/bitnami/> | mongodb | ~13.6.1 |
+| https://charts.bitnami.com/bitnami/ | mongodb | ~13.6.1 |
 
 ## Values
 

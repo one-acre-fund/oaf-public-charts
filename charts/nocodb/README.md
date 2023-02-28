@@ -23,7 +23,7 @@ $ helm install my-release one-acre-fund/nocodb
 
 | Repository | Name | Version |
 |------------|------|---------|
-| <https://charts.bitnami.com/bitnami> | postgresql | ~11.6.6 |
+| https://charts.bitnami.com/bitnami | postgresql | ~11.6.6 |
 
 ## Values
 

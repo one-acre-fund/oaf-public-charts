@@ -23,7 +23,7 @@ secret: {}
 ## ALL possible n8n Values
 
 #
-#database:
+# database:
 #  type:             # Type of database to use - Other possible types ['sqlite', 'mariadb', 'mysqldb', 'postgresdb'] - default: sqlite
 #  tablePrefix:      # Prefix for table names - default: ''
 #  postgresdb:
@@ -44,12 +44,12 @@ secret: {}
 #    password:        # MySQL Password - default: ''
 #    port:            # MySQL Port - default: 3306
 #    user:            # MySQL User - default: root
-#credentials:
+# credentials:
 #  overwrite:
 #    data:        # Overwrites for credentials - default: "{}"
 #    endpoint:    # Fetch credentials from API - default: ''
 #
-#executions:
+# executions:
 #  process:                # In what process workflows should be executed - possible values [main, own] - default: own
 #  timeout:                # Max run time (seconds) before stopping the workflow execution - default: -1
 #  maxTimeout:            # Max execution time (seconds) that can be set for a workflow individually - default: 3600
@@ -59,16 +59,16 @@ secret: {}
 #  pruneData:            # Delete data of past executions on a rolling basis - default: false
 #  pruneDataMaxAge:        # How old (hours) the execution data has to be to get deleted - default: 336
 #  pruneDataTimeout:        # Timeout (seconds) after execution data has been pruned - default: 3600
-#generic:
+# generic:
 #  timezone:     # The timezone to use - default: America/New_York
-#path:         # Path n8n is deployed to - default: "/"
-#host:         # Host name n8n can be reached - default: localhost
-#port:         # HTTP port n8n can be reached - default: 5678
-#listen_address: # IP address n8n should listen on - default: 0.0.0.0
-#protocol:       # HTTP Protocol via which n8n can be reached - possible values [http , https] - default: http
-#ssl_key:        # SSL Key for HTTPS Protocol - default: ''
-#ssl_cert:       # SSL Cert for HTTPS Protocol - default: ''
-#security:
+# path:         # Path n8n is deployed to - default: "/"
+# host:         # Host name n8n can be reached - default: localhost
+# port:         # HTTP port n8n can be reached - default: 5678
+# listen_address: # IP address n8n should listen on - default: 0.0.0.0
+# protocol:       # HTTP Protocol via which n8n can be reached - possible values [http , https] - default: http
+# ssl_key:        # SSL Key for HTTPS Protocol - default: ''
+# ssl_cert:       # SSL Cert for HTTPS Protocol - default: ''
+# security:
 #  excludeEndpoints: # Additional endpoints to exclude auth checks. Multiple endpoints can be separated by colon - default: ''
 #  basicAuth:
 #    active:     # If basic auth should be activated for editor and REST-API - default: false
@@ -84,12 +84,12 @@ secret: {}
 #    jwtNamespace:         # JWT namespace to expect (optional) -  default: ''
 #    jwtAllowedTenantKey:  # JWT tenant key name to inspect within JWT namespace (optional) - default: ''
 #    jwtAllowedTenant:     # JWT tenant to allow (optional) - default: ''
-#endpoints:
+# endpoints:
 #  rest:       # Path for rest endpoint  default: rest
 #  webhook:    # Path for webhook endpoint  default: webhook
 #  webhookTest: # Path for test-webhook endpoint  default: webhook-test
-#externalHookFiles: # Files containing external hooks. Multiple files can be separated by colon - default: ''
-#nodes:
+# externalHookFiles: # Files containing external hooks. Multiple files can be separated by colon - default: ''
+# nodes:
 #  exclude: # Nodes not to load - default: "[]"
 #  errorTriggerType: # Node Type to use as Error Trigger - default: n8n-nodes-base.errorTrigger
 
