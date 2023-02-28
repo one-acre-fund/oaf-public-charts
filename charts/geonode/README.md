@@ -16,19 +16,19 @@ Geonode - a CMS for Geospatial data
 
 * <https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/geonode>
 
-## TL;DR;
+## TL;DR
 
 ```console
-$ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
-$ helm install my-release one-acre-fund/geonode
+helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
+helm install my-release one-acre-fund/geonode
 ```
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | postgresql | ~10.1.2 |
-| https://charts.bitnami.com/bitnami | rabbitmq | ~8.6.0 |
+| <https://charts.bitnami.com/bitnami> | postgresql | ~10.1.2 |
+| <https://charts.bitnami.com/bitnami> | rabbitmq | ~8.6.0 |
 
 ## Values
 
@@ -43,13 +43,13 @@ $ helm install my-release one-acre-fund/geonode
 | general.superUser.email | string | `"support@example.com"` | Email address for `admin` user |
 | general.superUser.password | string | `"geonode"` | Password for initial `admin` user - This user will have access to geonode UI but also the built-in Django admin interface (/admin) |
 | general.supportEmail | string | `"support@example.com"` | Support email visible to users |
-| geonode.extraConf | string | Some standard base layers | Configuration to append to `settings.py` Can be used to configure new base maps or any other setting from https://github.com/GeoNode/geonode/blob/master/geonode/settings.py For base maps available in MapStore, see https://github.com/geosolutions-it/MapStore2/blob/master/web/client/utils/ConfigProvider.js |
+| geonode.extraConf | string | Some standard base layers | Configuration to append to `settings.py` Can be used to configure new base maps or any other setting from <https://github.com/GeoNode/geonode/blob/master/geonode/settings.py> For base maps available in MapStore, see <https://github.com/geosolutions-it/MapStore2/blob/master/web/client/utils/ConfigProvider.js> |
 | geonode.extraConf2 | string | Some OAuth settings | Same as `extraConf` but can be overridden separately |
-| geonode.extraEnvs | object | Various default values, see `values.yaml` | Use this to pass any env to `geonode` container See https://docs.geonode.org/en/master/basic/settings/index.html |
+| geonode.extraEnvs | object | Various default values, see `values.yaml` | Use this to pass any env to `geonode` container See <https://docs.geonode.org/en/master/basic/settings/index.html> |
 | geonode.extraSecretEnvs | object | `{"DJANGO_EMAIL_HOST_PASSWORD":"changeme"}` | Same as `extraEnvs` but passed as a secret |
 | geonode.image.name | string | `"geonode/geonode"` | Geonode image name |
 | geonode.image.tag | string | `"3.1"` | Geonode image tag |
-| geoserver.customEPSGs | list | Various useful ESPGs | List of custom ESPG definitions to add to Geoserver configuration - see https://docs.geoserver.org/stable/en/user/configuration/crshandling/customcrs.html |
+| geoserver.customEPSGs | list | Various useful ESPGs | List of custom ESPG definitions to add to Geoserver configuration - see <https://docs.geoserver.org/stable/en/user/configuration/crshandling/customcrs.html> |
 | geoserver.extraCustomEPSGs | list | `[]` | Same as `customEPSGs` but can be overridden separately |
 | geoserver.image.name | string | `"geonode/geoserver"` | `geoserver` image name |
 | geoserver.image.tag | string | `"2.18.2"` | `geoserver` image tag |
@@ -58,10 +58,10 @@ $ helm install my-release one-acre-fund/geonode
 | ingress.enabled | bool | `false` | Ingress enabled? |
 | ingress.hosts | list | `[{"host":"chart-example.local","paths":[]}]` | Ingress hosts/paths list |
 | ingress.tls | list | `[]` | Ingress tls settings |
-| postgresql.enabled | bool | `true` | Install Postgres? See See https://artifacthub.io/packages/helm/bitnami/postgresql for docs on all Postgres values |
+| postgresql.enabled | bool | `true` | Install Postgres? See See <https://artifacthub.io/packages/helm/bitnami/postgresql> for docs on all Postgres values |
 | postgresql.geodataDb | string | `"geonode_data"` | Postgres database AND user name for geoserver |
 | postgresql.geonodeDb | string | `"geonode"` | Postgres database AND user name for geonode |
 | postgresql.initdbScriptsSecret | string | `"{{ .Release.Name }}-postgres-init"` | Name of secret containing Postgres init script - will only be run on first deployment! Will be evaluated as a template |
 | postgresql.password | string | `"Uxu3UhxFmK"` | Application password for both geonodeDb and geodataDb users |
 | postgresql.postgresqlPassword | string | `"admin"` | Password for 'postgres' user |
-| rabbitmq | object | `{"auth":{"erlangCookie":"jixYBsiZ9RivaLXC02pTwGjvIo0nHtVu","password":"3asgDlgwN7","username":"user"}}` | RbbitMQ Settings - see https://artifacthub.io/packages/helm/bitnami/rabbitmq |
+| rabbitmq | object | `{"auth":{"erlangCookie":"jixYBsiZ9RivaLXC02pTwGjvIo0nHtVu","password":"3asgDlgwN7","username":"user"}}` | RbbitMQ Settings - see <https://artifacthub.io/packages/helm/bitnami/rabbitmq> |

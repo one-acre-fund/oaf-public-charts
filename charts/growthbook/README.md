@@ -16,7 +16,7 @@ A Helm chart for Growthbook
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami/ | mongodb | ~13.6.1 |
+| <https://charts.bitnami.com/bitnami/> | mongodb | ~13.6.1 |
 
 ## Values
 
