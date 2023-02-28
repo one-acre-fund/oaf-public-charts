@@ -17,16 +17,16 @@ Apicurio Studio API designer
 * <https://github.com/Apicurio/apicurio-studio>
 * <https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/apicurio>
 
-## TL;DR
+## TL;DR;
 
 This chart will install an Apicurio instance, with an optional dependent Postgres backing db.
 
 ```console
-helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
-helm install my-release one-acre-fund/apicurio
+$ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
+$ helm install my-release one-acre-fund/apicurio
 ```
 
-**WARNING**: The [Apicurio docs](https://www.apicur.io/studio/docs/setting-up-keycloak-for-use-with-apicurio) are wrong/incomplete about the Github integration. The documented instructions will let you login and link accounts, but NOT publish into your repository. To enable this, you will need to:
+__WARNING__: The [Apicurio docs](https://www.apicur.io/studio/docs/setting-up-keycloak-for-use-with-apicurio) are wrong/incomplete about the Github integration. The documented instructions will let you login and link accounts, but NOT publish into your repository. To enable this, you will need to:
 
 * In the default roles of your realm, add the `broker` client role named `read-token`
 * Add this `read-token` `broker` role to already created users if needed
@@ -38,7 +38,7 @@ For more details, see [this ticket](https://github.com/Apicurio/apicurio-studio/
 
 | Repository | Name | Version |
 |------------|------|---------|
-| <https://charts.bitnami.com/bitnami> | postgresql | ~11.6.6 |
+| https://charts.bitnami.com/bitnami | postgresql | ~11.6.6 |
 
 ## Values
 
@@ -70,7 +70,7 @@ For more details, see [this ticket](https://github.com/Apicurio/apicurio-studio/
 | microcks.api.url | string | `"http://www.example.com/api"` | URL to mickrocks application |
 | microcks.client.id | string | `"microcks-serviceaccount"` | Microcks Client ID |
 | microcks.client.secret | string | `"apicuriomr"` | Microcks Client Secret |
-| postgresql.enabled | bool | `true` | Install Postgres? See See <https://artifacthub.io/packages/helm/bitnami/postgresql> for docs on all Postgres values |
+| postgresql.enabled | bool | `true` | Install Postgres? See See https://artifacthub.io/packages/helm/bitnami/postgresql for docs on all Postgres values |
 | postgresql.host | string | `nil` | Custom db host name if not using the subchart |
 | postgresql.postgresqlDatabase | string | `"apicuriodb"` | Apicurio DB name |
 | postgresql.postgresqlPassword | string | `"vSX5RILHBk"` | Apicurio DB user password |
