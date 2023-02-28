@@ -16,18 +16,18 @@ Flagsmith - a Feature flag and remote configuration solution
 
 * <https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/flagsmith>
 
-## TL;DR;
+## TL;DR
 
 ```console
-$ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
-$ helm install my-release one-acre-fund/flagsmith
+helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
+helm install my-release one-acre-fund/flagsmith
 ```
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | postgresql | ~11.6.6 |
+| <https://charts.bitnami.com/bitnami> | postgresql | ~11.6.6 |
 
 ## Values
 
@@ -57,8 +57,8 @@ $ helm install my-release one-acre-fund/flagsmith
 | flagsmith.externalURL.web.domain | string | `"example.com"` | Public address domain for the UI |
 | flagsmith.externalURL.web.port | string | `""` | Public address port for the UI (leave empty for default 80/443 based on protocol) |
 | flagsmith.externalURL.web.scheme | string | `"https"` | Public address scheme for the UI |
-| flagsmith.extraConf | string | `""` | Free-text extra python conf to append to common.py (see https://github.com/Flagsmith/flagsmith-api/blob/master/src/app/settings/common.py) |
-| flagsmith.frontend.extraEnv | object | `{}` | Dictionary of env var key/values. Will be evaluated as a template. See https://hub.docker.com/r/flagsmith/flagsmith-frontend |
+| flagsmith.extraConf | string | `""` | Free-text extra python conf to append to common.py (see <https://github.com/Flagsmith/flagsmith-api/blob/master/src/app/settings/common.py>) |
+| flagsmith.frontend.extraEnv | object | `{}` | Dictionary of env var key/values. Will be evaluated as a template. See <https://hub.docker.com/r/flagsmith/flagsmith-frontend> |
 | flagsmith.frontend.extraSecretEnv | object | `{}` | Same as `extraEnv` but passed as `Secret`. Will be evaluated as a template |
 | flagsmith.frontend.image | string | `"flagsmith/flagsmith-frontend"` | UI image name |
 | flagsmith.frontend.replicas | int | `1` | Number of UI pods |
@@ -70,7 +70,7 @@ $ helm install my-release one-acre-fund/flagsmith
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/proxy-body-size":"100M"}` | Ingress annotations dictionary |
 | ingress.enabled | bool | `false` | Install ingress? |
 | ingress.tls | object | `{}` | Ingress TLS settings |
-| postgresql | object | see `values.yaml` | Postgres settings - See https://artifacthub.io/packages/helm/bitnami/postgresql for docs |
+| postgresql | object | see `values.yaml` | Postgres settings - See <https://artifacthub.io/packages/helm/bitnami/postgresql> for docs |
 | postgresql.enabled | bool | `true` | Install postgres chart? |
 | resources | object | `{"limits":{"cpu":"200m","memory":"200Mi"},"requests":{"cpu":"50m","memory":"100Mi"}}` | Resource specifications to apply to each container |
 | securityContext | object | `{"runAsGroup":1000,"runAsUser":1000}` | SecurityContext to apply to all pods |

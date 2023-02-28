@@ -24,8 +24,8 @@ $ helm install my-release one-acre-fund/n8n
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | postgresql | ~11.6.6 |
-| https://charts.bitnami.com/bitnami | redis | ~15.7.5 |
+| <https://charts.bitnami.com/bitnami> | postgresql | ~11.6.6 |
+| <https://charts.bitnami.com/bitnami> | redis | ~15.7.5 |
 
 ## Values
 
