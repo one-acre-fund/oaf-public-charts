@@ -4935,6 +4935,31 @@ entries:
   n8n:
   - apiVersion: v2
     appVersion: 0.212.0
+    created: "2023-02-28T14:36:46.465725037Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~17.7.4
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: A Helm chart for n8n
+    digest: ca3f822edc8d09a3bcec73c45c6c6110df8751d9529b38303bc1c4c396e83771
+    icon: https://avatars.githubusercontent.com/u/45487711?s=400&v=4
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: n8n
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/n8n-0.1.47/n8n-0.1.47.tgz
+    version: 0.1.47
+  - apiVersion: v2
+    appVersion: 0.212.0
     created: "2023-02-17T12:13:02.418861657Z"
     dependencies:
     - condition: redis.enabled
@@ -5648,6 +5673,25 @@ entries:
   nocodb:
   - apiVersion: v2
     appVersion: 1.16.1
+    created: "2023-02-28T14:36:46.677522561Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: A Helm chart for Kubernetes
+    digest: e024216b481568dafcad5a970738a83a234f9b020f24bf74353d70611d25897b
+    icon: https://cdn.svgporn.com/logos/nocodb.svg
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: nocodb
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.2.10/nocodb-0.2.10.tgz
+    version: 0.2.10
+  - apiVersion: v2
+    appVersion: 1.16.1
     created: "2023-02-17T09:59:29.090006172Z"
     dependencies:
     - condition: postgresql.enabled
@@ -5935,4 +5979,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2023-02-17T12:17:53.214827626Z"
+generated: "2023-02-28T14:36:46.678976263Z"
