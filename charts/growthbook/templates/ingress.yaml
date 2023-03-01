@@ -6,6 +6,7 @@ metadata:
   annotations:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
+  ingressClassName: {{ .Values.ingress.class | default "nginx" }}
   rules:
     - host: {{ .Values.ingress.appOriginName }}
       http:
