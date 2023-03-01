@@ -26,11 +26,11 @@ appVersion: "1.16.0"
 icon: https://cdn.svgporn.com/logos/growth-book-icon.svg
 
 # Disable if you already set up mongodb
-#dependencies:
-#  - name: mongodb
-#    version: ~13.6.1
-#    repository: https://charts.bitnami.com/bitnami/
-#    condition: mongodb.enabled
+dependencies:
+  - name: mongodb
+    version: ~13.6.1
+    repository: https://charts.bitnami.com/bitnami/
+    condition: mongodb.enabled
 
 maintainers:
   - name: bisonlou
