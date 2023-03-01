@@ -89,7 +89,11 @@ spec:
             - name: MONGODB_URI
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.growthbook.mongodbCredsSecret }}
+                  name: {{ .Values.growthbook.mongodbCredsSecret }}
+                  {{- else }}
                   name: {{ include "growthbook.fullname" . }}
+                  {{- end }}
                   key: MONGODB_URI
             - name: EMAIL_ENABLED
               value: {{ .Values.growthbook.email.enabled | quote }}
@@ -121,10 +125,10 @@ spec:
               mountPath: /usr/local/src/growthbook-helm
             - name: {{ include "growthbook.fullname" . }}
               mountPath: {{ .Values.volume.mountPath }}
-            {{ if contains "docdb.amazonaws.com" .Values.growthbook.externalMongodbUri }}
+            {{- if contains "docdb.amazonaws.com" .Values.growthbook.externalMongodbUri }}
             - name: rds-combined-ca-bundle
               mountPath: /usr/local/rds-combined-ca-bundle
-            {{ end }}
+            {{- end }}
           ports:
             - name: frontend-port
               containerPort: 3000
@@ -140,11 +144,11 @@ spec:
         - name: {{ include "growthbook.fullname" . }}-livenessprobe-exec
           configMap:
             name: {{ include "growthbook.fullname" . }}-livenessprobe-exec
-        {{ if contains "docdb.amazonaws.com" .Values.growthbook.externalMongodbUri }}
+        {{- if contains "docdb.amazonaws.com" .Values.growthbook.externalMongodbUri }}
         - name: rds-combined-ca-bundle
           configMap:
             name: rds-combined-ca-bundle.pem
-        {{ end }}
+        {{- end }}
         - name: {{ include "growthbook.fullname" . }}
           {{ include "growthbook.pvc" . }}
       {{- with .Values.affinity }}
