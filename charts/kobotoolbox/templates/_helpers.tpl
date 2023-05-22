@@ -292,7 +292,7 @@ server {
   server_name {{ .Values.kobocat.subdomain }}.{{ include "internal_domain" . }} {{ .Values.kobocat.subdomain }}.docker.internal {{ .Values.kobocat.subdomain }}.{{ .Values.general.externalDomain }};
 
   # Allow 100M upload
-  client_max_body_size 100M;
+  client_max_body_size 500M;
   # Support bigger headers. Useful for huge cookies
   large_client_header_buffers 8 16k;
 
@@ -330,7 +330,7 @@ server {
   server_name {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }} {{ .Values.kpi.subdomain }}.docker.internal {{ .Values.kpi.subdomain }}.{{ .Values.general.externalDomain }};
 
   # Allow 100M upload
-  client_max_body_size 100M;
+  client_max_body_size 500M;
   # Support bigger headers. Useful for huge cookies
   large_client_header_buffers 8 16k;
 
