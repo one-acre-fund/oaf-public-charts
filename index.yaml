@@ -6016,4 +6016,18 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.1.0/nocodb-0.1.0.tgz
     version: 0.1.0
-generated: "2023-05-22T10:57:55.428737238Z"
+  sydent:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-07-12T11:34:52.397313606Z"
+    description: A Helm chart for Kubernetes
+    digest: 80eb4ec0a53452eb24897b839e2c8d52f4e9951798caf07cc3bb4ed35e080a94
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: sydent
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/sydent-0.1.0/sydent-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-07-12T11:34:52.400609682Z"
