@@ -19,6 +19,7 @@ A Helm chart for Kubernetes
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
+| env.serverName | string | `"example.com"` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"matrixdotorg/sydent"` |  |
