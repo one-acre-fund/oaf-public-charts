@@ -14,6 +14,10 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+env:
+  # The servername of the matrix server
+  serverName: example.com
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
