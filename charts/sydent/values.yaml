@@ -18,6 +18,7 @@ env:
   default:
     username: sydentusername
     password: sydentpassword
+    templatePath: res
   email:
     smtphost: smtp.gmail.com
     smtpport: 25
