@@ -6019,6 +6019,19 @@ entries:
   sydent:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2023-08-22T21:20:28.724495465Z"
+    description: A Helm chart for Kubernetes
+    digest: 49891d613bffeb96180237661364408ab5790bbe6460fe899df45a159560eeae
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: sydent
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/sydent-0.2.0/sydent-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2023-07-12T16:51:52.434425983Z"
     description: A Helm chart for Kubernetes
     digest: 043079e071d8872de227989111af67506ead18c92c91f25441a623cbdb936c44
@@ -6043,4 +6056,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/sydent-0.1.0/sydent-0.1.0.tgz
     version: 0.1.0
-generated: "2023-07-12T16:51:52.435801558Z"
+generated: "2023-08-22T21:20:28.725760488Z"
