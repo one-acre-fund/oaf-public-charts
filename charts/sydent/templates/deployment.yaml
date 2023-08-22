@@ -45,7 +45,7 @@ spec:
             - name: SYDENT_TLS_MODE
               value: {{ .Values.env.email.tlsmode | quote }}
             - name: SYDENT_TEMPLATES_PATH
-              values: {{ .Values.env.default.templatePath | quote }}
+              value: {{ .Values.env.default.templatePath | quote }}
           envFrom:
             - secretRef:
                 name: {{ .Release.Name }}-config
