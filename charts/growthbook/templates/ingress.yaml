@@ -6,6 +6,7 @@ metadata:
   annotations:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
+  ingressClassName: {{ .Values.ingress.class | default "nginx" }}
   rules:
     - host: {{ .Values.ingress.appOriginName }}
       http:
@@ -27,9 +28,11 @@ spec:
                 name: {{ include "growthbook.fullname" . }}
                 port:
                   number: {{ .Values.port.backendPort }}
+  {{- if .Values.ingress.tls }}
   tls:
     - hosts:
         - {{ .Values.ingress.appOriginName }}
         - {{ .Values.ingress.apiHostName }}
       secretName: {{ .secretName }}
+  {{- end }}
 {{- end -}}
