@@ -33,9 +33,20 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          env: 
-            - name: SYDENT_SERVER_NAME
-              value: {{ .Values.env.serverName }}
+          env:
+            - name: SYDENT_SMTP_HOST
+              value: {{ .Values.env.email.smtphost }}
+            - name: SYDENT_SMTP_PORT
+              value: {{ .Values.env.email.smtpport | quote }}
+            - name: SYDENT_SMTP_USER
+              value: {{ .Values.env.email.smtpusername }}
+            - name: SYDENT_SMTP_HOSTNAME
+              value: {{ .Values.env.email.hostname }}
+            - name: SYDENT_TLS_MODE
+              value: {{ .Values.env.email.tlsmode | quote }}
+          envFrom:
+            - secretRef:
+                name: {{ .Release.Name }}-config
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

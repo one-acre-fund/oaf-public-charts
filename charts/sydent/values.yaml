@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: matrixdotorg/sydent
+  repository: oaftech.azurecr.io/oneacrefund/sydent
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
@@ -15,8 +15,16 @@ nameOverride: ""
 fullnameOverride: ""
 
 env:
-  # The servername of the matrix server
-  serverName: example.com
+  default:
+    username: sydentusername
+    password: sydentpassword
+  email:
+    smtphost: smtp.gmail.com
+    smtpport: 25
+    smtpusername: devops.oneacrefund.org
+    smtppassword: smtpsupersecretpassword
+    hostname: smtphostname
+    tlsmode: 0
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -29,16 +37,18 @@ serviceAccount:
 
 podAnnotations: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
+podSecurityContext:
+  fsGroup: 993
+  runAsUser: 993
+  runAsGroup: 933
 
 securityContext: {}
   # capabilities:
   #   drop:
   #   - ALL
-  # readOnlyRootFilesystem: true
+  # readOnlyRootFilesystem: false
   # runAsNonRoot: true
-  # runAsUser: 1000
+  # runAsUser: 993
 
 service:
   type: ClusterIP

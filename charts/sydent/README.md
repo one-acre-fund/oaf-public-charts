@@ -1,6 +1,6 @@
 # sydent
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -19,10 +19,17 @@ A Helm chart for Kubernetes
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
-| env.serverName | string | `"example.com"` |  |
+| env.default.password | string | `"sydentpassword"` |  |
+| env.default.username | string | `"sydentusername"` |  |
+| env.email.hostname | string | `"smtphostname"` |  |
+| env.email.smtphost | string | `"smtp.gmail.com"` |  |
+| env.email.smtppassword | string | `"smtpsupersecretpassword"` |  |
+| env.email.smtpport | int | `25` |  |
+| env.email.smtpusername | string | `"devops.oneacrefund.org"` |  |
+| env.email.tlsmode | int | `0` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"matrixdotorg/sydent"` |  |
+| image.repository | string | `"oaftech.azurecr.io/oneacrefund/sydent"` |  |
 | image.tag | string | `"latest"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
@@ -35,7 +42,9 @@ A Helm chart for Kubernetes
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | podAnnotations | object | `{}` |  |
-| podSecurityContext | object | `{}` |  |
+| podSecurityContext.fsGroup | int | `993` |  |
+| podSecurityContext.runAsGroup | int | `933` |  |
+| podSecurityContext.runAsUser | int | `993` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext | object | `{}` |  |
