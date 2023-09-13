@@ -1006,6 +1006,29 @@ entries:
   growthbook:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2023-09-13T05:37:38.529295727Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami/
+      version: ~13.6.1
+    description: A Helm chart for Growthbook
+    digest: 69e2c4a29d00862d1633de62dd4aa05184f43c9c626ac1b8c3738635a5826698
+    icon: https://cdn.svgporn.com/logos/growth-book-icon.svg
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    - email: jean.poutcheu@gmail.com
+      name: Nzeugaa
+    name: growthbook
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/growthbook-0.1.15/growthbook-0.1.15.tgz
+    version: 0.1.15
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2023-02-17T09:59:28.301838165Z"
     dependencies:
     - condition: mongodb.enabled
@@ -6082,4 +6105,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/sydent-0.1.0/sydent-0.1.0.tgz
     version: 0.1.0
-generated: "2023-08-22T22:01:08.019311259Z"
+generated: "2023-09-13T05:37:38.530553645Z"
