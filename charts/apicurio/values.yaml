@@ -51,8 +51,6 @@ ui:
     APICURIO_LOGGING_LEVEL: INFO
     # -- UI JVM options
     JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
-    # -- Redirect URI
-    APICURIO_UI_LOGOUT_REDIRECT_URI: "/"
     # -- Enable Microcks integration?
     APICURIO_UI_FEATURE_MICROCKS: "false"
     # -- Channel Regex
