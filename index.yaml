@@ -2,6 +2,30 @@ apiVersion: v1
 entries:
   apicurio:
   - apiVersion: v2
+    created: "2023-09-29T04:34:34.545432301Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: Apicurio Studio API designer
+    digest: 43e2dfb47f6df104b5b0fbd8aa68ae6daf2d24e8fd9e07e5f0e0707e31175e28
+    home: http://www.apicur.io/
+    icon: https://avatars.githubusercontent.com/u/28107283?s=400&v=4
+    keywords:
+    - api
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: apicurio
+    sources:
+    - https://github.com/Apicurio/apicurio-studio
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/apicurio
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/apicurio-1.0.14/apicurio-1.0.14.tgz
+    version: 1.0.14
+  - apiVersion: v2
     created: "2022-09-08T20:13:08.680881897Z"
     dependencies:
     - condition: postgresql.enabled
@@ -6105,4 +6129,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/sydent-0.1.0/sydent-0.1.0.tgz
     version: 0.1.0
-generated: "2023-09-13T05:37:38.530553645Z"
+generated: "2023-09-29T04:34:34.546930707Z"
