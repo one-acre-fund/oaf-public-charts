@@ -1,7 +1,7 @@
 apiVersion: v2
 name: pgbouncer
 description: A Helm chart for deploying bitnami/pgbouncer with TLS encryption
-version: 0.1.0
+version: 0.1.1
 appVersion: 1.19.1
 type: application
 maintainers:
@@ -15,7 +15,7 @@ keywords:
   - PostgreSQL
   - database
   - TLS
-home: https://github.com/one-acre-fund/oaf-private-charts
+home: https://github.com/one-acre-fund/oaf-public-charts
 sources:
-  - https://github.com/one-acre-fund/oaf-private-charts
+  - https://github.com/one-acre-fund/oaf-public-charts
   - https://bitnami.com/stack/pgbouncer
