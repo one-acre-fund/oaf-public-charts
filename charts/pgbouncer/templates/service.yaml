@@ -12,5 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "pgbouncer.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "pgbouncer.selectorLabels" . | nindent 4 }}
