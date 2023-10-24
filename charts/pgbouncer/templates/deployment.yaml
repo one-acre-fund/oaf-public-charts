@@ -39,7 +39,7 @@ spec:
         - name: POSTGRESQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: pgbouncer-postgresql-secret
+              name: {{ .Release.Name }}-secret
               key: password
         - name: POSTGRESQL_DATABASE
           value: "{{ .Values.pgbouncer.database }}"
