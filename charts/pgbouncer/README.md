@@ -1,10 +1,10 @@
 # PgBouncer
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) 
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) 
 
 A Helm chart for deploying bitnami/pgbouncer with TLS encryption
 
-**Homepage:** <https://github.com/one-acre-fund/oaf-private-charts>
+**Homepage:** <https://github.com/one-acre-fund/oaf-public-charts>
 
 ## Maintainers
 
@@ -14,7 +14,7 @@ A Helm chart for deploying bitnami/pgbouncer with TLS encryption
 
 ## Source Code
 
-* <https://github.com/one-acre-fund/oaf-private-charts>
+* <https://github.com/one-acre-fund/oaf-public-charts>
 * <https://bitnami.com/stack/pgbouncer>
 
 ## TL;DR
