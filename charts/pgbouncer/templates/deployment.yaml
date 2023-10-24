@@ -68,6 +68,12 @@ spec:
           value: "/etc/pgbouncer/tls/tls.crt"
         - name: PGBOUNCER_CLIENT_TLS_KEY_FILE
           value: "/etc/pgbouncer/tls/tls.key"
+        - name: PGBOUNCER_SERVER_TLS_SSLMODE
+          value: "require"
+        - name: PGBOUNCER_SERVER_TLS_KEY_FILE
+          value: "/etc/pgbouncer/tls/tls.key"
+        - name: PGBOUNCER_SERVER_TLS_CA_FILE
+          value: "/etc/pgbouncer/tls/tls.crt"
         {{- end }}
         {{- include "pgbouncer.env" . | nindent 8 }}
         ports:
