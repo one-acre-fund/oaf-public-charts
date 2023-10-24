@@ -69,6 +69,7 @@ spec:
         - name: PGBOUNCER_CLIENT_TLS_KEY_FILE
           value: "/etc/pgbouncer/tls/tls.key"
         {{- end }}
+        {{- include "pgbouncer.env" . | nindent 8 }}
         ports:
         - containerPort: {{ .Values.service.port }}
         volumeMounts:

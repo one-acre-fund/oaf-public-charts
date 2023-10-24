@@ -7,13 +7,22 @@ image:
 
 pgbouncer:
   username: postgres
-  password: "your-postgresql-password" # Provide the actual PostgreSQL password here
+  # Provide the actual PostgreSQL password here
+  password: "your-postgresql-password"
   database: ${PGBOUNCER_DATABASE}
   host: postgresql
   port: 5432
   setDatabaseUser: no
   setDatabasePassword: no
   connectQuery: ""
+
+# Add extra enviroment varibles in 
+# "KEY": "VALUE"
+extraEnv: []
+
+# Add extra enviroment secerts in 
+# "KEY": "VALUE"
+extraEnvSecrets: []
 
 tls:
   enabled: true
@@ -69,8 +78,10 @@ serviceAccount:
 
 podAnnotations: {}
 
+# podSecurityContext:
+#   fsGroup: 1001
 podSecurityContext: {}
-  # fsGroup: 1001
 
+# imagePullSecrets
+#   - name: myRegistryKeySecretName
 imagePullSecrets: []
-  # - name: myRegistryKeySecretName

@@ -60,3 +60,21 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+
+{{/* 
+List extra environment variables
+*/}}
+{{- define "pgbouncer.env" -}}
+{{- range $key, $value := .Values.extraEnv }}
+- name: {{ $key }}
+  value: {{ $value }}
+{{- end }}
+{{- range $key, $value := .Values.extraEnvSecrets }}
+- name: {{ $key }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ $.Release.Name }}-secret
+      key: {{ $key }}
+{{- end }}
+{{- end }}
