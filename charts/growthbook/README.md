@@ -1,6 +1,6 @@
 # growthbook
 
-![Version: 0.1.14](https://img.shields.io/badge/Version-0.1.14-informational?style=flat-square)
+![Version: 0.1.15](https://img.shields.io/badge/Version-0.1.15-informational?style=flat-square)
 
 A Helm chart for Growthbook
 
@@ -73,6 +73,7 @@ $ helm install my-release one-acre-fund/growthbook
 | ingress.appOriginName | string | `"my-app-origin.io"` |  |
 | ingress.enabled | bool | `false` |  |
 | ingress.name | string | `"growthbook-ingress"` |  |
+| ingress.secretName | string | `"growthbook-tls"` |  |
 | mongodb.architecture | string | `"standalone"` |  |
 | mongodb.auth.database | string | `"growthbook-db"` |  |
 | mongodb.auth.password | string | `"growthbook"` |  |
