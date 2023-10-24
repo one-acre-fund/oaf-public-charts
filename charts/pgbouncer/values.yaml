@@ -1,0 +1,48 @@
+nameOverride: ""
+fullnameOverride: ""
+image:
+  repository: bitnami/pgbouncer
+  tag: 1.19.1-debian-11-r44
+  pullPolicy: IfNotPresent
+
+pgbouncer:
+  username: postgres
+  password: "your-postgresql-password" # Provide the actual PostgreSQL password here
+  database: ${PGBOUNCER_DATABASE}
+  host: postgresql
+  port: 5432
+  setDatabaseUser: no
+  setDatabasePassword: no
+  connectQuery: ""
+
+tls:
+  enabled: true
+  existingSecret: oaf-tls
+  certFile: tls.crt
+  keyFile: tls.key
+
+service:
+  port: 6432
+  type: ClusterIP
+
+ingress:
+  enabled: false
+  annotations: {}
+  className: "nginx"
+  tls:
+    - secretName: ""
+      hosts:
+        - ""
+  hosts:
+    - host: ""
+      paths:
+        - path: "/"
+          pathType: "Prefix"
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

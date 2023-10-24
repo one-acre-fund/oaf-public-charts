@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-pgbouncer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-pgbouncer
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-pgbouncer
+    spec:
+      containers:
+      - name: pgbouncer
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: POSTGRESQL_USERNAME
+          value: "{{ .Values.pgbouncer.username }}"
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pgbouncer-postgresql-secret
+              key: password
+        - name: POSTGRESQL_DATABASE
+          value: "{{ .Values.pgbouncer.database }}"
+        - name: POSTGRESQL_HOST
+          value: "{{ .Values.pgbouncer.host }}"
+        - name: POSTGRESQL_PORT
+          value: "{{ .Values.pgbouncer.port }}"
+        - name: PGBOUNCER_PORT
+          value: "{{ .Values.service.port }}"
+        {{- if .Values.pgbouncer.setDatabaseUser }}
+        - name: PGBOUNCER_SET_DATABASE_USER
+          value: "{{ .Values.pgbouncer.setDatabaseUser }}"
+        {{- end }}
+        {{- if .Values.pgbouncer.setDatabasePassword }}
+        - name: PGBOUNCER_SET_DATABASE_PASSWORD
+          value: "{{ .Values.pgbouncer.setDatabasePassword }}"
+        {{- end }}
+        {{- if .Values.pgbouncer.connectQuery }}
+        - name: PGBOUNCER_CONNECT_QUERY
+          value: "{{ .Values.pgbouncer.connectQuery }}"
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: PGBOUNCER_CLIENT_TLS_SSLMODE
+          value: "require"
+        - name: PGBOUNCER_CLIENT_TLS_CERT_FILE
+          value: "/etc/pgbouncer/tls/tls.crt"
+        - name: PGBOUNCER_CLIENT_TLS_KEY_FILE
+          value: "/etc/pgbouncer/tls/tls.key"
+        {{- end }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+        volumeMounts:
+        {{- if .Values.tls.enabled }}
+        - name: tls-secret
+          mountPath: /etc/pgbouncer/tls
+          readOnly: true
+        {{- end }}
+        {{- if .Values.resources }}
+        resources: {{ .Values.resources | toYaml | nindent 10 }}
+        {{- end }}
+    volumes:
+    {{- if .Values.tls.enabled }}
+    - name: tls-secret
+      secret:
+        secretName: {{ .Values.tls.existingSecret }}
+    {{- end }}
