@@ -1,7 +1,7 @@
 apiVersion: v2
 name: pgbouncer
 description: A Helm chart for deploying bitnami/pgbouncer with TLS encryption
-version: 0.1.1
+version: 0.1.2
 appVersion: 1.19.1
 type: application
 maintainers:
