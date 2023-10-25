@@ -1,6 +1,6 @@
 # PgBouncer
 
-![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) 
+![Version: 0.1.6](https://img.shields.io/badge/Version-0.1.6-informational?style=flat-square) 
 
 A Helm chart for deploying bitnami/pgbouncer with TLS encryption
 
@@ -55,6 +55,7 @@ helm install pgbouncer one-acre-fund/pgbouncer
 | pgbouncer.host | string | `"postgresql"` |  |
 | pgbouncer.password | string | `"your-postgresql-password"` |  |
 | pgbouncer.port | int | `5432` |  |
+| pgbouncer.postgresqlDatabase | string | `"${PGBOUNCER_DATABASE}"` |  |
 | pgbouncer.setDatabasePassword | string | `"no"` |  |
 | pgbouncer.setDatabaseUser | string | `"no"` |  |
 | pgbouncer.username | string | `"postgres"` |  |
@@ -70,7 +71,7 @@ helm install pgbouncer one-acre-fund/pgbouncer
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |
-| tls.certFile | string | `"tls.crt"` |  |
+| tls.certFilename | string | `"tls.crt"` |  |
+| tls.certKeyFilename | string | `"tls.key"` |  |
+| tls.certificatesSecret | string | `"oaf-tls"` |  |
 | tls.enabled | bool | `true` |  |
-| tls.existingSecret | string | `"oaf-tls"` |  |
-| tls.keyFile | string | `"tls.key"` |  |

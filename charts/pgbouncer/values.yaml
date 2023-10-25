@@ -10,6 +10,7 @@ pgbouncer:
   # Provide the actual PostgreSQL password here
   password: "your-postgresql-password"
   database: ${PGBOUNCER_DATABASE}
+  postgresqlDatabase: ${PGBOUNCER_DATABASE}
   host: postgresql
   port: 5432
   setDatabaseUser: no
@@ -26,9 +27,9 @@ extraEnvSecrets: []
 
 tls:
   enabled: true
-  existingSecret: oaf-tls
-  certFile: tls.crt
-  keyFile: tls.key
+  certificatesSecret: oaf-tls
+  certFilename: tls.crt
+  certKeyFilename: tls.key
 
 service:
   port: 6432
