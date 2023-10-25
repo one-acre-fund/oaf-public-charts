@@ -6066,6 +6066,31 @@ entries:
   pgbouncer:
   - apiVersion: v2
     appVersion: 1.19.1
+    created: "2023-10-25T09:23:19.799839345Z"
+    description: A Helm chart for deploying bitnami/pgbouncer with TLS encryption
+    digest: 3f6b231c7ad727147b9a24a95b9acd03df6f2dfc118d220a10e4935efd5b74c9
+    home: https://github.com/one-acre-fund/oaf-public-charts
+    icon: https://bitnami.com/assets/stacks/pgbouncer/img/pgbouncer-stack-220x234.png
+    keywords:
+    - pgbouncer
+    - bitnami
+    - PostgreSQL
+    - database
+    - TLS
+    maintainers:
+    - email: rahma.ahmed@oneacrefund.org
+      name: Rahma
+      url: https://github.com/samaroon
+    name: pgbouncer
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts
+    - https://bitnami.com/stack/pgbouncer
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/pgbouncer-0.1.6/pgbouncer-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v2
+    appVersion: 1.19.1
     created: "2023-10-24T16:25:29.526812068Z"
     description: A Helm chart for deploying bitnami/pgbouncer with TLS encryption
     digest: 29e108d9d24bc9913da9fc86340a236bbfbd44f216e6da3b2897475144073b4e
@@ -6280,4 +6305,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/sydent-0.1.0/sydent-0.1.0.tgz
     version: 0.1.0
-generated: "2023-10-24T16:25:29.52877129Z"
+generated: "2023-10-25T09:23:19.801260686Z"
