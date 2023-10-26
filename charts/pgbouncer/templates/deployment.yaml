@@ -33,51 +33,12 @@ spec:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        env:
-        - name: POSTGRESQL_USERNAME
-          value: "{{ .Values.pgbouncer.username }}"
-        - name: POSTGRESQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Release.Name }}-secret
-              key: password
-        - name: POSTGRESQL_DATABASE
-          value: "{{ .Values.pgbouncer.postgresqlDatabase }}"
-        - name: PGBOUNCER_DATABASE
-          value: "{{ .Values.pgbouncer.database }}"
-        - name: POSTGRESQL_HOST
-          value: "{{ .Values.pgbouncer.host }}"
-        - name: POSTGRESQL_PORT
-          value: "{{ .Values.pgbouncer.port }}"
-        - name: PGBOUNCER_PORT
-          value: "{{ .Values.service.port }}"
-        {{- if .Values.pgbouncer.setDatabaseUser }}
-        - name: PGBOUNCER_SET_DATABASE_USER
-          value: "{{ .Values.pgbouncer.setDatabaseUser }}"
-        {{- end }}
-        {{- if .Values.pgbouncer.setDatabasePassword }}
-        - name: PGBOUNCER_SET_DATABASE_PASSWORD
-          value: "{{ .Values.pgbouncer.setDatabasePassword }}"
-        {{- end }}
-        {{- if .Values.pgbouncer.connectQuery }}
-        - name: PGBOUNCER_CONNECT_QUERY
-          value: "{{ .Values.pgbouncer.connectQuery }}"
-        {{- end }}
-        {{- if .Values.tls.enabled }}
-        - name: PGBOUNCER_CLIENT_TLS_SSLMODE
-          value: "require"
-        - name: PGBOUNCER_CLIENT_TLS_CERT_FILE
-          value: "/etc/pgbouncer/tls/{{ .Values.tls.certFilename }}"
-        - name: PGBOUNCER_CLIENT_TLS_KEY_FILE
-          value: "/etc/pgbouncer/tls/{{ .Values.tls.certKeyFilename }}"
-        - name: PGBOUNCER_SERVER_TLS_SSLMODE
-          value: "require"
-        - name: PGBOUNCER_SERVER_TLS_CERT_FILE
-          value: "/etc/pgbouncer/tls/{{ .Values.tls.certFilename }}"
-        - name: PGBOUNCER_SERVER_TLS_KEY_FILE
-          value: "/etc/pgbouncer/tls/{{ .Values.tls.certKeyFilename }}"
-        {{- end }}
-        {{- include "pgbouncer.env" . | nindent 8 }}
+        envFrom:
+        - configMapRef:
+            name: {{ .Release.Name }}-pgbouncer-config
+        envFrom:
+        - secretRef:
+            name: {{ .Release.Name }}-pgbouncer-secret
         ports:
         - containerPort: {{ .Values.service.port }}
         volumeMounts:

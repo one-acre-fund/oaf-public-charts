@@ -13,14 +13,14 @@ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
 
 ## Included Charts
 
-* [GeoNode](https://geonode.org/)
-* [KoboToolbox](https://www.kobotoolbox.org/)
-* [Flagsmith](https://flagsmith.com/)
-* [Fineract](https://fineract.apache.org/)
 * [Apicurio Studio](https://www.apicur.io/studio/)
-* [Metabase](https://www.metabase.com/)
+* [Flagsmith](https://flagsmith.com/)
 * [GrowthBook](https://growthbook.io/)
+* [KoboToolbox](https://www.kobotoolbox.org/)
+* [Kutt](https://kutt.it/)
+* [Mautic](https://www.mautic.org/)
 * [n8n](https://n8n.io/)
+* [PgBouncer](https://www.pgbouncer.org/)
 
 ## How to contribute
 

@@ -19,11 +19,11 @@ pgbouncer:
 
 # Add extra enviroment varibles in
 # "KEY": "VALUE"
-extraEnv: []
+extraConfigs: []
 
 # Add extra enviroment secerts in
 # "KEY": "VALUE"
-extraEnvSecrets: []
+extraSecretConfigs: []
 
 tls:
   enabled: true
