@@ -43,10 +43,30 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
+Common labels for GB Proxy
+*/}}
+{{- define "growthbook.proxyLabels" -}}
+helm.sh/chart: {{ include "growthbook.chart" . }}
+{{ include "growthbook.proxySelectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
 Selector labels
 */}}
 {{- define "growthbook.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "growthbook.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Selector labels for GB Proxy
+*/}}
+{{- define "growthbook.proxySelectorLabels" -}}
+app.kubernetes.io/name: {{ include "growthbook.name" . }}-proxy
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 

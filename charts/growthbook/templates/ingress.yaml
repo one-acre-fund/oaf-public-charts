@@ -27,9 +27,24 @@ spec:
                 name: {{ include "growthbook.fullname" . }}
                 port:
                   number: {{ .Values.port.backendPort }}
+    {{- if .Values.growthbookProxy.enabled }}
+    - host: {{ .Values.ingress.apiProxyHostName }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "growthbook.fullname" . }}-proxy
+                port:
+                  number: {{ .Values.port.proxyPort }}
+    {{- end }}
   tls:
     - hosts:
         - {{ .Values.ingress.appOriginName }}
         - {{ .Values.ingress.apiHostName }}
+        {{- if .Values.growthbookProxy.enabled }}
+        - {{ .Values.ingress.apiProxyHostName }}
+        {{- end }}
       secretName: {{ .Values.ingress.secretName }}
 {{- end -}}

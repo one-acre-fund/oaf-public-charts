@@ -8,7 +8,7 @@ image:
   repository: growthbook/growthbook
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag: 2.5.0
 
 nameOverride: ""
 fullnameOverride: ""
@@ -16,6 +16,7 @@ fullnameOverride: ""
 port:
   frontendPort: 3000
   backendPort: 3100
+  proxyPort: 3300
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -95,6 +96,32 @@ growthbook:
     ##
     # existingClaim:
 
+growthbookProxy:
+  enabled: false
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  image:
+    repository: growthbook/proxy
+    pullPolicy: Always
+    tag: latest
+  extraEnvVars:
+    NODE_ENV: production
+    # CACHE_STALE_TTL: ""
+    # CACHE_EXPIRES_TTL: ""
+  # internal or public endpoint of GB API
+  growthbook_api_host: http://growthbook:3100
+  # public endpoint of GB Proxy
+  proxy_host_public: https://my-api-proxy-host.io:443
+  # internal endpoint of GB Proxy
+  proxy_host_internal: http://growthbook-proxy:3300
+  # API key (should be the same as in GB configuration)
+  secret_api_key: "dev"
+
 tolerations: []
 
 affinity: {}
@@ -123,6 +150,7 @@ ingress:
   # Specify your app-origin, api-host without 'https://' prefix
   appOriginName: my-app-origin.io
   apiHostName: my-api-host.io
+  apiProxyHostName: my-api-proxy-host.io
 
 autoscaling:
   enabled: false

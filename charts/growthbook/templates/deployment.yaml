@@ -114,6 +114,19 @@ spec:
             - name: GOOGLE_OAUTH_CLIENT_SECRET
               value: {{ .Values.growthbook.datasource.google.clientSecret }}
             {{ end }}
+            {{- if .Values.growthbookProxy.enabled }}
+            - name: PROXY_ENABLED
+              value: {{ .Values.growthbookProxy.enabled | quote }}
+            - name: PROXY_HOST_PUBLIC
+              value: {{ .Values.growthbookProxy.proxy_host_public }}
+            - name: PROXY_HOST_INTERNAL
+              value: {{ .Values.growthbookProxy.proxy_host_internal }}
+            - name: SECRET_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "growthbook.fullname" . }}
+                  key: SECRET_API_KEY
+            {{- end }}
           volumeMounts:
             - name: {{ include "growthbook.fullname" . }}-livenessprobe-exec
               mountPath: /usr/local/src/growthbook-helm

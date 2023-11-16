@@ -1,0 +1,28 @@
+{{- if .Values.growthbookProxy.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "growthbook.fullname" . }}-proxy
+  labels:
+    {{- include "growthbook.proxyLabels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "growthbook.fullname" . }}-proxy
+  minReplicas: {{ .Values.growthbookProxy.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.growthbookProxy.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.growthbookProxy.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.growthbookProxy.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.growthbookProxy.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.growthbookProxy.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}
