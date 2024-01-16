@@ -1,6 +1,6 @@
 # n8n
 
-![Version: 0.1.47](https://img.shields.io/badge/Version-0.1.47-informational?style=flat-square)
+![Version: 0.1.49](https://img.shields.io/badge/Version-0.1.49-informational?style=flat-square)
 
 A Helm chart for n8n
 
