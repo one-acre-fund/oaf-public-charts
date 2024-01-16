@@ -1,6 +1,6 @@
 # apicurio
 
-![Version: 1.0.13](https://img.shields.io/badge/Version-1.0.13-informational?style=flat-square)
+![Version: 1.0.14](https://img.shields.io/badge/Version-1.0.14-informational?style=flat-square)
 
 Apicurio Studio API designer
 
@@ -81,7 +81,6 @@ For more details, see [this ticket](https://github.com/Apicurio/apicurio-studio/
 | ui.extraEnvVars | object | See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ui/) | Dictionary of name/value environment var pairs Will be evaluated as templates |
 | ui.extraEnvVars.APICURIO_LOGGING_LEVEL | string | `"INFO"` | UI logging level |
 | ui.extraEnvVars.APICURIO_UI_FEATURE_MICROCKS | string | `"false"` | Enable Microcks integration? |
-| ui.extraEnvVars.APICURIO_UI_LOGOUT_REDIRECT_URI | string | `"/"` | Redirect URI |
 | ui.extraEnvVars.APICURIO_UI_VALIDATION_CHANNELNAME_REGEXP | string | `"([^{}\\/]*(\\{[a-zA-Z_][0-9a-zA-Z_]*\\})?)+"` | Channel Regex |
 | ui.extraEnvVars.JAVA_TOOL_OPTIONS | string | `"-Djava.net.preferIPv4Stack=true"` | UI JVM options |
 | ui.extraSecretEnvVars | object | `{}` | Same as `envVars` but passed as secrets |

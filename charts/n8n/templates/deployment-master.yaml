@@ -72,11 +72,11 @@ spec:
             {{- end }}
             {{- if .Values.config }}
             - name: config-volume
-              mountPath: /n8n-config
+              mountPath: {{ .Values.persistence.configMountPath}}
             {{- end }}
             {{- if .Values.secret }}
             - name: secret-volume
-              mountPath: /n8n-secret
+              mountPath: {{ .Values.persistence.secretMountPath}}
                 {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
