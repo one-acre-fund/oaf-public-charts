@@ -1,6 +1,6 @@
 # n8n
 
-![Version: 0.1.47](https://img.shields.io/badge/Version-0.1.47-informational?style=flat-square)
+![Version: 0.1.49](https://img.shields.io/badge/Version-0.1.49-informational?style=flat-square)
 
 A Helm chart for n8n
 
@@ -77,7 +77,9 @@ $ helm install my-release one-acre-fund/n8n
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
+| persistence.configMountPath | string | `"/n8n-config"` |  |
 | persistence.enabled | bool | `false` |  |
+| persistence.secretMountPath | string | `"/n8n-secret"` |  |
 | persistence.size | string | `"1Gi"` |  |
 | persistence.type | string | `"emptyDir"` |  |
 | podAnnotations | object | `{}` |  |
