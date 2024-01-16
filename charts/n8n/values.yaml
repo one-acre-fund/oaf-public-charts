@@ -139,8 +139,6 @@ persistence:
   ## Use an existing PVC
   ##
   # existingClaim:
-  configMountPath: /n8n-config
-  secretMountPath: /n8n-secret
 
 replicaCount: 1
 
