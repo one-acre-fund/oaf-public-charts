@@ -1,0 +1,75 @@
+{{- if .Values.growthbookProxy.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "growthbook.fullname" . }}-proxy
+  labels:
+    {{- include "growthbook.proxyLabels" . | nindent 4 }}
+spec:
+  {{- if not .Values.growthbookProxy.autoscaling.enabled }}
+  replicas: {{ .Values.growthbookProxy.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "growthbook.proxySelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.growthbookProxy.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "growthbook.proxySelectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.growthbookProxy.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "growthbook.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-proxy
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.growthbookProxy.image.repository }}:{{ .Values.growthbookProxy.image.tag }}"
+          imagePullPolicy: {{ .Values.growthbookProxy.image.pullPolicy }}
+          livenessProbe: 
+            httpGet: 
+              path: /healthcheck
+              port: {{ .Values.port.proxyPort }}
+            initialDelaySeconds: 3
+            periodSeconds: 2
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          env:
+            {{- range $key, $value := .Values.growthbookProxy.extraEnvVars }}
+            - name: {{ $key }}
+              value: |-
+                {{- tpl $value $ | nindent 16 }}
+            {{- end }}
+            - name: SECRET_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "growthbook.fullname" . }}
+                  key: SECRET_API_KEY
+            - name: GROWTHBOOK_API_HOST
+              value: {{ .Values.growthbookProxy.growthbook_api_host }}
+          ports:
+            - name: proxy-port
+              containerPort: {{ .Values.port.proxyPort }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end -}}

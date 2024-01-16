@@ -1,0 +1,17 @@
+{{- if .Values.growthbookProxy.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "growthbook.fullname" . }}-proxy
+  labels:
+    {{- include "growthbook.proxyLabels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.port.proxyPort }}
+      targetPort: {{ .Values.port.proxyPort }}
+      protocol: TCP
+      name: frontend-port
+  selector:
+    {{- include "growthbook.proxySelectorLabels" . | nindent 4 }}
+{{- end -}}
