@@ -6366,6 +6366,19 @@ entries:
   sydent:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-08-09T12:58:55.448143908Z"
+    description: A Helm chart for Kubernetes
+    digest: d26989da0ec309869042fb1a3fbcafc83df1915be0d2fe23555289df9ecf4416
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: sydent
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/sydent-0.2.3/sydent-0.2.3.tgz
+    version: 0.2.3
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2023-08-22T22:01:08.016894322Z"
     description: A Helm chart for Kubernetes
     digest: d3e790526d1f71553dcfe92028c3715b7e5d01c7175f6d7dc3512f837dbd81b3
@@ -6429,4 +6442,18 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/sydent-0.1.0/sydent-0.1.0.tgz
     version: 0.1.0
-generated: "2024-01-16T10:04:44.742168516Z"
+  uptime-wrapper:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2024-08-09T12:58:55.660660232Z"
+    description: A Helm chart for Kubernetes
+    digest: a3f4bede75a72cf96df73da7bbbf5e2e63828063af688229874221969222dcc1
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: uptime-wrapper
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-0.1.0/uptime-wrapper-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-08-09T12:58:55.661362206Z"
