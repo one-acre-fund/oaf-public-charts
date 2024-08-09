@@ -4,6 +4,12 @@
 
 A Helm chart for Kubernetes
 
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| innocent lou | <bisonlou@gmail.com> |  |
+
 ## Values
 
 | Key | Type | Default | Description |
