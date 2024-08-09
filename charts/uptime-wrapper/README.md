@@ -8,7 +8,7 @@ A Helm chart for Kubernetes
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| innocent lou | <bisonlou@gmail.com> |  |
+| bisonlou | <bisonlou@gmail.com> |  |
 
 ## Values
 
