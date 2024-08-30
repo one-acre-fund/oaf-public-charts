@@ -5068,6 +5068,31 @@ entries:
   n8n:
   - apiVersion: v2
     appVersion: 0.212.0
+    created: "2024-08-30T05:26:18.489341579Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~17.7.4
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: A Helm chart for n8n
+    digest: 1444b67ce5df5d1ba68d4e006b1e83f52dcfe4f5fab0f56a7c3d87b7b7d7a9b8
+    icon: https://avatars.githubusercontent.com/u/45487711?s=400&v=4
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: n8n
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/n8n-0.1.50/n8n-0.1.50.tgz
+    version: 0.1.50
+  - apiVersion: v2
+    appVersion: 0.212.0
     created: "2024-01-16T10:04:44.617982576Z"
     dependencies:
     - condition: redis.enabled
@@ -6456,4 +6481,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-0.1.0/uptime-wrapper-0.1.0.tgz
     version: 0.1.0
-generated: "2024-08-09T12:58:55.661362206Z"
+generated: "2024-08-30T05:26:18.489772206Z"
