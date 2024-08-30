@@ -18,16 +18,13 @@ spec:
       args:
         - |
           RESPONSE=$(wget -qO- '{{ include "n8n.fullname" . }}:{{ .Values.service.port }}/healthz')
-          if [ "$RESPONSE" = "$EXPECTED_RESPONSE" ]; then
+          if [ "$RESPONSE" = '{"status":"ok"}' ]; then
             echo "Health check passed."
             exit 0
           else
-            echo "Health check failed. Expected '$EXPECTED_RESPONSE' but got '$RESPONSE'."
+            echo "Health check failed. Expected '{"status":"ok"}' but got '$RESPONSE'."
             exit 1
           fi
-  env:
-    - name: EXPECTED_RESPONSE
-      value: '{"status":"ok"}'
   volumeMounts:
     - name: test-scripts
       mountPath: /test-scripts
