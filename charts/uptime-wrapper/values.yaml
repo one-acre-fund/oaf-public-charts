@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: medaziz11/uptimekuma_restapi
+  repository: oneacrefund/uptime-wrapper-api
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
