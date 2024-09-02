@@ -26,7 +26,7 @@ A Helm chart for Kubernetes
 | env.SECRET_KEY | string | `"32_character_secret_key"` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"oneacrefund/uptime-wrapper-api"` |  |
+| image.repository | string | `"oaftech.azurecr.io/oneacrefund/uptime-wrapper-api"` |  |
 | image.tag | string | `"latest"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
