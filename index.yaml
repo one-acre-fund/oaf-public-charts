@@ -6495,6 +6495,19 @@ entries:
   uptime-wrapper:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-09-02T11:56:24.884928767Z"
+    description: A Helm chart for Kubernetes
+    digest: 73fb7e7c55fe9f7a789ab6149a9a77c65a46038441fdec91d4fb2fcd7a73c063
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: uptime-wrapper
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-1.0.0/uptime-wrapper-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-08-09T12:58:55.660660232Z"
     description: A Helm chart for Kubernetes
     digest: a3f4bede75a72cf96df73da7bbbf5e2e63828063af688229874221969222dcc1
@@ -6506,4 +6519,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-0.1.0/uptime-wrapper-0.1.0.tgz
     version: 0.1.0
-generated: "2024-08-30T05:43:24.964908023Z"
+generated: "2024-09-02T11:56:24.885317354Z"
