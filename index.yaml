@@ -5068,6 +5068,31 @@ entries:
   n8n:
   - apiVersion: v2
     appVersion: 0.212.0
+    created: "2024-09-02T12:33:15.494294809Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~17.7.4
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: A Helm chart for n8n
+    digest: fdc19f96066670e568b621d09ad1df3f822fa5824cd0d71511438d04a9423085
+    icon: https://avatars.githubusercontent.com/u/45487711?s=400&v=4
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: n8n
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/n8n-0.1.52/n8n-0.1.52.tgz
+    version: 0.1.52
+  - apiVersion: v2
+    appVersion: 0.212.0
     created: "2024-08-30T05:43:24.964455668Z"
     dependencies:
     - condition: redis.enabled
@@ -6495,6 +6520,19 @@ entries:
   uptime-wrapper:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-09-02T12:33:15.619222323Z"
+    description: A Helm chart for Kubernetes
+    digest: d9c5c3e16952c7f9b75365775fdc25e4568d3da36048625863b2e3ad059127e0
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: uptime-wrapper
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-1.0.1/uptime-wrapper-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-09-02T11:56:24.884928767Z"
     description: A Helm chart for Kubernetes
     digest: 73fb7e7c55fe9f7a789ab6149a9a77c65a46038441fdec91d4fb2fcd7a73c063
@@ -6519,4 +6557,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-0.1.0/uptime-wrapper-0.1.0.tgz
     version: 0.1.0
-generated: "2024-09-02T11:56:24.885317354Z"
+generated: "2024-09-02T12:33:15.619769333Z"
