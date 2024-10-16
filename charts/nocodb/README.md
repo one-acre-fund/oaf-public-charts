@@ -1,12 +1,8 @@
 # nocodb
 
-
-
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) 
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square)
 
 A Helm chart for Kubernetes
-
-
 
 ## Maintainers
 
@@ -20,11 +16,11 @@ A Helm chart for Kubernetes
 
 ## TL;DR
 
-[nocodb](https://www.nocodb.com/) is a fair-source API automation platform.
+[nocodb](https://www.nocodb.com/) is an open source no-code platform to build and manage your data-driven applications.
 
 ```console
-$ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
-$ helm install my-release one-acre-fund/nocodb
+helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
+helm install my-release one-acre-fund/nocodb
 ```
 
 ## Requirements
