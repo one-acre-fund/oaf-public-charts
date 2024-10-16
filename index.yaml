@@ -4780,6 +4780,31 @@ entries:
   mautic:
   - apiVersion: v2
     appVersion: v4-apache
+    created: "2024-10-16T16:16:28.196339203Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.4.6
+    description: A Helm chart for Mautic, a marketing automation tool
+    digest: 0fd19cc78d5e01d6b882831c6538b622aa2693bb53e8707b9325aae3e12c24a7
+    home: https://www.mautic.org/
+    icon: https://secure.gravatar.com/avatar/a946d764bc1e4a7a39664099febfc9b2.png?s=400
+    keywords:
+    - marketing
+    - mautic
+    - crm
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: mautic
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/mautic
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/mautic-0.1.7/mautic-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: v4-apache
     created: "2024-01-16T10:04:44.47800376Z"
     dependencies:
     - condition: mariadb.enabled
@@ -5905,6 +5930,40 @@ entries:
     version: 0.1.10
   nocodb:
   - apiVersion: v2
+    appVersion: 0.257.0
+    created: "2024-10-16T16:16:28.416060768Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.x.x
+    - condition: redis.enabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 20.x.x
+    - condition: minio.enabled
+      name: minio
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 14.x.x
+    - name: common
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: A Helm chart for Kubernetes
+    digest: e9ab13d77279b61f1d6ab512bd75e8c394dba3ca57e03d7a32216bb74af3535d
+    icon: https://raw.githubusercontent.com/one-acre-fund/oaf-public-charts/main/charts/nocodb/img/icon.png
+    maintainers:
+    - email: rahma.ahmed@oneacrefund.org
+      name: samaroon
+    name: nocodb
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/nocodb
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.3.0/nocodb-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: 1.16.1
     created: "2023-02-28T14:36:46.677522561Z"
     dependencies:
@@ -6591,4 +6650,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-0.1.0/uptime-wrapper-0.1.0.tgz
     version: 0.1.0
-generated: "2024-10-16T06:06:03.545689787Z"
+generated: "2024-10-16T16:16:28.416391345Z"
