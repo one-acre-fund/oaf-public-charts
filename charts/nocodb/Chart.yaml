@@ -41,3 +41,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 2.x.x
+
+maintainers:
+  - name: samaroon
+    email: rahma.ahmed@oneacrefund.org
