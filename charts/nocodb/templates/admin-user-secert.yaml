@@ -1,0 +1,15 @@
+{{ if .Values.admin.create }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "nocodb.adminSecretName" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+type: Opaque
+data:
+  {{ include "nocodb.adminEmailKey" . }}: {{ .Values.admin.email | b64enc | quote }}
+  {{ include "nocodb.adminPasswordKey" . }}: {{ .Values.admin.password | b64enc | quote }}
+{{- end }}

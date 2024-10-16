@@ -1,0 +1,230 @@
+{{/*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/* vim: set filetype=mustache: */}}
+=
+
+{{- define "nocodb.fullname" -}}
+{{- if .Values.fullnameOverride -}}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- include "common.names.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "nocodb.name" -}}
+{{- if .Values.nameOverride -}}
+{{- .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- include "common.names.name" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name for Postgresql.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "nocodb.postgresql.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "postgresql" "chartValues" .Values.postgresql "context" $) -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name for Minio.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "nocodb.minio.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "minio" "chartValues" .Values.minio "context" $) -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name for Redis.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "nocodb.redis.fullname" -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "redis" "chartValues" .Values.redis "context" $) -}}
+{{- end -}}
+
+{{/*
+Return the proper nocodb image name
+*/}}
+{{- define "nocodb.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "nocodb.imagePullSecrets" -}}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the Postgresql hostname
+*/}}
+{{- define "nocodb.databaseHost" -}}
+{{- ternary (include "nocodb.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql port
+*/}}
+{{- define "nocodb.databasePort" -}}
+{{- ternary 5432 .Values.externalDatabase.port .Values.postgresql.enabled -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql database name
+*/}}
+{{- define "nocodb.databaseName" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- .Values.postgresql.auth.database -}}
+{{- else -}}
+    {{- .Values.externalDatabase.database -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Postgresql user
+*/}}
+{{- define "nocodb.databaseUser" -}}
+{{- if .Values.postgresql.enabled }}
+    {{- .Values.postgresql.auth.username -}}
+{{- else -}}
+    {{- .Values.externalDatabase.user -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the PostgreSQL Secret Name
+*/}}
+{{- define "nocodb.databaseSecretName" -}}
+  {{- if .Values.postgresql.enabled }}
+    {{- if .Values.postgresql.auth.existingSecret }}
+      {{- tpl .Values.postgresql.auth.existingSecret $ -}}
+    {{- else -}}
+      {{- default (include "nocodb.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+    {{- end -}}
+  {{- else -}}
+    {{- default (printf "%s-externaldb" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") (tpl .Values.externalDatabase.existingSecret $) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Add environment variables to configure database values
+*/}}
+{{- define "nocodb.databaseSecretPasswordKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "password" -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
+            {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
+        {{- else -}}
+            {{- print "password" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- print "password" -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Add environment variables to configure database values
+*/}}
+{{- define "nocodb.databaseSecretPostgresPasswordKey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "postgres-password" -}}
+{{- else -}}
+    {{- if .Values.externalDatabase.existingSecret -}}
+        {{- if .Values.externalDatabase.existingSecretPostgresPasswordKey -}}
+            {{- printf "%s" .Values.externalDatabase.existingSecretPostgresPasswordKey -}}
+        {{- else -}}
+            {{- print "postgres-password" -}}
+        {{- end -}}
+    {{- else -}}
+        {{- print "postgres-password" -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "nocodb.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+
+{{- define "nocodb.jwtSecretName" -}}
+  {{- if .Values.jwt.existingSecretName -}}
+    {{- printf "%s" .Values.jwt.existingSecretName -}}
+  {{- else -}}
+    {{- if .Values.jwt.name -}}
+      {{- printf "%s" .Values.jwt.name -}}
+    {{- else -}}
+      {{- printf "%s-jwt-secret" (include "nocodb.fullname" .) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "nocodb.jwtSecretKey" -}}
+    {{- if .Values.jwt.existingSecretKey -}}
+        {{- printf "%s" .Values.jwt.existingSecretKey -}}
+    {{- else -}}
+        {{- print "jwt-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "nocodb.adminSecretName" -}}
+  {{- if .Values.admin.existingSecretName -}}
+    {{- printf "%s" .Values.admin.existingSecretName -}}
+  {{- else -}}
+    {{- printf "%s-supper-admin-secret" (include "nocodb.fullname" .) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "nocodb.adminEmailKey" -}}
+    {{- if .Values.admin.existingSecretEmailKey -}}
+        {{- printf "%s" .Values.admin.existingSecretEmailKey -}}
+    {{- else -}}
+        {{- print "email" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "nocodb.adminPasswordKey" -}}
+    {{- if .Values.admin.existingSecretPasswordKey -}}
+        {{- printf "%s" .Values.admin.existingSecretPasswordKey -}}
+    {{- else -}}
+        {{- print "password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "nocodb.smtpSecretName" -}}
+  {{- if .Values.smtp.existingSecretName -}}
+    {{- printf "%s" .Values.smtp.existingSecretName -}}
+  {{- else -}}
+    {{- printf "%s-smtp-secret" (include "nocodb.fullname" .) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- define "nocodb.smtpSecretPasswordKey" -}}
+    {{- if .Values.smtp.existingSecretPasswordKey -}}
+        {{- printf "%s" .Values.smtp.existingSecretPasswordKey -}}
+    {{- else -}}
+        {{- print "password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "nocodb.smtpSecretUsernameKey" -}}
+    {{- if .Values.smtp.existingSecretUsernameKey -}}
+        {{- printf "%s" .Values.smtp.existingSecretUsernameKey -}}
+    {{- else -}}
+        {{- print "username" -}}
+    {{- end -}}
+{{- end -}}

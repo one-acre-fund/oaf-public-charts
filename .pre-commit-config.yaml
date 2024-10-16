@@ -37,17 +37,6 @@ repos:
           - json
       - id: no-commit-to-branch
         args: ["--branch", "main"]
-  # - repo: https://github.com/jorisroovers/gitlint
-  #   rev: v0.18.0
-  #   hooks:
-  #     - id: gitlint
-  #       name: gitlint
-  #       description: Checks your git commit messages for style.
-  #       language: python
-  #       additional_dependencies: ["./gitlint-core[trusted-deps]"]
-  #       entry: gitlint
-  #       args: [--staged, --msg-filename]
-  #       stages: [commit-msg]
   - repo: https://github.com/milin/giticket
     rev: v1.4
     hooks:
