@@ -8,17 +8,23 @@ A Helm chart for Kubernetes
 
 
 
+## Maintainers
 
+| Name | Email | Url |
+| ---- | ------ | --- |
+| samaroon | <rahma.ahmed@oneacrefund.org> |  |
 
+## Source Code
 
+* <https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/nocodb>
 
 ## TL;DR
 
-[n8n](https://www.n8n.io/) is a fair-source API automation platform.
+[nocodb](https://www.nocodb.com/) is a fair-source API automation platform.
 
 ```console
 $ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
-$ helm install my-release one-acre-fund/n8n
+$ helm install my-release one-acre-fund/nocodb
 ```
 
 ## Requirements
