@@ -252,12 +252,8 @@ priorityClassName: ""
 
 schedulerName: ""
 
-jwt:
-  create: true
-  name: ""
-  secret: ""
-  existingSecretName: ""
-  existingSecretKey: ""
+extraEnvSecrets: []
+extraEnv: []
 
 admin:
   create: true

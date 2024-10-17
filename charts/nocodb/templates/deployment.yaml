@@ -133,13 +133,6 @@ spec:
             - name: NC_REDIS_URL
               value: "redis://:$(NC_REDIS_PASSWORD)@{{ template "nocodb.redis.fullname" . }}-master:{{ .Values.redis.master.service.ports.redis }}"
             {{- end }}
-            {{- if and .Values.jwt.create (not (eq .Values.jwt.secret "")) }}
-            - name: NC_AUTH_JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "nocodb.jwtSecretName" . }}
-                  key: {{ include "nocodb.jwtSecretKey" . }}
-            {{- end }}
             {{- if .Values.admin.create }}
             - name: NC_ADMIN_EMAIL
               valueFrom:
@@ -196,6 +189,13 @@ spec:
                   name: {{ include "nocodb.databaseSecretName" . }}
                   key: {{ include "nocodb.databaseSecretPasswordKey" . }}
             {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "nocodb.fullname" . }}-secrets
+                optional: true
+            - configMapRef:
+                name: {{ include "nocodb.fullname" . }}-config
+                optional: true
           ports:
             - name: http
               containerPort: {{ .Values.service.ports.http }}
