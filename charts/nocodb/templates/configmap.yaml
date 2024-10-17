@@ -1,0 +1,15 @@
+{{- if .Values.extraEnv -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "nocodb.fullname" . }}-config
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+   {{- range $key, $val := .Values.extraEnv }}
+   {{ $key }}: {{ $val | quote }}
+   {{- end }}
+{{- end }}
