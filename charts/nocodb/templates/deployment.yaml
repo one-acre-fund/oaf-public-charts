@@ -114,13 +114,13 @@ spec:
             - name: NC_S3_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "nocodb.fullname" . }}-minio
-                  key: root-user
+                  name: {{ include "nocodb.minio.secretName" . }}
+                  key: {{ include "nocodb.minio.rootPasswordKey" . }}
             - name: NC_S3_ACCESS_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "nocodb.fullname" . }}-minio
-                  key: root-password
+                  name: {{ include "nocodb.minio.secretName" . }}
+                  key: {{ include "nocodb.minio.rootPasswordKey" . }}
             - name: NC_S3_FORCE_PATH_STYLE
               value: "true"
             {{- end }}
@@ -128,8 +128,8 @@ spec:
             - name: NC_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "nocodb.fullname" . }}-redis
-                  key: redis-password
+                  name: {{ include "nocodb.redis.secretName" . }}
+                  key: {{ include "nocodb.redis.passwordKey" . }}
             - name: NC_REDIS_URL
               value: "redis://:$(NC_REDIS_PASSWORD)@{{ template "nocodb.redis.fullname" . }}-master:{{ .Values.redis.master.service.ports.redis }}"
             {{- end }}
@@ -137,13 +137,13 @@ spec:
             - name: NC_ADMIN_EMAIL
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "nocodb.adminSecretName" . }}
-                  key: {{ include "nocodb.adminEmailKey" . }}
+                  name: {{ include "nocodb.admin.secretName" . }}
+                  key: {{ include "nocodb.admin.emailKey" . }}
             - name: NC_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "nocodb.adminSecretName" . }}
-                  key: {{ include "nocodb.adminPasswordKey" . }}
+                  name: {{ include "nocodb.admin.secretName" . }}
+                  key: {{ include "nocodb.admin.passwordKey" . }}
             {{- end }}
             {{- if and .Values.smtp.enabled (or (not (eq .Values.smtp.password "")) .Values.smtp.existingSecretName) }}
             - name: NC_SMTP_HOST
@@ -155,13 +155,13 @@ spec:
             - name: NC_SMTP_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "nocodb.smtpSecretName" . }}
-                  key: {{ include "nocodb.smtpSecretUsernameKey" . }}
+                  name: {{ include "nocodb.smtp.secretName" . }}
+                  key: {{ include "nocodb.smtp.secretUsernameKey" . }}
             - name: NC_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "nocodb.smtpSecretName" . }}
-                  key: {{ include "nocodb.smtpSecretPasswordKey" . }}
+                  name: {{ include "nocodb.smtp.secretName" . }}
+                  key: {{ include "nocodb.smtp.secretPasswordKey" . }}
             - name: NC_SMTP_FROM
               value: {{ .Values.smtp.from | quote }}
             - name: NC_SMTP_IGNORE_TLS
