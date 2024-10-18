@@ -241,16 +241,16 @@ Get the credentials secret.
 {{- end -}}
 
 {{- define "nocodb.minio.rootUserKey" -}}
-    {{- if .Values.minio.auth.existingSecretRootUserKey -}}
-        {{- printf "%s" .Values.minio.auth.existingSecretRootUserKey -}}
+    {{- if .Values.minio.auth.rootUserSecretKey -}}
+        {{- printf "%s" .Values.minio.auth.rootUserSecretKey -}}
     {{- else -}}
         {{- print "root-user" -}}
     {{- end -}}
 {{- end -}}
 
 {{- define "nocodb.minio.rootPasswordKey" -}}
-    {{- if .Values.minio.auth.existingSecretRootPasswordKey -}}
-        {{- printf "%s" .Values.minio.auth.existingSecretRootPasswordKey -}}
+    {{- if .Values.minio.auth.rootPasswordSecretKey -}}
+        {{- printf "%s" .Values.minio.auth.rootPasswordSecretKey -}}
     {{- else -}}
         {{- print "root-password" -}}
     {{- end -}}
