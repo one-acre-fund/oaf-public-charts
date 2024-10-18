@@ -1,8 +1,8 @@
-{{ if .Values.admin.create }}
+{{ if and .Values.admin.create (not (eq .Values.admin.email "")) (not (eq .Values.admin.password "")) }}
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "nocodb.adminSecretName" . }}
+  name: {{ include "nocodb.admin.secretName" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -10,6 +10,6 @@ metadata:
   {{- end }}
 type: Opaque
 data:
-  {{ include "nocodb.adminEmailKey" . }}: {{ .Values.admin.email | b64enc | quote }}
-  {{ include "nocodb.adminPasswordKey" . }}: {{ .Values.admin.password | b64enc | quote }}
+  {{ include "nocodb.admin.emailKey" . }}: {{ .Values.admin.email | b64enc | quote }}
+  {{ include "nocodb.admin.passwordKey" . }}: {{ .Values.admin.password | b64enc | quote }}
 {{- end }}

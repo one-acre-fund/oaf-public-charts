@@ -181,7 +181,7 @@ Add environment variables to configure database values
     {{- end -}}
 {{- end -}}
 
-{{- define "nocodb.adminSecretName" -}}
+{{- define "nocodb.admin.secretName" -}}
   {{- if .Values.admin.existingSecretName -}}
     {{- printf "%s" .Values.admin.existingSecretName -}}
   {{- else -}}
@@ -189,7 +189,7 @@ Add environment variables to configure database values
   {{- end -}}
 {{- end -}}
 
-{{- define "nocodb.adminEmailKey" -}}
+{{- define "nocodb.admin.emailKey" -}}
     {{- if .Values.admin.existingSecretEmailKey -}}
         {{- printf "%s" .Values.admin.existingSecretEmailKey -}}
     {{- else -}}
@@ -197,7 +197,7 @@ Add environment variables to configure database values
     {{- end -}}
 {{- end -}}
 
-{{- define "nocodb.adminPasswordKey" -}}
+{{- define "nocodb.admin.passwordKey" -}}
     {{- if .Values.admin.existingSecretPasswordKey -}}
         {{- printf "%s" .Values.admin.existingSecretPasswordKey -}}
     {{- else -}}
@@ -205,7 +205,7 @@ Add environment variables to configure database values
     {{- end -}}
 {{- end -}}
 
-{{- define "nocodb.smtpSecretName" -}}
+{{- define "nocodb.smtp.secretName" -}}
   {{- if .Values.smtp.existingSecretName -}}
     {{- printf "%s" .Values.smtp.existingSecretName -}}
   {{- else -}}
@@ -213,18 +213,61 @@ Add environment variables to configure database values
   {{- end -}}
 {{- end -}}
 
-{{- define "nocodb.smtpSecretPasswordKey" -}}
+{{- define "nocodb.smtp.secretPasswordKey" -}}
     {{- if .Values.smtp.existingSecretPasswordKey -}}
         {{- printf "%s" .Values.smtp.existingSecretPasswordKey -}}
     {{- else -}}
-        {{- print "password" -}}
+        {{- print "smtp-password" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "nocodb.smtpSecretUsernameKey" -}}
+{{- define "nocodb.smtp.secretUsernameKey" -}}
     {{- if .Values.smtp.existingSecretUsernameKey -}}
         {{- printf "%s" .Values.smtp.existingSecretUsernameKey -}}
     {{- else -}}
-        {{- print "username" -}}
+        {{- print "smtp-username" -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Get the credentials secret.
+*/}}
+{{- define "nocodb.minio.secretName" -}}
+{{- if .Values.minio.auth.existingSecret -}}
+    {{- printf "%s" (tpl .Values.minio.auth.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s" (include "nocodb.minio.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "nocodb.minio.rootUserKey" -}}
+    {{- if .Values.minio.auth.existingSecretRootUserKey -}}
+        {{- printf "%s" .Values.minio.auth.existingSecretRootUserKey -}}
+    {{- else -}}
+        {{- print "root-user" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "nocodb.minio.rootPasswordKey" -}}
+    {{- if .Values.minio.auth.existingSecretRootPasswordKey -}}
+        {{- printf "%s" .Values.minio.auth.existingSecretRootPasswordKey -}}
+    {{- else -}}
+        {{- print "root-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "nocodb.redis.secretName" -}}
+{{- if .Values.redis.auth.existingSecret -}}
+    {{- printf "%s" (tpl .Values.redis.auth.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s" (include "nocodb.redis.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "nocodb.redis.passwordKey" -}}
+    {{- if .Values.redis.auth.existingSecretKey -}}
+        {{- printf "%s" .Values.redis.auth.existingSecretKey -}}
+    {{- else -}}
+        {{- print "redis-password" -}}
     {{- end -}}
 {{- end -}}
