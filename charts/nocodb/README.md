@@ -2,7 +2,7 @@
 
 
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) 
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) 
 
 A Helm chart for Kubernetes
 
@@ -82,6 +82,8 @@ $ helm install my-release one-acre-fund/nocodb
 | externalDatabase.postgresqlPostgresPassword | string | `""` |  |
 | externalDatabase.postgresqlPostgresUser | string | `"nocodb_admin_user"` |  |
 | externalDatabase.user | string | `"nocodb_user"` |  |
+| extraEnv | list | `[]` |  |
+| extraEnvSecrets | list | `[]` |  |
 | fullnameOverride | string | `""` |  |
 | global.defaultStorageClass | string | `""` |  |
 | global.imagePullSecrets | list | `[]` |  |
@@ -99,11 +101,6 @@ $ helm install my-release one-acre-fund/nocodb
 | ingress.hosts[0].paths[0].path | string | `"/"` |  |
 | ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
 | ingress.tls | list | `[]` |  |
-| jwt.create | bool | `true` |  |
-| jwt.existingSecretKey | string | `""` |  |
-| jwt.existingSecretName | string | `""` |  |
-| jwt.name | string | `""` |  |
-| jwt.secret | string | `""` |  |
 | livenessProbe.failureThreshold | int | `3` |  |
 | livenessProbe.httpGet.path | string | `"/api/v1/health"` |  |
 | livenessProbe.httpGet.port | string | `"http"` |  |
