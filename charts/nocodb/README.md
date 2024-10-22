@@ -2,7 +2,7 @@
 
 
 
-![Version: 0.3.3](https://img.shields.io/badge/Version-0.3.3-informational?style=flat-square) 
+![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) 
 
 A Helm chart for Kubernetes
 
@@ -80,7 +80,7 @@ $ helm install my-release one-acre-fund/nocodb
 | externalDatabase.password | string | `""` |  |
 | externalDatabase.port | int | `5432` |  |
 | externalDatabase.postgresqlPostgresPassword | string | `""` |  |
-| externalDatabase.postgresqlPostgresUser | string | `"nocodb_admin_user"` |  |
+| externalDatabase.postgresqlPostgresUser | string | `"postgres"` |  |
 | externalDatabase.user | string | `"nocodb_user"` |  |
 | extraEnv | list | `[]` |  |
 | extraEnvSecrets | list | `[]` |  |

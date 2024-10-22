@@ -317,7 +317,7 @@ externalDatabase:
   password: ""
   database: nocodb
   create: true
-  postgresqlPostgresUser: nocodb_admin_user
+  postgresqlPostgresUser: "postgres"
   postgresqlPostgresPassword: ""
   existingSecret: ""
   existingSecretPasswordKey: ""
