@@ -95,7 +95,7 @@ spec:
             - name: PORT
               value: {{ .Values.service.ports.http | quote }}
             - name: NC_DB
-              value: "pg://{{ include "nocodb.databaseHost" . }}:{{ template "nocodb.databasePort" . }}?u={{ template "nocodb.databaseUser" . }}&p=$(NC_DB_PASSWORD)&d={{ template "nocodb.databaseName" . }}"
+              value: "pg://{{ include "nocodb.databaseHost" . }}:{{ include "nocodb.databasePort" . }}?u={{ include "nocodb.databaseUser" . }}&p=$(NC_DB_PASSWORD)&d={{ include "nocodb.databaseName" . }}"
             {{- if .Values.nocodb.publicUrl }}
             - name: NC_PUBLIC_URL
               value: {{ .Values.publicUrl | quote }}
@@ -106,7 +106,7 @@ spec:
             {{- end }}
             {{- if .Values.minio.enabled }}
             - name: NC_S3_ENDPOINT
-              value: "http://{{ template "nocodb.minio.fullname" . }}:{{ .Values.minio.containerPorts.api }}"
+              value: "http://{{ include "nocodb.minio.fullname" . }}:{{ .Values.minio.containerPorts.api }}"
             - name: NC_S3_REGION
               value: {{ .Values.minio.region | quote }}
             - name: NC_S3_BUCKET_NAME
@@ -131,7 +131,7 @@ spec:
                   name: {{ include "nocodb.redis.secretName" . }}
                   key: {{ include "nocodb.redis.passwordKey" . }}
             - name: NC_REDIS_URL
-              value: "redis://:$(NC_REDIS_PASSWORD)@{{ template "nocodb.redis.fullname" . }}-master:{{ .Values.redis.master.service.ports.redis }}"
+              value: "redis://:$(NC_REDIS_PASSWORD)@{{ include "nocodb.redis.fullname" . }}-master:{{ .Values.redis.master.service.ports.redis }}"
             {{- end }}
             {{- if .Values.admin.create }}
             - name: NC_ADMIN_EMAIL
@@ -169,9 +169,9 @@ spec:
             {{- end }}
             {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.create }}
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
-              value: {{ template "nocodb.databaseHost" . }}
+              value: {{ include "nocodb.databaseHost" . }}
             - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
-              value: {{ template "nocodb.databasePort" . }}
+              value: {{ include "nocodb.databasePort" . | quote }}
             - name: POSTGRESQL_CLIENT_POSTGRES_USER
               value: {{ .Values.externalDatabase.postgresqlPostgresUser }}
             - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD
@@ -180,9 +180,9 @@ spec:
                   name: {{ include "nocodb.databaseSecretName" . }}
                   key: {{ include "nocodb.databaseSecretPostgresPasswordKey" . }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_NAME
-              value: {{ template "nocodb.databaseName" . }}
+              value: {{ include "nocodb.databaseName" . }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME
-              value: {{ template "nocodb.databaseUser" . }}
+              value: {{ include "nocodb.databaseUser" . }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
