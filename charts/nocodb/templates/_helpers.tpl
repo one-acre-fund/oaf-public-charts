@@ -99,7 +99,7 @@ Return the Postgresql user
 {{/*
 Return the PostgreSQL Secret Name
 */}}
-{{- define "nocodb.databaseSecretName" -}}
+{{- define "nocodb.database.secretName" -}}
   {{- if .Values.postgresql.enabled }}
     {{- if .Values.postgresql.auth.existingSecret }}
       {{- tpl .Values.postgresql.auth.existingSecret $ -}}
@@ -114,7 +114,7 @@ Return the PostgreSQL Secret Name
 {{/*
 Add environment variables to configure database values
 */}}
-{{- define "nocodb.databaseSecretPasswordKey" -}}
+{{- define "nocodb.database.secretPasswordKey" -}}
 {{- if .Values.postgresql.enabled -}}
     {{- print "password" -}}
 {{- else -}}
@@ -133,7 +133,7 @@ Add environment variables to configure database values
 {{/*
 Add environment variables to configure database values
 */}}
-{{- define "nocodb.databaseSecretPostgresPasswordKey" -}}
+{{- define "nocodb.database.secretPostgresPasswordKey" -}}
 {{- if .Values.postgresql.enabled -}}
     {{- print "postgres-password" -}}
 {{- else -}}
@@ -158,27 +158,6 @@ Add environment variables to configure database values
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
-{{- end -}}
-
-
-{{- define "nocodb.jwtSecretName" -}}
-  {{- if .Values.jwt.existingSecretName -}}
-    {{- printf "%s" .Values.jwt.existingSecretName -}}
-  {{- else -}}
-    {{- if .Values.jwt.name -}}
-      {{- printf "%s" .Values.jwt.name -}}
-    {{- else -}}
-      {{- printf "%s-jwt-secret" (include "nocodb.fullname" .) -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
-
-{{- define "nocodb.jwtSecretKey" -}}
-    {{- if .Values.jwt.existingSecretKey -}}
-        {{- printf "%s" .Values.jwt.existingSecretKey -}}
-    {{- else -}}
-        {{- print "jwt-secret" -}}
-    {{- end -}}
 {{- end -}}
 
 {{- define "nocodb.admin.secretName" -}}
@@ -229,30 +208,27 @@ Add environment variables to configure database values
     {{- end -}}
 {{- end -}}
 
-{{/*
-Get the credentials secret.
-*/}}
 {{- define "nocodb.minio.secretName" -}}
-{{- if .Values.minio.auth.existingSecret -}}
-    {{- printf "%s" (tpl .Values.minio.auth.existingSecret $) -}}
-{{- else -}}
-    {{- printf "%s" (include "nocodb.minio.fullname" .) -}}
-{{- end -}}
+    {{- if .Values.minio.enabled -}}
+        {{- .Values.minio.auth.existingSecret | default (include "nocodb.minio.fullname" .) -}}
+    {{- else -}}
+        {{- .Values.externalMinio.existingSecret | default (printf "%s-externalminio" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") -}}
+    {{- end -}}
 {{- end -}}
 
 {{- define "nocodb.minio.rootUserKey" -}}
-    {{- if .Values.minio.auth.rootUserSecretKey -}}
-        {{- printf "%s" .Values.minio.auth.rootUserSecretKey -}}
+    {{- if .Values.minio.enabled -}}       
+        {{- .Values.minio.auth.rootUserSecretKey | default "root-user" -}}
     {{- else -}}
-        {{- print "root-user" -}}
+        {{- .Values.externalMinio.rootUserSecretKey | default "root-user" -}}
     {{- end -}}
 {{- end -}}
 
 {{- define "nocodb.minio.rootPasswordKey" -}}
-    {{- if .Values.minio.auth.rootPasswordSecretKey -}}
-        {{- printf "%s" .Values.minio.auth.rootPasswordSecretKey -}}
+    {{- if .Values.minio.enabled -}}       
+        {{- .Values.minio.auth.rootPasswordSecretKey | default "root-password" -}}
     {{- else -}}
-        {{- print "root-password" -}}
+        {{- .Values.externalMinio.rootPasswordSecretKey | default "root-password" -}}
     {{- end -}}
 {{- end -}}
 

@@ -2,7 +2,7 @@
 
 
 
-![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) 
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) 
 
 A Helm chart for Kubernetes
 
@@ -82,6 +82,14 @@ $ helm install my-release one-acre-fund/nocodb
 | externalDatabase.postgresqlPostgresPassword | string | `""` |  |
 | externalDatabase.postgresqlPostgresUser | string | `"postgres"` |  |
 | externalDatabase.user | string | `"nocodb_user"` |  |
+| externalMinio.bucketName | string | `""` |  |
+| externalMinio.endpoint | string | `""` |  |
+| externalMinio.existingSecret | string | `""` |  |
+| externalMinio.region | string | `"us-east-1"` |  |
+| externalMinio.rootPassword | string | `""` |  |
+| externalMinio.rootPasswordSecretKey | string | `""` |  |
+| externalMinio.rootUser | string | `"admin"` |  |
+| externalMinio.rootUserSecretKey | string | `""` |  |
 | extraEnv | list | `[]` |  |
 | extraEnvSecrets | list | `[]` |  |
 | fullnameOverride | string | `""` |  |
