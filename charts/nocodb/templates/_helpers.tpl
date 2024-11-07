@@ -99,7 +99,7 @@ Return the Postgresql user
 {{/*
 Return the PostgreSQL Secret Name
 */}}
-{{- define "nocodb.databaseSecretName" -}}
+{{- define "nocodb.database.secretName" -}}
   {{- if .Values.postgresql.enabled }}
     {{- if .Values.postgresql.auth.existingSecret }}
       {{- tpl .Values.postgresql.auth.existingSecret $ -}}
@@ -114,9 +114,9 @@ Return the PostgreSQL Secret Name
 {{/*
 Add environment variables to configure database values
 */}}
-{{- define "nocodb.databaseSecretPasswordKey" -}}
+{{- define "nocodb.database.secretPasswordKey" -}}
 {{- if .Values.postgresql.enabled -}}
-    {{- print "password" -}}
+    {{- default "password" .Values.postgresql.auth.secretKeys.userPasswordKey -}}
 {{- else -}}
     {{- if .Values.externalDatabase.existingSecret -}}
         {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
@@ -133,9 +133,9 @@ Add environment variables to configure database values
 {{/*
 Add environment variables to configure database values
 */}}
-{{- define "nocodb.databaseSecretPostgresPasswordKey" -}}
+{{- define "nocodb.database.secretPostgresPasswordKey" -}}
 {{- if .Values.postgresql.enabled -}}
-    {{- print "postgres-password" -}}
+    {{- default "postgres-password" .Values.postgresql.auth.secretKeys.postgresPasswordKey -}}
 {{- else -}}
     {{- if .Values.externalDatabase.existingSecret -}}
         {{- if .Values.externalDatabase.existingSecretPostgresPasswordKey -}}
@@ -161,29 +161,9 @@ Add environment variables to configure database values
 {{- end -}}
 
 
-{{- define "nocodb.jwtSecretName" -}}
-  {{- if .Values.jwt.existingSecretName -}}
-    {{- printf "%s" .Values.jwt.existingSecretName -}}
-  {{- else -}}
-    {{- if .Values.jwt.name -}}
-      {{- printf "%s" .Values.jwt.name -}}
-    {{- else -}}
-      {{- printf "%s-jwt-secret" (include "nocodb.fullname" .) -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
-
-{{- define "nocodb.jwtSecretKey" -}}
-    {{- if .Values.jwt.existingSecretKey -}}
-        {{- printf "%s" .Values.jwt.existingSecretKey -}}
-    {{- else -}}
-        {{- print "jwt-secret" -}}
-    {{- end -}}
-{{- end -}}
-
 {{- define "nocodb.admin.secretName" -}}
-  {{- if .Values.admin.existingSecretName -}}
-    {{- printf "%s" .Values.admin.existingSecretName -}}
+  {{- if .Values.admin.existingSecret -}}
+    {{- printf "%s" .Values.admin.existingSecret -}}
   {{- else -}}
     {{- printf "%s-supper-admin-secret" (include "nocodb.fullname" .) -}}
   {{- end -}}
@@ -206,8 +186,8 @@ Add environment variables to configure database values
 {{- end -}}
 
 {{- define "nocodb.smtp.secretName" -}}
-  {{- if .Values.smtp.existingSecretName -}}
-    {{- printf "%s" .Values.smtp.existingSecretName -}}
+  {{- if .Values.smtp.existingSecret -}}
+    {{- printf "%s" .Values.smtp.existingSecret -}}
   {{- else -}}
     {{- printf "%s-smtp-secret" (include "nocodb.fullname" .) -}}
   {{- end -}}

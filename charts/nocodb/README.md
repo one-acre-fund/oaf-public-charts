@@ -2,7 +2,7 @@
 
 
 
-![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) 
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) 
 
 A Helm chart for Kubernetes
 
@@ -42,8 +42,8 @@ $ helm install my-release one-acre-fund/nocodb
 |-----|------|---------|-------------|
 | admin.create | bool | `true` |  |
 | admin.email | string | `""` |  |
+| admin.existingSecret | string | `""` |  |
 | admin.existingSecretEmailKey | string | `""` |  |
-| admin.existingSecretName | string | `""` |  |
 | admin.existingSecretPasswordKey | string | `""` |  |
 | admin.password | string | `""` |  |
 | affinity | object | `{}` |  |
@@ -82,6 +82,14 @@ $ helm install my-release one-acre-fund/nocodb
 | externalDatabase.postgresqlPostgresPassword | string | `""` |  |
 | externalDatabase.postgresqlPostgresUser | string | `"postgres"` |  |
 | externalDatabase.user | string | `"nocodb_user"` |  |
+| externalMinio.bucketName | string | `""` |  |
+| externalMinio.endpoint | string | `""` |  |
+| externalMinio.existingSecret | string | `""` |  |
+| externalMinio.region | string | `"us-east-1"` |  |
+| externalMinio.rootPassword | string | `""` |  |
+| externalMinio.rootPasswordSecretKey | string | `""` |  |
+| externalMinio.rootUser | string | `"admin"` |  |
+| externalMinio.rootUserSecretKey | string | `""` |  |
 | extraEnv | list | `[]` |  |
 | extraEnvSecrets | list | `[]` |  |
 | fullnameOverride | string | `""` |  |
@@ -92,7 +100,7 @@ $ helm install my-release one-acre-fund/nocodb
 | hostAliases | list | `[]` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"nocodb/nocodb"` |  |
-| image.tag | string | `"0.257.0"` |  |
+| image.tag | string | `"0.257.2"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.className | string | `""` |  |
@@ -180,7 +188,7 @@ $ helm install my-release one-acre-fund/nocodb
 | smtp.host | string | `"smtp.gmail.com"` |  |
 | smtp.ignoreTLS | bool | `true` |  |
 | smtp.password | string | `""` |  |
-| smtp.port | int | `587` |  |
+| smtp.port | int | `465` |  |
 | smtp.secure | bool | `true` |  |
 | smtp.username | string | `""` |  |
 | tolerations | list | `[]` |  |

@@ -20,7 +20,7 @@ nocodb:
 image:
   repository: nocodb/nocodb
   pullPolicy: IfNotPresent
-  tag: 0.257.0
+  tag: 0.257.2
 
 imagePullSecrets: []
 nameOverride: ""
@@ -261,12 +261,12 @@ admin:
   password: ""
   existingSecretPasswordKey: ""
   existingSecretEmailKey: ""
-  existingSecretName: ""
+  existingSecret: ""
 
 smtp:
   enabled: true
   host: smtp.gmail.com
-  port: 587
+  port: 465
   secure: true
   username: ""
   password: ""
@@ -286,6 +286,16 @@ minio:
     rootPasswordSecretKey: ""
   defaultBuckets: "nocodb"
   region: us-east-1
+
+externalMinio:
+  rootUser: admin
+  rootPassword: ""
+  endpoint: ""
+  region: us-east-1
+  bucketName: ""
+  existingSecret: ""
+  rootUserSecretKey: ""
+  rootPasswordSecretKey: ""
 
 redis:
   enabled: true

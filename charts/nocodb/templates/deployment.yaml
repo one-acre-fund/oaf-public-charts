@@ -90,8 +90,8 @@ spec:
             - name: NC_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "nocodb.databaseSecretName" . }}
-                  key: {{ include "nocodb.databaseSecretPasswordKey" . }}
+                  name: {{ include "nocodb.database.secretName" . }}
+                  key: {{ include "nocodb.database.secretPasswordKey" . }}
             - name: PORT
               value: {{ .Values.service.ports.http | quote }}
             - name: NC_DB
@@ -111,11 +111,19 @@ spec:
               value: {{ .Values.minio.region | quote }}
             - name: NC_S3_BUCKET_NAME
               value: {{ include "nocodb.fullname" . | quote }}
+            {{- else }}
+            - name: NC_S3_ENDPOINT
+              value: {{ .Values.externalMinio.endpoint | quote }}
+            - name: NC_S3_REGION
+              value: {{ .Values.externalMinio.region | quote }}
+            - name: NC_S3_BUCKET_NAME
+              value: {{ .Values.externalMinio.bucketName | quote }}
+            {{- end }}
             - name: NC_S3_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "nocodb.minio.secretName" . }}
-                  key: {{ include "nocodb.minio.rootPasswordKey" . }}
+                  key: {{ include "nocodb.minio.rootUserKey" . }}
             - name: NC_S3_ACCESS_SECRET
               valueFrom:
                 secretKeyRef:
@@ -123,7 +131,6 @@ spec:
                   key: {{ include "nocodb.minio.rootPasswordKey" . }}
             - name: NC_S3_FORCE_PATH_STYLE
               value: "true"
-            {{- end }}
             {{- if .Values.redis.enabled }}
             - name: NC_REDIS_PASSWORD
               valueFrom:
@@ -145,7 +152,7 @@ spec:
                   name: {{ include "nocodb.admin.secretName" . }}
                   key: {{ include "nocodb.admin.passwordKey" . }}
             {{- end }}
-            {{- if and .Values.smtp.enabled (or (not (eq .Values.smtp.password "")) .Values.smtp.existingSecretName) }}
+            {{- if .Values.smtp.enabled }}
             - name: NC_SMTP_HOST
               value: {{ .Values.smtp.host | quote }}
             - name: NC_SMTP_PORT
@@ -177,8 +184,8 @@ spec:
             - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "nocodb.databaseSecretName" . }}
-                  key: {{ include "nocodb.databaseSecretPostgresPasswordKey" . }}
+                  name: {{ include "nocodb.database.secretName" . }}
+                  key: {{ include "nocodb.database.secretPostgresPasswordKey" . }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_NAME
               value: {{ include "nocodb.databaseName" . }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME
@@ -186,8 +193,8 @@ spec:
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "nocodb.databaseSecretName" . }}
-                  key: {{ include "nocodb.databaseSecretPasswordKey" . }}
+                  name: {{ include "nocodb.database.secretName" . }}
+                  key: {{ include "nocodb.database.secretPasswordKey" . }}
             {{- end }}
           envFrom:
             - secretRef:
