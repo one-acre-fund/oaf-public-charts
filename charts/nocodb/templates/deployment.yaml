@@ -111,7 +111,7 @@ spec:
               value: {{ .Values.minio.region | quote }}
             - name: NC_S3_BUCKET_NAME
               value: {{ include "nocodb.fullname" . | quote }}
-            {{- else }}
+            {{- else if and (not .Values.minio.enabled) .Values.externalMinio.create }}
             - name: NC_S3_ENDPOINT
               value: {{ .Values.externalMinio.endpoint | quote }}
             - name: NC_S3_REGION

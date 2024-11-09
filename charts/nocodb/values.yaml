@@ -264,20 +264,22 @@ admin:
   existingSecret: ""
 
 smtp:
-  enabled: true
+  enabled: false
   host: smtp.gmail.com
   port: 465
-  secure: true
   username: ""
   password: ""
   from: ""
+  secure: true
   ignoreTLS: true
+  rejectUnauthorized: true
+  domain: ""
   existingSecret: ""
   existingSecretUsernameKey: ""
   existingSecretPasswordKey: ""
 
 minio:
-  enabled: true
+  enabled: false
   auth:
     rootUser: admin
     rootPassword: ""
@@ -288,6 +290,7 @@ minio:
   region: us-east-1
 
 externalMinio:
+  create: true
   rootUser: admin
   rootPassword: ""
   endpoint: ""
@@ -298,7 +301,7 @@ externalMinio:
   rootPasswordSecretKey: ""
 
 redis:
-  enabled: true
+  enabled: false
   master:
     disableCommands:
       - FLUSHALL
@@ -309,7 +312,7 @@ redis:
     password: ""
 
 postgresql:
-  enabled: true
+  enabled: false
   auth:
     enablePostgresUser: true
     username: nocodb_user
