@@ -196,13 +196,6 @@ spec:
                   name: {{ include "nocodb.database.secretName" . }}
                   key: {{ include "nocodb.database.secretPasswordKey" . }}
             {{- end }}
-          envFrom:
-            - secretRef:
-                name: {{ include "nocodb.fullname" . }}-secrets
-                optional: true
-            - configMapRef:
-                name: {{ include "nocodb.fullname" . }}-config
-                optional: true
           ports:
             - name: http
               containerPort: {{ .Values.service.ports.http }}
