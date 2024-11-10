@@ -12,7 +12,7 @@ A Helm chart for Kubernetes
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| samaroon | <rahma.ahmed@oneacrefund.org> |  |
+| samaroon | <rahma.ahmed@oneacrefund.org> | <https://github.com/samaroon> |
 
 ## Source Code
 
