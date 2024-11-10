@@ -160,7 +160,6 @@ Add environment variables to configure database values
 {{- end -}}
 {{- end -}}
 
-
 {{- define "nocodb.admin.secretName" -}}
   {{- if .Values.admin.existingSecret -}}
     {{- printf "%s" .Values.admin.existingSecret -}}
@@ -234,6 +233,30 @@ Get the credentials secret.
     {{- else -}}
         {{- print "root-password" -}}
     {{- end -}}
+{{- end -}}
+
+{{- define "nocodb.minio.endpoint" -}}
+{{- if .Values.minio.enabled -}}
+http://{{ include "nocodb.minio.fullname" . }}:{{ .Values.minio.containerPorts.api }}
+{{- else if .Values.externalMinio.create -}}
+{{ .Values.externalMinio.endpoint | quote }}
+{{- end -}}
+{{- end -}}
+
+{{- define "nocodb.minio.region" -}}
+{{- if .Values.minio.enabled -}}
+{{ .Values.minio.region | quote }}
+{{- else if .Values.externalMinio.create -}}
+{{ .Values.externalMinio.region | quote }}
+{{- end -}}
+{{- end -}}
+
+{{- define "nocodb.minio.bucketName" -}}
+{{- if .Values.minio.enabled -}}
+{{ include "nocodb.fullname" . | quote }}
+{{- else if .Values.externalMinio.create -}}
+{{ .Values.externalMinio.bucketName | quote }}
+{{- end -}}
 {{- end -}}
 
 {{- define "nocodb.redis.secretName" -}}
