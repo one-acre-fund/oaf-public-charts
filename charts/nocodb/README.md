@@ -2,7 +2,7 @@
 
 
 
-![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) 
+![Version: 0.4.1](https://img.shields.io/badge/Version-0.4.1-informational?style=flat-square) 
 
 A Helm chart for Kubernetes
 
@@ -12,7 +12,7 @@ A Helm chart for Kubernetes
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| samaroon | <rahma.ahmed@oneacrefund.org> |  |
+| samaroon | <rahma.ahmed@oneacrefund.org> | <https://github.com/samaroon> |
 
 ## Source Code
 
@@ -83,6 +83,7 @@ $ helm install my-release one-acre-fund/nocodb
 | externalDatabase.postgresqlPostgresUser | string | `"postgres"` |  |
 | externalDatabase.user | string | `"nocodb_user"` |  |
 | externalMinio.bucketName | string | `""` |  |
+| externalMinio.create | bool | `true` |  |
 | externalMinio.endpoint | string | `""` |  |
 | externalMinio.existingSecret | string | `""` |  |
 | externalMinio.region | string | `"us-east-1"` |  |
@@ -122,7 +123,7 @@ $ helm install my-release one-acre-fund/nocodb
 | minio.auth.rootUser | string | `"admin"` |  |
 | minio.auth.rootUserSecretKey | string | `""` |  |
 | minio.defaultBuckets | string | `"nocodb"` |  |
-| minio.enabled | bool | `true` |  |
+| minio.enabled | bool | `false` |  |
 | minio.region | string | `"us-east-1"` |  |
 | nameOverride | string | `""` |  |
 | nocodb.backendUrl | string | `""` |  |
@@ -143,7 +144,7 @@ $ helm install my-release one-acre-fund/nocodb
 | postgresql.auth.postgresPassword | string | `""` |  |
 | postgresql.auth.replicationPassword | string | `""` |  |
 | postgresql.auth.username | string | `"nocodb_user"` |  |
-| postgresql.enabled | bool | `true` |  |
+| postgresql.enabled | bool | `false` |  |
 | priorityClassName | string | `""` |  |
 | readinessProbe.failureThreshold | int | `3` |  |
 | readinessProbe.httpGet.path | string | `"/api/v1/health"` |  |
@@ -153,7 +154,7 @@ $ helm install my-release one-acre-fund/nocodb
 | readinessProbe.successThreshold | int | `1` |  |
 | readinessProbe.timeoutSeconds | int | `5` |  |
 | redis.auth.password | string | `""` |  |
-| redis.enabled | bool | `true` |  |
+| redis.enabled | bool | `false` |  |
 | redis.master.disableCommands[0] | string | `"FLUSHALL"` |  |
 | redis.replica.disableCommands[0] | string | `"FLUSHALL"` |  |
 | replicaCount | int | `1` |  |
@@ -180,7 +181,8 @@ $ helm install my-release one-acre-fund/nocodb
 | serviceAccount.automountServiceAccountToken | bool | `false` |  |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |
-| smtp.enabled | bool | `true` |  |
+| smtp.domain | string | `""` |  |
+| smtp.enabled | bool | `false` |  |
 | smtp.existingSecret | string | `""` |  |
 | smtp.existingSecretPasswordKey | string | `""` |  |
 | smtp.existingSecretUsernameKey | string | `""` |  |
@@ -189,6 +191,7 @@ $ helm install my-release one-acre-fund/nocodb
 | smtp.ignoreTLS | bool | `true` |  |
 | smtp.password | string | `""` |  |
 | smtp.port | int | `465` |  |
+| smtp.rejectUnauthorized | bool | `true` |  |
 | smtp.secure | bool | `true` |  |
 | smtp.username | string | `""` |  |
 | tolerations | list | `[]` |  |

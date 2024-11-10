@@ -104,20 +104,13 @@ spec:
             - name: NUXT_PUBLIC_NC_BACKEND_URL
               value: {{ .Values.backendUrl | quote }}
             {{- end }}
-            {{- if .Values.minio.enabled }}
+            {{- if or .Values.minio.enabled .Values.externalMinio.create }}
             - name: NC_S3_ENDPOINT
-              value: "http://{{ include "nocodb.minio.fullname" . }}:{{ .Values.minio.containerPorts.api }}"
+              value: {{ include "nocodb.minio.endpoint" . }}
             - name: NC_S3_REGION
-              value: {{ .Values.minio.region | quote }}
+              value: {{ include "nocodb.minio.region" . }}
             - name: NC_S3_BUCKET_NAME
-              value: {{ include "nocodb.fullname" . | quote }}
-            {{- else }}
-            - name: NC_S3_ENDPOINT
-              value: {{ .Values.externalMinio.endpoint | quote }}
-            - name: NC_S3_REGION
-              value: {{ .Values.externalMinio.region | quote }}
-            - name: NC_S3_BUCKET_NAME
-              value: {{ .Values.externalMinio.bucketName | quote }}
+              value: {{ include "nocodb.minio.bucketName" . }}
             {{- end }}
             - name: NC_S3_ACCESS_KEY
               valueFrom:
@@ -196,13 +189,6 @@ spec:
                   name: {{ include "nocodb.database.secretName" . }}
                   key: {{ include "nocodb.database.secretPasswordKey" . }}
             {{- end }}
-          envFrom:
-            - secretRef:
-                name: {{ include "nocodb.fullname" . }}-secrets
-                optional: true
-            - configMapRef:
-                name: {{ include "nocodb.fullname" . }}-config
-                optional: true
           ports:
             - name: http
               containerPort: {{ .Values.service.ports.http }}

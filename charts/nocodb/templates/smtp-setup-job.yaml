@@ -1,0 +1,87 @@
+{{- if and .Values.smtp.enabled -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "nocodb.fullname" . }}-smtp-setup
+  labels:
+    app: {{ include "nocodb.fullname" . }}
+  annotations:
+    "helm.sh/hook": "post-install,post-upgrade"
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+spec:
+  template:
+    spec:
+      containers:
+        - name: configure-smtp
+          image: badouralix/curl-jq:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+                TOKEN=$(curl --silent --location 'http://{{ include "nocodb.fullname" . }}:{{ .Values.service.ports.http }}/api/v1/auth/user/signin' \
+                --header 'Accept: application/json' \
+                --header 'Content-Type: application/json' \
+                --data-raw '{
+                    "email": "'"$NC_ADMIN_EMAIL"'",
+                    "password": "'"$NC_ADMIN_PASSWORD"'"
+                }' | jq -r '.token')
+
+                if [ -z "$TOKEN" ]; then
+                    echo "Authentication failed. No token received."
+                    exit 1
+                fi
+
+                PLUGIN_ID=$(curl  --silent --location 'http://{{ include "nocodb.fullname" . }}:{{ .Values.service.ports.http }}/api/v1/db/meta/plugins/SMTP' \
+                    --header 'Accept: application/json' \
+                    --header 'Content-Type: application/json' \
+                    --header "xc-auth: $TOKEN" | jq -r .id)
+
+                if [ -z "$PLUGIN_ID" ]; then
+                    echo "Failed to get SMTP plugin ID."
+                    exit 1
+                fi
+
+                curl --silent --location --request PATCH "http://{{ include "nocodb.fullname" . }}:{{ .Values.service.ports.http }}/api/v1/db/meta/plugins/$PLUGIN_ID" \
+                    --header 'Accept: application/json' \
+                    --header 'Content-Type: application/json' \
+                    --header "xc-auth: $TOKEN" \
+                    --data-raw '{"input": "{\"from\":\"'$NC_SMTP_FROM'\",\"host\":\"'$NC_SMTP_HOST'\",\"name\":\"'$NC_SMTP_DOMAIN'\",\"port\":\"'$NC_SMTP_PORT'\",\"username\":\"'$NC_SMTP_USERNAME'\",\"password\":\"'$NC_SMTP_PASSWORD'\",\"secure\":'$NC_SMTP_SECURE',\"ignoreTLS\":\"'$NC_SMTP_IGNORE_TLS'\",\"rejectUnauthorized\":'$NC_SMTP_REJECT_UNAUTHORIZED'}", "active": true}' \
+                    --write-out "%{http_code}" --silent --output /dev/null
+          env:
+            - name: NC_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.admin.secretName" . }}
+                  key: {{ include "nocodb.admin.emailKey" . }}
+            - name: NC_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.admin.secretName" . }}
+                  key: {{ include "nocodb.admin.passwordKey" . }}
+            - name: NC_SMTP_FROM
+              value: {{ .Values.smtp.from | quote }}
+            - name: NC_SMTP_HOST
+              value: {{ .Values.smtp.host | quote }}
+            - name: NC_SMTP_PORT
+              value: {{ .Values.smtp.port | quote }}
+            - name: NC_SMTP_SECURE
+              value: {{ .Values.smtp.secure | quote }}
+            - name: NC_SMTP_IGNORE_TLS
+              value: {{ .Values.smtp.ignoreTLS | quote }}
+            - name: NC_SMTP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.smtp.secretName" . }}
+                  key: {{ include "nocodb.smtp.secretUsernameKey" . }}
+            - name: NC_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.smtp.secretName" . }}
+                  key: {{ include "nocodb.smtp.secretPasswordKey" . }}
+            - name: NC_SMTP_DOMAIN
+              value: {{ .Values.smtp.domain }}
+            - name: NC_SMTP_REJECT_UNAUTHORIZED
+              value: {{ .Values.smtp.rejectUnauthorized | quote }}
+      restartPolicy: Never
+    backoffLimit: 4
+{{- end }}
