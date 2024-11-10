@@ -54,10 +54,8 @@ spec:
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
-
-      # Init container to wait for the database
-      {{- if or .Values.postgresql.enabled .Values.externalDatabase.create }}
       initContainers:
+      {{- if or .Values.postgresql.enabled .Values.externalDatabase.create }}
         - name: wait-for-database
           image: postgres:alpine
           env:
@@ -78,6 +76,39 @@ spec:
                 sleep 2;
               done;
               echo "Database is ready.";
+      {{- end }}
+      {{- if or .Values.minio.enabled .Values.externalMinio.create }}
+        - name: wait-for-minio
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until wget -qO- {{ include "nocodb.minio.endpoint" . }}/minio/health/ready; do
+                echo "Waiting for minio...";
+                sleep 2;
+              done;
+              echo "Minio is ready.";
+      {{- end }}
+      {{- if .Values.redis.enabled }}
+        - name: wait-for-redis
+          image: redis:alpine
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.redis.secretName" . }}
+                  key: {{ include "nocodb.redis.passwordKey" . }}
+          command:
+            - sh
+            - -c
+            - |
+              export REDISCLI_AUTH="$REDIS_PASSWORD"
+              until redis-cli -h "{{ include "nocodb.redis.fullname" . }}-master" -p "{{ .Values.redis.master.service.ports.redis }}" ping; do
+                echo "Waiting for redis...";
+                sleep 2;
+              done;
+              echo "Redis is ready.";
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
