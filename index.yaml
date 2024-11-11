@@ -5931,7 +5931,7 @@ entries:
   nocodb:
   - apiVersion: v2
     appVersion: 0.257.2
-    created: "2024-11-10T07:53:16.995623395Z"
+    created: "2024-11-11T10:11:44.4892171+03:00"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
@@ -5951,7 +5951,7 @@ entries:
       - bitnami-common
       version: 2.x.x
     description: A Helm chart for Kubernetes
-    digest: 44fedb6f2bec66d6745e8e5c2d1611b591d70daa5934492f3fc085b6024824de
+    digest: c4fc2c34ad8d99e673f3e7fee160ee95ce6a6a1c7e287b8ded1331f92bd570b2
     icon: https://raw.githubusercontent.com/one-acre-fund/oaf-public-charts/main/charts/nocodb/img/icon.png
     maintainers:
     - email: rahma.ahmed@oneacrefund.org
@@ -5962,8 +5962,8 @@ entries:
     - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/nocodb
     type: application
     urls:
-    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.4.1/nocodb-0.4.1.tgz
-    version: 0.4.1
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.4.2/nocodb-0.4.2.tgz
+    version: 0.4.2
   - apiVersion: v2
     appVersion: 0.257.2
     created: "2024-11-10T07:53:16.995623395Z"
@@ -5997,8 +5997,8 @@ entries:
     - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/nocodb
     type: application
     urls:
-    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.4.2/nocodb-0.4.2.tgz
-    version: 0.4.2
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.4.1/nocodb-0.4.1.tgz
+    version: 0.4.1
   - apiVersion: v2
     appVersion: 0.257.2
     created: "2024-11-08T14:20:07.915299063Z"
