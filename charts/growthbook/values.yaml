@@ -1,0 +1,152 @@
+# Default values for growthbook.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: growthbook/growthbook
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: latest
+
+nameOverride: ""
+fullnameOverride: ""
+
+port:
+  frontendPort: 3000
+  backendPort: 3100
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+growthbook:
+  sso:
+    enabled: false
+    # License key
+    licenseKey:
+    # To configure Single-Sign-On
+    # ssoConfig contains Single-Sign-On config json object
+    # {
+    #  "clientId": "CLIENT_ID",
+    #  "clientSecret": "CLIENT_SECRET",
+    #  "emailDomain": "EMAIL_DOMAIN",
+    #  "additionalScope": "offline_access",
+    #  "metadata": {
+    #    "issuer": "BASE_URL",
+    #    "authorization_endpoint": "BASE_URL/oauth2/v1/authorize",
+    #    "id_token_signing_alg_values_supported":["RS256"],
+    #    "jwks_uri": "BASE_URL/oauth2/v1/keys",
+    #    "token_endpoint": "BASE_URL/oauth2/v1/token",
+    #    "code_challenge_methods_supported":["S256"]
+    #  }
+    # }
+    ssoConfig: {}
+  extraEnvVars:
+    NODE_ENV: production
+    APP_ORIGIN: https://my-app-origin.io:443
+    API_HOST: https://my-api-host.io:443
+  jwtSecret: jwtSecretString
+  encryptionKey: encryptionKeyString
+  # To send emails from the app
+  email:
+    enabled: false
+    host:
+    port: 25
+    hostUser:
+    hostPassword:
+    senderEmail:
+    # Site Manager is alerted when a new member joins the organization
+    siteManagerEmail:
+  # To configure datasource
+  datasource:
+    # Required if using Google Analytics as a data source
+    google:
+      enabled: false
+      clientId:
+      clientSecret:
+  # For mongodb not installed with a subchart
+  externalMongodbUri:
+  persistence:
+    enabled: true
+    ## what type volume, possible options are [existing, emptyDir, dynamic] dynamic for Dynamic Volume Provisioning, existing for using an existing
+    type: emptyDir
+    ## Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    # storageClassName: "-"
+    ## Persistent Volume Access Mode
+    ##
+    accessModes:
+      - ReadWriteMany
+    ## Persistent Volume size
+    ##
+    storage: 3Gi
+    ## Use an existing PVC
+    ##
+    # existingClaim:
+
+tolerations: []
+
+affinity: {}
+
+# Set your nodeSelector setting
+nodeSelector: {}
+
+volume:
+  name: uploads-persistent-storage
+  mountPath: /usr/local/src/app/packages/back-end/uploads
+
+service:
+  type: ClusterIP
+
+ingress:
+  enabled: false
+  name: growthbook-ingress
+  secretName: growthbook-tls
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    # Specify your app-origin with 'https://' prefix
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://my-app-origin.io"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Authorization,Referer,sec-ch-ua,sec-ch-ua-mobile,sec-ch-ua-platform,User-Agent,X-Organization,Content-Type"
+  # Specify your app-origin, api-host without 'https://' prefix
+  appOriginName: my-app-origin.io
+  apiHostName: my-api-host.io
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Disable if you already set up mongodb, you should also disable dependencies in Chart.yaml.
+# Make sure you specify right mongodb credential in secret
+# Example below assumes prometheus is running at sys-monitoring namespace
+# For more configurations and explanations, visit https://github.com/bitnami/charts/tree/master/bitnami/mongodb
+mongodb:
+  # -- Install MongoDB?
+  enabled: true
+  auth:
+    rootUser: root
+    rootPassword: password
+    username: growthbook
+    password: growthbook
+    database: growthbook-db
+  architecture: standalone
+  replicaSetName: rs0
+  initdbScripts:
+    grant-role.js: |
+      db = db.getSiblingDB('{{ .Values.auth.database }}')
+      db.grantRolesToUser("{{ .Values.auth.username }}", [{ role: 'readWrite', db: "{{ .Values.auth.database }}" }])

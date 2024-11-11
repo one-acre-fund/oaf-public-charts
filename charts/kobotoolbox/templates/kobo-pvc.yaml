@@ -1,3 +1,4 @@
+{{- if .Values.general.mediaStorage.enabled -}}
 # PVC for media uploads
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -13,3 +14,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.general.mediaStorage.size }}
+{{- end -}}

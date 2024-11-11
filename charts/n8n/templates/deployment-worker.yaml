@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "n8n-worker.fullname" . }}
+  labels:
+    {{- include "n8n-worker.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  strategy:
+    type: {{ .Values.deploymentStrategy.type }}
+  selector:
+    matchLabels:
+      {{- include "n8n-worker.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ print .Values | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "n8n-worker.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "n8n.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if and .Values.communityNodes .Values.persistence.enabled }}
+      initContainers:
+        - name: installer
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          volumeMounts:
+            - name: data
+              mountPath: /root/.n8n
+          command:
+            - sh
+            - -c
+            - |
+              cd /root/.n8n
+              mkdir -p nodes
+              cd nodes
+            {{- range .Values.communityNodes }}
+              npm install --save {{ . }}
+            {{- end }}
+          {{- include "n8n.env" . | nindent 10 }}
+      {{- end }}
+      containers:
+        - name: "{{ .Chart.Name }}-worker"
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            {{- toYaml .Values.worker.command | nindent 12 }}
+          {{- include "n8n.env" . | nindent 10 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- if .Values.persistence.enabled }}
+            - name: data
+              mountPath: /root/.n8n
+            {{- end }}
+            {{- if .Values.config }}
+            - name: config-volume
+              mountPath: {{ .Values.persistence.configMountPath}}
+            {{- end }}
+            {{- if .Values.secret }}
+            - name: secret-volume
+              mountPath: {{ .Values.persistence.secretMountPath}}
+                {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        {{- if .Values.persistence.enabled }}
+        - name: "data"
+          {{ include "n8n.pvc" . }}
+        {{- end }}
+        {{- if .Values.config }}
+        - name: config-volume
+          configMap:
+            name: {{ include "n8n.fullname" . }}
+        {{- end }}
+        {{- if .Values.secret }}
+        - name: secret-volume
+          secret:
+            secretName: {{ include "n8n.fullname" . }}
+            items:
+              - key: "secret.json"
+                path: "secret.json"
+        {{- end }}

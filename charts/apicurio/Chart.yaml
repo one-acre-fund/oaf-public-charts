@@ -1,0 +1,20 @@
+apiVersion: v2
+name: apicurio
+version: 1.0.15
+description: Apicurio Studio API designer
+icon: https://avatars.githubusercontent.com/u/28107283?s=400&v=4
+type: application
+keywords:
+  - api
+home: http://www.apicur.io/
+sources:
+  - https://github.com/Apicurio/apicurio-studio
+  - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/apicurio
+maintainers:
+  - name: Yann-J
+    email: yann.jouanique@gmail.com
+dependencies:
+  - name: postgresql
+    version: ~11.6.6
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled

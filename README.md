@@ -1,4 +1,4 @@
-# oaf-public-charts
+# OAF Public Charts
 
 [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/one-acre-fund)](https://artifacthub.io/packages/search?repo=one-acre-fund)
 [![Release Charts](https://github.com/one-acre-fund/oaf-public-charts/actions/workflows/helm-release.yaml/badge.svg)](https://github.com/one-acre-fund/oaf-public-charts/actions/workflows/helm-release.yaml)

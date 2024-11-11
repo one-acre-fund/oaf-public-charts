@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-test
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": test-success
+    # "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+    - name: {{ .Release.Name }}-test-http
+      # Test published services - change this to reflect your endpoints
+      image: blacktop/httpie
+      imagePullPolicy: IfNotPresent
+      command:
+      - sh
+      - -ce
+      - |
+        http --ignore-stdin --check-status --print hb "http://{{ .Release.Name }}-metabase.{{ .Release.Namespace }}.svc:3000/api/health"

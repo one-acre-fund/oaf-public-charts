@@ -1,0 +1,6 @@
+keycloak:
+  url: https://studio-auth.apicur.io/auth
+  realm: apicurio-local
+  client:
+    id: apicurio-studio
+    secret: apicuriokc

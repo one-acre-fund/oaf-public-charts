@@ -1,0 +1,19 @@
+apiVersion: v2
+name: metabase
+version: 0.1.11
+description: Metabase with postgres persistence and plugins support
+home: https://www.metabase.com/
+icon: https://avatars.githubusercontent.com/u/10520629?s=400&v=4
+keywords:
+  - bi
+  - analytics
+maintainers:
+  - name: Yann-J
+    email: yann.jouanique@gmail.com
+sources:
+  - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/metabase
+dependencies:
+  - name: postgresql
+    version: ~11.6.6
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled

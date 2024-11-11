@@ -1,0 +1,21 @@
+apiVersion: v2
+name: pgbouncer
+description: A Helm chart for deploying bitnami/pgbouncer with TLS encryption
+version: 0.1.8
+appVersion: 1.19.1
+type: application
+maintainers:
+  - name: Rahma
+    email: rahma.ahmed@oneacrefund.org
+    url: https://github.com/samaroon
+icon: https://bitnami.com/assets/stacks/pgbouncer/img/pgbouncer-stack-220x234.png
+keywords:
+  - pgbouncer
+  - bitnami
+  - PostgreSQL
+  - database
+  - TLS
+home: https://github.com/one-acre-fund/oaf-public-charts
+sources:
+  - https://github.com/one-acre-fund/oaf-public-charts
+  - https://bitnami.com/stack/pgbouncer

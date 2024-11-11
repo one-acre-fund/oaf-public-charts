@@ -1,0 +1,88 @@
+nameOverride: ""
+fullnameOverride: ""
+image:
+  repository: bitnami/pgbouncer
+  tag: 1.19.1-debian-11-r44
+  pullPolicy: IfNotPresent
+
+pgbouncer:
+  username: postgres
+  # Provide the actual PostgreSQL password here
+  password: "your-postgresql-password"
+  database: ${PGBOUNCER_DATABASE}
+  postgresqlDatabase: ${PGBOUNCER_DATABASE}
+  host: postgresql
+  port: 5432
+  setDatabaseUser: no
+  setDatabasePassword: no
+  connectQuery: ""
+
+# Add extra enviroment varibles in
+# "KEY": "VALUE"
+extraConfigs: []
+
+# Add extra enviroment secerts in
+# "KEY": "VALUE"
+extraSecretConfigs: []
+
+tls:
+  enabled: true
+  certificatesSecret: oaf-tls
+  certFilename: tls.crt
+  certKeyFilename: tls.key
+
+service:
+  port: 6432
+  type: ClusterIP
+
+ingress:
+  enabled: false
+  annotations: {}
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  className: "nginx"
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+replicaCount: 1
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+# podSecurityContext:
+#   fsGroup: 1001
+podSecurityContext: {}
+
+# imagePullSecrets
+#   - name: myRegistryKeySecretName
+imagePullSecrets: []

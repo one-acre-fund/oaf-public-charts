@@ -1,0 +1,240 @@
+apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "nocodb.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "nocodb.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+      {{- if or .Values.postgresql.enabled .Values.externalDatabase.create }}
+        - name: wait-for-database
+          image: postgres:alpine
+          env:
+            - name: NC_DB_HOST
+              value: "{{ include "nocodb.databaseHost" . }}"
+            - name: NC_DB_PORT
+              value: "{{ include "nocodb.databasePort" . }}"
+            - name: NC_DB_USER
+              value: "{{ include "nocodb.databaseUser" . }}"
+            - name: NC_DB_NAME
+              value: "{{ include "nocodb.databaseName" . }}"
+          command:
+            - sh
+            - -c
+            - |
+              until pg_isready -h $NC_DB_HOST -p $NC_DB_PORT -U $NC_DB_USER -d $NC_DB_NAME; do
+                echo "Waiting for database...";
+                sleep 2;
+              done;
+              echo "Database is ready.";
+      {{- end }}
+      {{- if or .Values.minio.enabled .Values.externalMinio.create }}
+        - name: wait-for-minio
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until wget -qO- {{ include "nocodb.minio.endpoint" . }}/minio/health/ready; do
+                echo "Waiting for minio...";
+                sleep 2;
+              done;
+              echo "Minio is ready.";
+      {{- end }}
+      {{- if .Values.redis.enabled }}
+        - name: wait-for-redis
+          image: redis:alpine
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.redis.secretName" . }}
+                  key: {{ include "nocodb.redis.passwordKey" . }}
+          command:
+            - sh
+            - -c
+            - |
+              export REDISCLI_AUTH="$REDIS_PASSWORD"
+              until redis-cli -h "{{ include "nocodb.redis.fullname" . }}-master" -p "{{ .Values.redis.master.service.ports.redis }}" ping; do
+                echo "Waiting for redis...";
+                sleep 2;
+              done;
+              echo "Redis is ready.";
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: NC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.database.secretName" . }}
+                  key: {{ include "nocodb.database.secretPasswordKey" . }}
+            - name: PORT
+              value: {{ .Values.service.ports.http | quote }}
+            - name: NC_DB
+              value: "pg://{{ include "nocodb.databaseHost" . }}:{{ include "nocodb.databasePort" . }}?u={{ include "nocodb.databaseUser" . }}&p=$(NC_DB_PASSWORD)&d={{ include "nocodb.databaseName" . }}"
+            {{- if .Values.nocodb.publicUrl }}
+            - name: NC_PUBLIC_URL
+              value: {{ .Values.publicUrl | quote }}
+            {{- end }}
+            {{- if .Values.nocodb.backendUrl }}
+            - name: NUXT_PUBLIC_NC_BACKEND_URL
+              value: {{ .Values.backendUrl | quote }}
+            {{- end }}
+            {{- if or .Values.minio.enabled .Values.externalMinio.create }}
+            - name: NC_S3_ENDPOINT
+              value: {{ include "nocodb.minio.endpoint" . }}
+            - name: NC_S3_REGION
+              value: {{ include "nocodb.minio.region" . }}
+            - name: NC_S3_BUCKET_NAME
+              value: {{ include "nocodb.minio.bucketName" . }}
+            {{- end }}
+            - name: NC_S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.minio.secretName" . }}
+                  key: {{ include "nocodb.minio.rootUserKey" . }}
+            - name: NC_S3_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.minio.secretName" . }}
+                  key: {{ include "nocodb.minio.rootPasswordKey" . }}
+            - name: NC_S3_FORCE_PATH_STYLE
+              value: "true"
+            {{- if .Values.redis.enabled }}
+            - name: NC_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.redis.secretName" . }}
+                  key: {{ include "nocodb.redis.passwordKey" . }}
+            - name: NC_REDIS_URL
+              value: "redis://:$(NC_REDIS_PASSWORD)@{{ include "nocodb.redis.fullname" . }}-master:{{ .Values.redis.master.service.ports.redis }}"
+            {{- end }}
+            {{- if .Values.admin.create }}
+            - name: NC_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.admin.secretName" . }}
+                  key: {{ include "nocodb.admin.emailKey" . }}
+            - name: NC_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.admin.secretName" . }}
+                  key: {{ include "nocodb.admin.passwordKey" . }}
+            {{- end }}
+            {{- if .Values.smtp.enabled }}
+            - name: NC_SMTP_HOST
+              value: {{ .Values.smtp.host | quote }}
+            - name: NC_SMTP_PORT
+              value: {{ .Values.smtp.port | quote }}
+            - name: NC_SMTP_SECURE
+              value: {{ .Values.smtp.secure | quote }}
+            - name: NC_SMTP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.smtp.secretName" . }}
+                  key: {{ include "nocodb.smtp.secretUsernameKey" . }}
+            - name: NC_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.smtp.secretName" . }}
+                  key: {{ include "nocodb.smtp.secretPasswordKey" . }}
+            - name: NC_SMTP_FROM
+              value: {{ .Values.smtp.from | quote }}
+            - name: NC_SMTP_IGNORE_TLS
+              value: {{ .Values.smtp.ignoreTLS | quote }}
+            {{- end }}
+            {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.create }}
+            - name: POSTGRESQL_CLIENT_DATABASE_HOST
+              value: {{ include "nocodb.databaseHost" . }}
+            - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
+              value: {{ include "nocodb.databasePort" . | quote }}
+            - name: POSTGRESQL_CLIENT_POSTGRES_USER
+              value: {{ .Values.externalDatabase.postgresqlPostgresUser }}
+            - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.database.secretName" . }}
+                  key: {{ include "nocodb.database.secretPostgresPasswordKey" . }}
+            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_NAME
+              value: {{ include "nocodb.databaseName" . }}
+            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME
+              value: {{ include "nocodb.databaseUser" . }}
+            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "nocodb.database.secretName" . }}
+                  key: {{ include "nocodb.database.secretPasswordKey" . }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.ports.http }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          {{- with .Values.volumeMounts }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+      {{- with .Values.volumes }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}

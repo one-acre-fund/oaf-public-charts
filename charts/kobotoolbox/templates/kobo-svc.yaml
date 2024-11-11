@@ -17,4 +17,12 @@ spec:
     - targetPort: 8001
       port: 8001
       name: kobocat
+    {{- if .Values.uwsgiExporter.enabled }}
+    - targetPort: 1717
+      port: 1717
+      name: kc-metrics
+    - targetPort: 1818
+      port: 1818
+      name: kpi-metrics
+    {{- end }}
   type: {{ .Values.general.serviceType }}

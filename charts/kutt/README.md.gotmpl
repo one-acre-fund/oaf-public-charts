@@ -1,0 +1,25 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.versionBadge" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+## TL;DR
+
+[Kutt](https://github.com/thedevs-network/kutt) is an open-source URL Shortening service.
+
+```console
+$ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
+$ helm install my-release one-acre-fund/kutt
+```
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}

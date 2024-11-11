@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-pgbouncer-config
+  labels:
+  {{- include "pgbouncer.labels" . | nindent 4 }}
+data:
+  POSTGRESQL_USERNAME: "{{ .Values.pgbouncer.username }}"
+  POSTGRESQL_DATABASE: "{{ .Values.pgbouncer.postgresqlDatabase }}"
+  PGBOUNCER_DATABASE: "{{ .Values.pgbouncer.database }}"
+  POSTGRESQL_HOST: "{{ .Values.pgbouncer.host }}"
+  POSTGRESQL_PORT: "{{ .Values.pgbouncer.port }}"
+  PGBOUNCER_PORT: "{{ .Values.service.port }}"
+{{- if .Values.pgbouncer.setDatabaseUser }}
+  PGBOUNCER_SET_DATABASE_USER: "{{ .Values.pgbouncer.setDatabaseUser }}"
+{{- end }}
+{{- if .Values.pgbouncer.setDatabasePassword }}
+  PGBOUNCER_SET_DATABASE_PASSWORD: "{{ .Values.pgbouncer.setDatabasePassword }}"
+{{- end }}
+{{- if .Values.pgbouncer.connectQuery }}
+  PGBOUNCER_CONNECT_QUERY: "{{ .Values.pgbouncer.connectQuery }}"
+{{- end }}
+{{- if .Values.tls.enabled }}
+  PGBOUNCER_CLIENT_TLS_SSLMODE: "require"
+  PGBOUNCER_CLIENT_TLS_CERT_FILE: "/etc/pgbouncer/tls/{{ .Values.tls.certFilename }}"
+  PGBOUNCER_CLIENT_TLS_KEY_FILE: "/etc/pgbouncer/tls/{{ .Values.tls.certKeyFilename }}"
+  PGBOUNCER_SERVER_TLS_SSLMODE: "require"
+  PGBOUNCER_SERVER_TLS_CERT_FILE: "/etc/pgbouncer/tls/{{ .Values.tls.certFilename }}"
+  PGBOUNCER_SERVER_TLS_KEY_FILE: "/etc/pgbouncer/tls/{{ .Values.tls.certKeyFilename }}"
+{{- end }}
+{{- range $key, $value := .Values.extraConfigs }}
+  {{ $key }}: "{{ $value }}"
+{{- end }}

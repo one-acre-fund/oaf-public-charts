@@ -45,19 +45,6 @@ spec:
             - name: cache-volume
               subPath: config/config.json
               mountPath: /srv/src/enketo_express/config/config.json
-            # Cache build
-            - name: cache-volume
-              subPath: checksum
-              mountPath: /srv/src/enketo_express/checksum
-            - name: cache-volume
-              subPath: build/css
-              mountPath: /srv/src/enketo_express/public/css
-            - name: cache-volume
-              subPath: build/js
-              mountPath: /srv/src/enketo_express/public/js/build
-            - name: cache-volume
-              subPath: build/locales
-              mountPath: /srv/src/enketo_express/locales/build
             # Custom icons
             - name: kobo-assets
               mountPath: /srv/src/enketo_express/public/images/favicon.ico

@@ -1,0 +1,26 @@
+apiVersion: v2
+name: geonode
+version: 0.1.16
+type: application
+description: Geonode - a CMS for Geospatial data
+icon: https://pbs.twimg.com/profile_images/1221883359/geonode_400x400.png
+home: https://geonode.org/
+keywords:
+  - geospatial
+  - gis
+  - cms
+  - maps
+sources:
+  - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/geonode
+maintainers:
+  - name: Yann-J
+    email: yann.jouanique@gmail.com
+dependencies:
+  - name: postgresql
+    version: ~10.1.2
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: rabbitmq
+    version: ~8.6.0
+    repository: https://charts.bitnami.com/bitnami
+    condition: rabbitmq.enabled

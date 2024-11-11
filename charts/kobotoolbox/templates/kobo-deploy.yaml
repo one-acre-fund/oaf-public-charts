@@ -1,4 +1,3 @@
-# Sync gateway pod
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,9 +15,14 @@ spec:
         # TODO: better checksum?
         checksum/config: {{ .Values | toString | sha256sum }}
         checksum/nginx_conf: {{ include "nginx_conf" . | sha256sum }}
+        co.elastic.logs/enabled: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9117"
+        prometheus.io/path: "/metrics"
       labels:
         org.kobotoolbox.instance: {{ .Release.Name }}-kobo
     spec:
+      priorityClassName: {{ .Values.priorityClass }}
       # Define internal host names since we're doing host-based routing
       hostAliases:
         - ip: "127.0.0.1"
@@ -43,13 +47,15 @@ spec:
           env:
             {{- include "env_mongo" . | nindent 12 }}
             {{- include "env_postgres" . | nindent 12 }}
-
+        {{- if .Values.shared.initContainers }}
+        {{ tpl (toYaml .Values.shared.initContainers) . | nindent 8 }}
+        {{- end }}
       # All containers need to be in the same pod since they share volumes!
       # This also means they probably can't be scaled up... (?)
       containers:
         # Nginx does the host-based routing for all containers
         - name: nginx
-          image: nginx:1.19
+          image: "{{ .Values.nginx.image.name }}:{{ .Values.nginx.image.tag }}"
           volumeMounts:
             # Config
             - name: nginx-confd
@@ -68,49 +74,44 @@ spec:
             - name: media
               subPath: kpi_media
               mountPath: /srv/kpi_media
+          {{- if .Values.probes.enabled }}
+          startupProbe:
+            httpGet:
+            tcpSocket:
+              port: 80
+            periodSeconds: 10
+            failureThreshold: 30
           readinessProbe:
-            httpGet:
-              path: /static/img/favicon.ico
+            tcpSocket:
               port: 80
-              httpHeaders:
-                - name: Host
-                  value: {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}
-            initialDelaySeconds: 10
-            periodSeconds: 20
-            failureThreshold: 15
+            periodSeconds: 5
+            failureThreshold: 5
           livenessProbe:
-            httpGet:
-              path: /static/img/favicon.ico
+            tcpSocket:
               port: 80
-              httpHeaders:
-                - name: Host
-                  value: {{ .Values.kpi.subdomain }}.{{ include "internal_domain" . }}
-            initialDelaySeconds: 60
-            periodSeconds: 20
-
+            failureThreshold: 5
+            periodSeconds: 5
+          {{- end }}
         # Kobocat is the forms API server that Enketo / Collect will connect to
         - name: kobocat
           image: "{{ .Values.kobocat.image.name }}:{{ .Values.kobocat.image.tag }}"
           terminationMessagePolicy: FallbackToLogsOnError
-          # command:
-          # - sh
-          # - -c
-          # - cat
-          # tty: true
-          # TODO: wait for KPI container?
+          {{- if .Values.kobocat.command }}
+          command:
+            {{- .Values.kobocat.command | toYaml | nindent 12 }}
+          {{- end }}
           ports:
             - containerPort: 8001
+            - name: metrics
+              containerPort: 1717
+              protocol: TCP
           env:
             {{- include "env_general" . | nindent 12 }}
             {{- include "env_mongo" . | nindent 12 }}
             {{- include "env_postgres" . | nindent 12 }}
-            {{- include "env_redis" . | nindent 12 }}
             {{- include "env_externals" . | nindent 12 }}
             {{- include "env_kobocat" . | nindent 12 }}
-            {{- include "env_uwsgi" "KC" | nindent 12 }}
             {{- include "env_smtp" . | nindent 12 }}
-            - name: ENKETO_PROTOCOL
-              value: http
             - name: KPI_PORT
               value: '8003'
             {{- range $key, $value := .Values.kobocat.extraEnv }}
@@ -118,19 +119,34 @@ spec:
               value: |-
                 {{- tpl $value $ | nindent 16 }}
             {{- end }}
+            {{- range $key, $value := .Values.shared.extraEnv }}
+            - name: {{ $key | quote }}
+              value: |-
+                {{- tpl $value $ | nindent 16 }}
+            {{- end }}
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: KC_DATABASE_URL
+          envFrom:
+          - secretRef:
+              name: {{ .Release.Name }}-kobocat-secrets
+          - secretRef:
+              name: {{ .Release.Name }}-secrets
           volumeMounts:
             # Replace redundant init scripts with empty files
             - name: config
-              mountPath: /etc/my_init.d/01_wait_for_mongo.bash
+              mountPath: /srv/init/wait_for_mongo.bash
               subPath: empty_script
               readOnly: true
             - name: config
-              mountPath: /etc/my_init.d/02_wait_for_postgres.bash
+              mountPath: /srv/init/wait_for_postgres.bash
               subPath: empty_script
               readOnly: true
             # Config
             - name: config
-              mountPath: /srv/src/kobocat/docker/kobocat.ini
+              mountPath: /srv/src/kobocat/docker/uwsgi.ini
               subPath: kc_uwsgi.ini
               readOnly: true
             # Store uploaded media in PVC
@@ -140,54 +156,63 @@ spec:
             - name: cache-volume
               subPath: static/kobocat
               mountPath: /srv/static
+          {{- if .Values.probes.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: 8001
+            failureThreshold: 30
+            periodSeconds: 10
           readinessProbe:
             tcpSocket:
               port: 8001
-            initialDelaySeconds: 10
-            periodSeconds: 20
+            failureThreshold: 5
+            periodSeconds: 5
           livenessProbe:
             tcpSocket:
               port: 8001
-            initialDelaySeconds: 30
-            periodSeconds: 20
-
+            failureThreshold: 5
+            periodSeconds: 5
+          {{- end }}
         # KPI is the main User Interface and admin API
         - name: kpi
           image: "{{ .Values.kpi.image.name }}:{{ .Values.kpi.image.tag }}"
           terminationMessagePolicy: FallbackToLogsOnError
-          # Override entrypoint to redirect logs to stdout
+          {{- if .Values.kpi.command }}
           command:
-            - sh
-            - -c
-            - |
-              # Init log files so we can pipe them
-              touch /srv/logs/celery_beat.log && touch /srv/logs/celery.log && touch /srv/logs/celery_sync_kobocat_xforms.log
-
-              # Run with dockerize
-              dockerize -stdout /srv/logs/celery_beat.log -stdout /srv/logs/celery.log -stdout /srv/logs/celery_sync_kobocat_xforms.log /srv/src/kpi/docker/init.bash
-          # - cat
-          # tty: true
+            {{- .Values.kpi.command | toYaml | nindent 12 }}
+          {{- end }}
           env:
             {{- include "env_general" . | nindent 12 }}
             {{- include "env_mongo" . | nindent 12 }}
             {{- include "env_postgres" . | nindent 12 }}
-            {{- include "env_redis" . | nindent 12 }}
             {{- include "env_externals" . | nindent 12 }}
             {{- include "env_kpi" . | nindent 12 }}
-            {{- include "env_uwsgi" "KPI" | nindent 12 }}
             {{- include "env_smtp" . | nindent 12 }}
-            - name: SYNC_KOBOCAT_XFORMS
-              value: 'True'
-            - name: C_FORCE_ROOT
-              value: 'True'
             {{- range $key, $value := .Values.kpi.extraEnv }}
             - name: {{ $key | quote }}
               value: |-
                 {{- tpl $value $ | nindent 16 }}
             {{- end }}
-
+            {{- range $key, $value := .Values.shared.extraEnv }}
+            - name: {{ $key | quote }}
+              value: |-
+                {{- tpl $value $ | nindent 16 }}
+            {{- end }}
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: KPI_DATABASE_URL
+          envFrom:
+          - secretRef:
+              name: {{ .Release.Name }}-kpi-secrets
+          - secretRef:
+              name: {{ .Release.Name }}-secrets
           ports:
             - containerPort: 8003
+            - name: metrics
+              containerPort: 1818
+              protocol: TCP
           volumeMounts:
             # Override init scripts with empty ones
             - name: config
@@ -205,7 +230,7 @@ spec:
             # Web server settings
             - name: config
               subPath: kpi_uwsgi.ini
-              mountPath: /srv/src/kpi/uwsgi.ini
+              mountPath: /srv/src/kpi/docker/uwsgi.ini
               readOnly: true
             # www
             - name: cache-volume
@@ -218,17 +243,26 @@ spec:
             - name: media
               subPath: kobocat_media_uploads
               mountPath: /srv/src/kobocat/media
+          {{- if .Values.probes.enabled }}
+          startupProbe:
+            tcpSocket:
+              port: 8003
+            failureThreshold: 40
+            periodSeconds: 10
           readinessProbe:
             tcpSocket:
               port: 8003
-            initialDelaySeconds: 10
-            periodSeconds: 20
+            failureThreshold: 5
+            periodSeconds: 5
           livenessProbe:
             tcpSocket:
               port: 8003
-            initialDelaySeconds: 30
-            periodSeconds: 20
-
+            failureThreshold: 5
+            periodSeconds: 5
+          {{- end }}
+        {{- if .Values.shared.sidecarContainers }}
+        {{- tpl (toYaml .Values.shared.sidecarContainers) $ | nindent 8 }}
+        {{- end }}
       volumes:
         - name: nginx-confd
           configMap:
@@ -243,8 +277,14 @@ spec:
             name: {{ .Release.Name }}-assets
         # This volume will host uploaded media. If the pod is scaled to more than 1 replica, it needs to be ReadWriteMany
         - name: media
+
+        {{- if .Values.general.mediaStorage.enabled }}
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-kobo-media
+        {{- else }}
+          # using emptyDir since some hardcoded checks are still done on this media directory even if using online storage
+          emptyDir: {}
+        {{- end }}
         # Using an emptyDir to cache compiled statics... it will survive container crashes, but not pod restarts
         - name: cache-volume
           emptyDir: {}

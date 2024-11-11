@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-test-apicurio-connections
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    # TODO: find better API-level tests...
+    - image: jwilder/dockerize
+      imagePullPolicy: IfNotPresent
+      name: test-connections
+      args:
+        - -timeout=5m
+        # Postgres
+        - -wait=tcp://{{ include "dbHost" . }}:{{ .Values.postgresql.service.port }}
+        # API
+        - -wait=http://{{ .Release.Name }}-api:8080/system/ready
+        # UI
+        - -wait=http://{{ .Release.Name }}-ui:8080/ready
+        # WS
+        - -wait=http://{{ .Release.Name }}-ws:8080/metrics
+  restartPolicy: Never

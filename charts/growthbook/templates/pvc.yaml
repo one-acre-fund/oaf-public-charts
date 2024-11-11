@@ -1,0 +1,22 @@
+{{- if and .Values.growthbook.persistence.enabled (not .Values.growthbook.persistence.existingClaim) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "growthbook.fullname" . }}
+spec:
+  accessModes:
+    {{- range .Values.growthbook.persistence.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- if .Values.growthbook.persistence.storageClass }}
+  {{- if eq "-" .Values.growthbook.persistence.storageClassName }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: {{ .Values.growthbook.persistence.storageClassName }}
+  {{- end }}
+  {{- end }}
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: {{ .Values.growthbook.persistence.storage }}
+{{- end }}

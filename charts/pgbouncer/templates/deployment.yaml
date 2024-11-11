@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pgbouncer.fullname" . }}
+  labels:
+    {{- include "pgbouncer.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pgbouncer.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "pgbouncer.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "pgbouncer.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: {{ .Chart.Name }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        - configMapRef:
+            name: {{ .Release.Name }}-pgbouncer-config
+        envFrom:
+        - secretRef:
+            name: {{ .Release.Name }}-pgbouncer-secret
+        ports:
+        - containerPort: {{ .Values.service.port }}
+        volumeMounts:
+        {{- if .Values.tls.enabled }}
+        - name: tls-secret
+          mountPath: /etc/pgbouncer/tls
+          readOnly: true
+        {{- end }}
+        {{- if .Values.resources }}
+        resources: {{ .Values.resources | toYaml | nindent 10 }}
+        {{- end }}
+      {{- if .Values.tls.enabled }}
+      volumes:
+      - name: tls-secret
+        secret:
+          secretName: {{ .Values.tls.certificatesSecret }}
+      {{- end }}

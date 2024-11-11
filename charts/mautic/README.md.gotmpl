@@ -1,0 +1,25 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.versionBadge" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+## TL;DR
+
+[Mautic](https://www.mautic.org/) is an open-source marketing campaign automation tool.
+
+```console
+$ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
+$ helm install my-release one-acre-fund/mautic
+```
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}

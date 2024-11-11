@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ws
+  namespace: {{ .Release.Namespace }}
+  labels:
+    org.apicurio.instance: {{ .Release.Name }}-ws
+spec:
+  replicas: {{ .Values.ws.replicas }}
+  selector:
+    matchLabels:
+      org.apicurio.instance: {{ .Release.Name }}-ws
+  template:
+    metadata:
+      labels:
+        org.apicurio.instance: {{ .Release.Name }}-ws
+      annotations:
+        # Force a pod restart if secret values change
+        checksum/secrets: {{ include "secrets_ws" . | sha256sum }}
+    spec:
+      securityContext:
+        {{- .Values.ws.securityContext | toYaml | nindent 8 }}
+      restartPolicy: Always
+
+      initContainers:
+        {{- if .Values.api.wait }}
+        # Wait for db
+        - name: wait-db
+          image: jwilder/dockerize
+          imagePullPolicy: IfNotPresent
+          args:
+            - -wait
+            - tcp://{{ include "dbHost" . }}:{{ .Values.postgresql.service.port }}
+            - -timeout
+            - 300s
+        {{- end}}
+
+      containers:
+        - name: api
+          image: "{{ .Values.ws.image.name }}:{{ .Values.ws.image.tag }}"
+          imagePullPolicy: {{ .Values.ws.imagePullPolicy }}
+          terminationMessagePolicy: FallbackToLogsOnError
+          env:
+            # DB settings
+            - name: APICURIO_DB_CONNECTION_URL
+              value: {{ include "dbUrl" . | quote }}
+            - name: APICURIO_DB_DRIVER_NAME
+              value: {{ .Values.database.driver | quote }}
+            - name: APICURIO_DB_INITIALIZE
+              value: {{ .Values.database.initialize | quote }}
+            - name: APICURIO_DB_TYPE
+              value: {{ .Values.database.type | quote }}
+            - name: APICURIO_DB_USER_NAME
+              value: {{ .Values.postgresql.postgresqlUsername | quote }}
+
+            # Others
+            - name: APICURIO_SHARE_FOR_EVERYONE
+              value: {{ .Values.general.shareForEveryone | quote }}
+
+            {{- range $key, $value := .Values.ws.extraEnvVars }}
+            - name: {{ $key }}
+              value: |-
+                {{- tpl $value $ | nindent 16 }}
+            {{- end }}
+
+          envFrom:
+            - secretRef:
+                name: {{ .Release.Name }}-ws
+
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            {{- include "httpProbe" "/metrics" | nindent 12 }}
+          livenessProbe:
+            {{- include "httpProbe" "/metrics" | nindent 12 }}
