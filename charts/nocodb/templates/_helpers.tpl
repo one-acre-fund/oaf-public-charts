@@ -212,11 +212,7 @@ Add environment variables to configure database values
 Get the credentials secret.
 */}}
 {{- define "nocodb.minio.secretName" -}}
-{{- if .Values.minio.auth.existingSecret -}}
-    {{- printf "%s" (tpl .Values.minio.auth.existingSecret $) -}}
-{{- else -}}
-    {{- printf "%s" (include "nocodb.minio.fullname" .) -}}
-{{- end -}}
+{{- coalesce .Values.minio.auth.existingSecret .Values.externalMinio.existingSecret (include "nocodb.minio.fullname" .) -}}
 {{- end -}}
 
 {{- define "nocodb.minio.rootUserKey" -}}
