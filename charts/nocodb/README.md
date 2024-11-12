@@ -1,7 +1,7 @@
 # nocodb
 
-![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square) 
-![AppVersion: 0.257.2](https://img.shields.io/badge/AppVersion-0.257.2-informational?style=flat-square) 
+![Version: 0.4.5](https://img.shields.io/badge/Version-0.4.5-informational?style=flat-square) 
+![AppVersion: 0.258.0](https://img.shields.io/badge/AppVersion-0.258.0-informational?style=flat-square) 
 
 A Helm chart for Kubernetes
 
@@ -98,7 +98,7 @@ helm install my-release one-acre-fund/nocodb
 | hostAliases | list | `[]` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"nocodb/nocodb"` |  |
-| image.tag | string | `"0.257.2"` |  |
+| image.tag | string | `"0.258.0"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.className | string | `""` |  |
