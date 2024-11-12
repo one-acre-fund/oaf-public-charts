@@ -20,7 +20,7 @@ nocodb:
 image:
   repository: nocodb/nocodb
   pullPolicy: IfNotPresent
-  tag: 0.257.2
+  tag: 0.258.0
 
 imagePullSecrets: []
 nameOverride: ""
