@@ -1,6 +1,6 @@
 # growthbook
 
-![Version: 0.1.16](https://img.shields.io/badge/Version-0.1.16-informational?style=flat-square)
+![Version: 0.1.17](https://img.shields.io/badge/Version-0.1.17-informational?style=flat-square)
 
 A Helm chart for Growthbook
 
@@ -63,7 +63,7 @@ $ helm install my-release one-acre-fund/growthbook
 | growthbook.sso.ssoConfig | object | `{}` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"growthbook/growthbook"` |  |
-| image.tag | string | `"latest"` |  |
+| image.tag | string | `"3.4.0"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
 | ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-headers" | string | `"Authorization,Referer,sec-ch-ua,sec-ch-ua-mobile,sec-ch-ua-platform,User-Agent,X-Organization,Content-Type"` |  |
