@@ -41,8 +41,8 @@ spec:
                 echo "waiting for mongodb..."
                 sleep 2
               done
-                env:
-                  {{- include "growthbook.mongo.env" . | nindent 12 }}
+            env:
+              {{- include "growthbook.mongo.env" . | nindent 12 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
