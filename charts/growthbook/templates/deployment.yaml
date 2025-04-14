@@ -30,15 +30,19 @@ spec:
       initContainers:
         # Wait for MongoDB
         - name: wait-db
-          image: jwilder/dockerize
-          # We don't care about having latest...
+          image: alpine:3.18
           imagePullPolicy: IfNotPresent
           command:
             - sh
             - -c
-            - dockerize -timeout=120s -wait tcp://${MONGODB_HOST}:${MONGODB_PORT}
-          env:
-            {{- include "growthbook.mongo.env" . | nindent 12 }}
+            - |
+              apk add --no-cache netcat-openbsd
+              until nc -z -w3 ${MONGODB_HOST} ${MONGODB_PORT}; do
+                echo "waiting for mongodb..."
+                sleep 2
+              done
+                env:
+                  {{- include "growthbook.mongo.env" . | nindent 12 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
