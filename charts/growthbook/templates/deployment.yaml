@@ -13,10 +13,10 @@ spec:
       {{- include "growthbook.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "growthbook.selectorLabels" . | nindent 8 }}
     spec:
@@ -28,15 +28,18 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
-        # Wait for MongoDB
         - name: wait-db
-          image: jwilder/dockerize
-          # We don't care about having latest...
+          image: alpine:3.18
           imagePullPolicy: IfNotPresent
           command:
             - sh
             - -c
-            - dockerize -timeout=120s -wait tcp://${MONGODB_HOST}:${MONGODB_PORT}
+            - |
+              apk add --no-cache netcat-openbsd
+              until nc -z -w3 ${MONGODB_HOST} ${MONGODB_PORT}; do
+                echo "waiting for mongodb..."
+                sleep 2
+              done
           env:
             {{- include "growthbook.mongo.env" . | nindent 12 }}
       containers:
@@ -48,16 +51,19 @@ spec:
           lifecycle:
             postStart:
               exec:
-                command: ["/bin/sh", "-c", "apt-get update && apt-get install curl -y"]
+                command:
+                  - /bin/sh
+                  - -c
+                  - apt-get update && apt-get install curl -y
           livenessProbe:
             exec:
               command:
-              - bash
-              - /usr/local/src/growthbook-helm/livenessprobe-exec.sh
+                - bash
+                - /usr/local/src/growthbook-helm/livenessprobe-exec.sh
             initialDelaySeconds: 30
             periodSeconds: 5
           env:
-            {{ if .Values.growthbook.sso.enabled }}
+            {{- if .Values.growthbook.sso.enabled }}
             - name: LICENSE_KEY
               valueFrom:
                 secretKeyRef:
@@ -68,7 +74,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "growthbook.fullname" . }}
                   key: SSO_CONFIG
-            {{ end }}
+            {{- end }}
             {{- range $key, $value := .Values.growthbook.extraEnvVars }}
             - name: {{ $key }}
               value: |-
@@ -91,29 +97,29 @@ spec:
                   key: MONGODB_URI
             - name: EMAIL_ENABLED
               value: {{ .Values.growthbook.email.enabled | quote }}
-            {{ if .Values.growthbook.email.enabled }}
+            {{- if .Values.growthbook.email.enabled }}
             - name: EMAIL_HOST
-              value: {{ .Values.growthbook.email.host }}
+              value: {{ .Values.growthbook.email.host | quote }}
             - name: EMAIL_PORT
               value: {{ .Values.growthbook.email.port | quote }}
             - name: EMAIL_HOST_USER
-              value: {{ .Values.growthbook.email.hostUser }}
+              value: {{ .Values.growthbook.email.hostUser | quote }}
             - name: EMAIL_HOST_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "growthbook.fullname" . }}
                   key: EMAIL_HOST_PASSWORD
             - name: EMAIL_FROM
-              value: {{ .Values.growthbook.email.senderEmail }}
+              value: {{ .Values.growthbook.email.senderEmail | quote }}
             - name: SITE_MANAGER_EMAIL
-              value: {{ .Values.growthbook.email.siteManagerEmail }}
-            {{ end }}
-            {{ if .Values.growthbook.datasource.google.enabled }}
+              value: {{ .Values.growthbook.email.siteManagerEmail | quote }}
+            {{- end }}
+            {{- if .Values.growthbook.datasource.google.enabled }}
             - name: GOOGLE_OAUTH_CLIENT_ID
-              value: {{ .Values.growthbook.datasource.google.clientId }}
+              value: {{ .Values.growthbook.datasource.google.clientId | quote }}
             - name: GOOGLE_OAUTH_CLIENT_SECRET
-              value: {{ .Values.growthbook.datasource.google.clientSecret }}
-            {{ end }}
+              value: {{ .Values.growthbook.datasource.google.clientSecret | quote }}
+            {{- end }}
           volumeMounts:
             - name: {{ include "growthbook.fullname" . }}-livenessprobe-exec
               mountPath: /usr/local/src/growthbook-helm
@@ -135,7 +141,7 @@ spec:
           configMap:
             name: {{ include "growthbook.fullname" . }}-livenessprobe-exec
         - name: {{ include "growthbook.fullname" . }}
-          {{ include "growthbook.pvc" . }}
+          {{- include "growthbook.pvc" . | nindent 10 }}
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
