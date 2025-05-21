@@ -11,7 +11,7 @@ service:
   port: 8000
 
 # -- This is the main Scoold application configuration file.
-# _WARNING_, it is passed as a configmap to the container, which may not be secure enough for your needs
+# It is mounted as a `secret` to the container, so sensitive information is fine
 # See the [Scoold README](https://github.com/Erudika/scoold) for more details
 applicationConf: |
   scoold.env = production

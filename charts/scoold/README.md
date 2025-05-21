@@ -16,7 +16,7 @@ Scoold - Stack Overflow in a JAR
 
 * <https://github.com/Erudika/scoold>
 
-## TL;DR;
+## TL;DR
 
 This chart will install a standalone instance of [Scoold](https://scoold.com/), that can be backed by any Para backend instance (cloud or self-hosted). It was inspired by the official Helm chart, but this seems to be unmaintained, and was not working at the time of trying it.
 
@@ -30,7 +30,7 @@ $ helm install my-release one-acre-fund/scoold
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` |  |
-| applicationConf | string | `"scoold.env = production\nscoold.para_endpoint = \"https://paraio.com\"\nscoold.para_access_key = \"app:scoold\"\nscoold.para_secret_key = \"secret\"\n#scoold.password_auth_enabled = true\n#scoold.is_default_space_public = true\n####################################\n# Add more config properties here...\n####################################\n"` | This is the main Scoold application configuration file. _WARNING_, it is passed as a configmap to the container, which may not be secure enough for your needs See the [Scoold README](https://github.com/Erudika/scoold) for more details |
+| applicationConf | string | `"scoold.env = production\nscoold.para_endpoint = \"https://paraio.com\"\nscoold.para_access_key = \"app:scoold\"\nscoold.para_secret_key = \"secret\"\n#scoold.password_auth_enabled = true\n#scoold.is_default_space_public = true\n####################################\n# Add more config properties here...\n####################################\n"` | This is the main Scoold application configuration file. It is mounted as a `secret` to the container, so sensitive information is fine See the [Scoold README](https://github.com/Erudika/scoold) for more details |
 | extraEnvs | object | `{}` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.registry | string | `"docker.io"` |  |
