@@ -30,8 +30,7 @@ $ helm install my-release one-acre-fund/scoold
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` |  |
-| applicationConf | string | `"scoold.env = production\nscoold.para_endpoint = \"https://paraio.com\"\nscoold.para_access_key = \"app:scoold\"\nscoold.para_secret_key = \"secret\"\n#scoold.password_auth_enabled = true\n#scoold.is_default_space_public = true\n####################################\n# Add more config properties here...\n####################################\n"` | See https://github.com/Erudika/scoold for more details |
-| ecrAccessKey | string | `""` |  |
+| applicationConf | string | `"scoold.env = production\nscoold.para_endpoint = \"https://paraio.com\"\nscoold.para_access_key = \"app:scoold\"\nscoold.para_secret_key = \"secret\"\n#scoold.password_auth_enabled = true\n#scoold.is_default_space_public = true\n####################################\n# Add more config properties here...\n####################################\n"` | This is the main Scoold application configuration file. _WARNING_, it is passed as a configmap to the container, which may not be secure enough for your needs See the [Scoold README](https://github.com/Erudika/scoold) for more details |
 | extraEnvs | object | `{}` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.registry | string | `"docker.io"` |  |
@@ -43,9 +42,8 @@ $ helm install my-release one-acre-fund/scoold
 | ingress.paths[0] | string | `"/"` |  |
 | ingress.tls | list | `[]` |  |
 | javaOpts | string | `"-Xmx512m -Xms512m -Dconfig.file=/scoold/config/application.conf"` |  |
-| namespace | string | `"prod"` |  |
 | nodeSelector | object | `{}` |  |
-| replicaCount | int | `1` | Publicly reachable host name for the UI |
+| replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | service.name | string | `"http"` |  |
 | service.port | int | `8000` |  |

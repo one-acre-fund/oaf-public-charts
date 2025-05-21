@@ -1,4 +1,3 @@
-# -- Publicly reachable host name for the UI
 replicaCount: 1
 image:
   registry: docker.io
@@ -12,8 +11,8 @@ service:
   port: 8000
 
 # -- This is the main Scoold application configuration file.
-# -- _WARNING_, it is passed as a configmap to the container, which may not be secure enough for your needs
-# -- See https://github.com/Erudika/scoold for more details
+# _WARNING_, it is passed as a configmap to the container, which may not be secure enough for your needs
+# See the [Scoold README](https://github.com/Erudika/scoold) for more details
 applicationConf: |
   scoold.env = production
   scoold.para_endpoint = "https://paraio.com"
@@ -28,11 +27,6 @@ applicationConf: |
 javaOpts: "-Xmx512m -Xms512m -Dconfig.file=/scoold/config/application.conf"
 
 extraEnvs: {}
-
-namespace: "prod"
-
-# Access key for AWS ECR - private registry for Scoold PRO
-ecrAccessKey: ""
 
 updateStrategy: RollingUpdate
 

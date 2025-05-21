@@ -26,9 +26,10 @@ spec:
     spec:
       volumes:
         {{- if .Values.applicationConf }}
+        
         - name: appconfig
           secret:
-            name: {{ include "scoold.name" . }}-config
+            secretName: {{ include "scoold.name" . }}-config
             items:
               - key: "application.conf"
                 path: "application.conf"
