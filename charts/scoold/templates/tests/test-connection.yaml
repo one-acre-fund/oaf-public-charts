@@ -1,19 +1,20 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "scoold.fullname" . }}-test-connection"
+  name: '{{ include "scoold.fullname" . }}-test-connection'
   namespace: "{{ .Release.Namespace }}"
   labels:
-    app.kubernetes.io/name: {{ include "scoold.name" . }}
-    helm.sh/chart: {{ include "scoold.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name: { { include "scoold.name" . } }
+    helm.sh/chart: { { include "scoold.chart" . } }
+    app.kubernetes.io/instance: { { .Release.Name } }
+    app.kubernetes.io/managed-by: { { .Release.Service } }
   annotations:
     "helm.sh/hook": test-success
 spec:
   containers:
     - name: wget
       image: busybox
-      command: ['wget']
-      args:  ['http://{{ include "scoold.fullname" . }}:{{ .Values.service.port }}']
+      command: ["wget", "--spider", "--retry-connrefused", "--timeout=5"]
+      args:
+        ['http://{{ include "scoold.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never

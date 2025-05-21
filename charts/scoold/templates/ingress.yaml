@@ -31,7 +31,7 @@ spec:
       http:
         paths:
         {{- range $ingressPaths }}
-          - path: {{ . }}
+          - path: {{ . | quote }}
             pathType: Prefix
             backend:
               service:
