@@ -60,8 +60,10 @@ spec:
               value: {{ $val | quote }}
             {{- end }}
           volumeMounts:
+            {{- if .Values.applicationConf }}
             - name: appconfig
               mountPath: /scoold/config
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
