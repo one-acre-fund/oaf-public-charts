@@ -10,7 +10,7 @@ Scoold - Stack Overflow in a JAR
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Yann Jouanique | <yann.jouanique@oneacrefund.org> |  |
+| Yann-J | <yann.jouanique@oneacrefund.org> |  |
 
 ## Source Code
 
