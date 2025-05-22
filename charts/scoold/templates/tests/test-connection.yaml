@@ -4,10 +4,10 @@ metadata:
   name: '{{ include "scoold.fullname" . }}-test-connection'
   namespace: "{{ .Release.Namespace }}"
   labels:
-    app.kubernetes.io/name: { { include "scoold.name" . } }
-    helm.sh/chart: { { include "scoold.chart" . } }
-    app.kubernetes.io/instance: { { .Release.Name } }
-    app.kubernetes.io/managed-by: { { .Release.Service } }
+    app.kubernetes.io/name: {{ include "scoold.name" . }}
+    helm.sh/chart: {{ include "scoold.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
     "helm.sh/hook": test-success
 spec:
