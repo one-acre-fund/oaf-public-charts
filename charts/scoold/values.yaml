@@ -1,0 +1,63 @@
+replicaCount: 1
+image:
+  registry: docker.io
+  repository: erudikaltd/scoold
+  tag: latest_stable
+  pullPolicy: IfNotPresent
+
+service:
+  name: http
+  type: ClusterIP
+  port: 8000
+
+# -- This is the main Scoold application configuration file.
+# It is mounted as a `secret` to the container, so sensitive information is fine
+# See the [Scoold README](https://github.com/Erudika/scoold) for more details
+applicationConf: |
+  scoold.env = production
+  scoold.para_endpoint = "https://paraio.com"
+  scoold.para_access_key = "app:scoold"
+  scoold.para_secret_key = "secret"
+  #scoold.password_auth_enabled = true
+  #scoold.is_default_space_public = true
+  ####################################
+  # Add more config properties here...
+  ####################################
+
+javaOpts: "-Xmx512m -Xms512m -Dconfig.file=/scoold/config/application.conf"
+
+extraEnvs: {}
+
+updateStrategy: RollingUpdate
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  paths: ["/"]
+  hosts:
+    - scoold.local
+  tls: []
+  #  - secretName: scoold-tls-secret
+  #    hosts:
+  #      - scoold.local
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

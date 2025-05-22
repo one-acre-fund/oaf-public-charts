@@ -9,5 +9,6 @@ rules:
     max: 1
 
 ignore: |
-  **/templates/**
+  **/templates/**/*.yaml
+  **/templates/**/*.tpl
   index.yaml
