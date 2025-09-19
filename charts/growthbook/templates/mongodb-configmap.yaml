@@ -1,0 +1,36 @@
+{{- if .Values.mongodb.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "growthbook.fullname" . }}-mongodb-common-scripts
+  namespace: {{ .Release.Namespace }}
+data:
+  ping-mongodb.sh: |
+    #!/bin/bash
+    set -euo pipefail
+    TLS_OPTIONS="${TLS_OPTIONS:-}"
+    mongo $TLS_OPTIONS --port "${MONGODB_PORT_NUMBER:-27017}" --quiet --eval "db.adminCommand('ping')"
+
+  readiness-probe.sh: |
+    #!/bin/bash
+    set -euo pipefail
+    TLS_OPTIONS="${TLS_OPTIONS:-}"
+    # Detect server version (e.g., 4.4.5)
+    [[ $(mongod -version | grep "db version") =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] && VERSION=${BASH_REMATCH[1]}
+    . /opt/bitnami/scripts/libversion.sh
+    VERSION_MAJOR="$(get_sematic_version "$VERSION" 1)"
+    VERSION_MINOR="$(get_sematic_version "$VERSION" 2)"
+    VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
+
+    if [[ ( "$VERSION_MAJOR" -ge 5 ) || ( "$VERSION_MAJOR" -ge 4 && "$VERSION_MINOR" -ge 4 && "$VERSION_PATCH" -ge 2 ) ]]; then
+      mongo $TLS_OPTIONS --port "${MONGODB_PORT_NUMBER:-27017}" --quiet --eval "db.hello().isWritablePrimary || db.hello().secondary" | grep -q 'true'
+    else
+      mongo $TLS_OPTIONS --port "${MONGODB_PORT_NUMBER:-27017}" --quiet --eval "db.isMaster().ismaster || db.isMaster().secondary" | grep -q 'true'
+    fi
+
+  startup-probe.sh: |
+    #!/bin/bash
+    set -euo pipefail
+    TLS_OPTIONS="${TLS_OPTIONS:-}"
+    mongo $TLS_OPTIONS --port "${MONGODB_PORT_NUMBER:-27017}" --quiet --eval "db.hello().isWritablePrimary || db.hello().secondary" | grep -q 'true'
+{{- end }}
