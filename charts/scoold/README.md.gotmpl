@@ -1,0 +1,25 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.versionBadge" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+## TL;DR
+
+This chart will install a standalone instance of [Scoold](https://scoold.com/), that can be backed by any Para backend instance (cloud or self-hosted). It was inspired by the official Helm chart, but this seems to be unmaintained, and was not working at the time of trying it.
+
+```console
+$ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
+$ helm install my-release one-acre-fund/scoold
+```
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
