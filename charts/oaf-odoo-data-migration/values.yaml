@@ -1,0 +1,119 @@
+# Default values for oaf-odoo-data-migration.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: oaf-odoo-data-migration
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# Odoo connection configuration
+odoo:
+  url: ""
+  database: ""
+  username: ""
+  password: ""
+
+  # Whether to store sensitive data in the chart's secret (recommended)
+  useSecret: true
+
+# Job configuration - since this is a one-time data migration
+job:
+  enabled: true
+  restartPolicy: Never
+  backoffLimit: 3
+  activeDeadlineSeconds: 3600
+  ttlSecondsAfterFinished: 86400
+
+# CronJob configuration - for scheduled migrations
+cronJob:
+  enabled: false
+  schedule: "0 2 * * *" # Run daily at 2 AM
+  suspend: false
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+
+# Service configuration (not typically needed for batch jobs)
+service:
+  type: ClusterIP
+  port: 80
+
+# Data volume configuration
+persistence:
+  enabled: true
+  # existingClaim: ""
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 2Gi # Increased size for larger files
+  # If you want to use an existing PVC
+  # existingClaim: "my-data-pvc"
+
+# Data files configuration
+dataFiles:
+  # ConfigMap name for small files (< 1MB)
+  configMapName: ""
+  mountPath: "/app/data"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Environment variables
+env:
+  - name: PYTHONUNBUFFERED
+    value: "1"
+
+# Additional environment variables from secrets
+envFrom:
+  []
+  # - secretRef:
+  #     name: odoo-credentials
+
+# Logging configuration
+logging:
+  level: INFO
