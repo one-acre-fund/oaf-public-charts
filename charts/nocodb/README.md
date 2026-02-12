@@ -1,6 +1,6 @@
 # nocodb
 
-![Version: 0.4.5](https://img.shields.io/badge/Version-0.4.5-informational?style=flat-square) 
+![Version: 0.4.6](https://img.shields.io/badge/Version-0.4.6-informational?style=flat-square) 
 ![AppVersion: 0.258.0](https://img.shields.io/badge/AppVersion-0.258.0-informational?style=flat-square) 
 
 A Helm chart for Kubernetes
