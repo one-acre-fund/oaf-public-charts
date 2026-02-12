@@ -48,20 +48,16 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - apt-get update && apt-get install curl -y
           livenessProbe:
             exec:
               command:
                 - bash
                 - /usr/local/src/growthbook-helm/livenessprobe-exec.sh
             initialDelaySeconds: 30
-            periodSeconds: 5
+            periodSeconds: 30
+            timeoutSeconds: 30
+            successThreshold: 1
+            failureThreshold: 3
           env:
             {{- if .Values.growthbook.sso.enabled }}
             - name: LICENSE_KEY
