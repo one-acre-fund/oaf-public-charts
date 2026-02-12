@@ -5954,6 +5954,41 @@ entries:
   nocodb:
   - apiVersion: v2
     appVersion: 0.258.0
+    created: "2026-02-12T20:33:19.50841909Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.x.x
+    - condition: redis.enabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 20.x.x
+    - condition: minio.enabled
+      name: minio
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 14.x.x
+    - name: common
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: A Helm chart for Kubernetes
+    digest: 03354cc51ec953cc1fcd5a62769d2dc24aa981435d26ed828637d22ea0007999
+    icon: https://raw.githubusercontent.com/one-acre-fund/oaf-public-charts/main/charts/nocodb/img/icon.png
+    maintainers:
+    - email: rahma.ahmed@oneacrefund.org
+      name: samaroon
+      url: https://github.com/samaroon
+    name: nocodb
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/nocodb
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/nocodb-0.4.6/nocodb-0.4.6.tgz
+    version: 0.4.6
+  - apiVersion: v2
+    appVersion: 0.258.0
     created: "2024-11-12T12:21:22.596850656Z"
     dependencies:
     - condition: postgresql.enabled
@@ -7070,4 +7105,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-0.1.0/uptime-wrapper-0.1.0.tgz
     version: 0.1.0
-generated: "2025-02-10T13:13:51.951554916Z"
+generated: "2026-02-12T20:33:19.509249168Z"
