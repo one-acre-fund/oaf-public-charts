@@ -48,20 +48,14 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - apt-get update && apt-get install curl -y
           livenessProbe:
-            exec:
-              command:
-                - bash
-                - /usr/local/src/growthbook-helm/livenessprobe-exec.sh
+            tcpSocket:
+              port: 3000
             initialDelaySeconds: 30
-            periodSeconds: 5
+            periodSeconds: 30
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
           env:
             {{- if .Values.growthbook.sso.enabled }}
             - name: LICENSE_KEY
@@ -121,8 +115,6 @@ spec:
               value: {{ .Values.growthbook.datasource.google.clientSecret | quote }}
             {{- end }}
           volumeMounts:
-            - name: {{ include "growthbook.fullname" . }}-livenessprobe-exec
-              mountPath: /usr/local/src/growthbook-helm
             - name: {{ include "growthbook.fullname" . }}
               mountPath: {{ .Values.volume.mountPath }}
           ports:
@@ -137,9 +129,6 @@ spec:
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 8 }}
       volumes:
-        - name: {{ include "growthbook.fullname" . }}-livenessprobe-exec
-          configMap:
-            name: {{ include "growthbook.fullname" . }}-livenessprobe-exec
         - name: {{ include "growthbook.fullname" . }}
           {{- include "growthbook.pvc" . | nindent 10 }}
       {{- with .Values.affinity }}
