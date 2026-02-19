@@ -1,0 +1,31 @@
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+apiVersion: "monitoring.coreos.com/v1"
+kind: ServiceMonitor
+metadata:
+  labels:
+    {{- include "elastalert.labels" . | nindent 4 }}
+{{- if .Values.metrics.serviceMonitor.additionalLabels }}
+{{ toYaml .Values.metrics.serviceMonitor.additionalLabels | indent 4 }}
+{{- end }}
+  name: {{ include "elastalert.fullname" . }}-metrics
+  namespace: {{ .Values.metrics.serviceMonitor.namespace | default .Release.Namespace | quote }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "elastalert.labels" . | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace | quote }}
+  endpoints:
+  - port: metrics
+    interval: {{ .Values.metrics.serviceMonitor.interval }}
+    scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+    {{- with .Values.metrics.serviceMonitor.metricRelabelings }}
+    metricRelabelings:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .Values.metrics.serviceMonitor.relabelings }}
+    relabelings:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}

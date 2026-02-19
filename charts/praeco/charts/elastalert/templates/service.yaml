@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "elastalert.fullname" . }}
+  labels:
+{{ include "elastalert.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ .Values.service_ws.port }}
+      targetPort: ws
+      protocol: TCP
+      name: ws
+    {{- if .Values.metrics.enabled }}
+    - port: {{ .Values.metrics.port | default 9979 }}
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+    {{- end }}
+  selector:
+    app.kubernetes.io/name: {{ include "elastalert.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

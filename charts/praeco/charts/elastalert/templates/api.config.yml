@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ template "elastalert.fullname" . }}-api-config
+  labels:
+    app: {{ template "elastalert.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+stringData:
+  elastalert_api_config: |-
+    {
+      "appName": "elastalert-server",
+      "port": 3030,
+      "wsport": 3333,
+      "elastalertPath": "/opt/elastalert",
+      "verbose": false,
+      "es_debug": false,
+      "debug": false,
+      "rulesPath": {
+        "relative": true,
+        "path": "/rules"
+      },
+      "templatesPath": {
+        "relative": true,
+        "path": "/rule_templates"
+      },
+      "es_host": "{{ .Values.elasticsearch.host }}",
+      "es_port": {{ .Values.elasticsearch.port }},
+      "es_username": "{{ .Values.elasticsearch.username }}",
+      "es_password": "{{ .Values.elasticsearch.password }}",
+      "es_ssl": {{ .Values.elasticsearch.useSsl }},
+      "writeback_index": "{{ .Values.writebackIndex }}"
+    }
+    

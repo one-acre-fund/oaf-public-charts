@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "praeco.fullname" . }}-config
+  labels:
+    app: {{ template "praeco.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  praeco_config: |-
+    {
+      {{- if .Values.praeco.port -}}
+      "appUrl": "{{ .Values.praeco.schema }}://{{ .Values.praeco.external_host }}:{{ .Values.praeco.port }}",
+      {{- else -}}
+      "appUrl": "{{ .Values.praeco.schema }}://{{ .Values.praeco.external_host }}",
+      {{- end -}}
+      "errorLoggerUrl": "",
+      "hidePreconfiguredFields": []
+    }

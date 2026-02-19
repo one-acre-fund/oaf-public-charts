@@ -1,0 +1,152 @@
+# Default values for elastalert.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: praecoapp/elastalert-server
+  tag: "20230219" # use quotes if tag contains no string
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 3030
+
+service_ws:
+  type: ClusterIP
+  port: 3333
+
+metrics:
+  enabled: true
+  port: 9979
+  serviceMonitor:
+    enabled: true
+    namespace: prometheus
+    interval: 15s
+    scrapeTimeout: 1m
+    scheme: http
+  prometheusRule:
+    enabled: true
+
+ingress:
+  enabled: false
+  annotations:
+    {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+persistence:
+  ## Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  accessMode: ReadWriteOnce
+  size: 100Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+elasticsearch:
+  # elasticsearch endpoint e.g. (svc.namespace||svc)
+  host: "elasticsearch-master"
+  # elasticsearch port
+  port: 9200
+  # whether or not to connect to es_host using TLS
+  useSsl: "false"
+  # Username if authenticating to ES with basic auth
+  username: ""
+  # Password if authenticating to ES with basic auth
+  password: ""
+  # whether or not to verify TLS certificates
+  verifyCerts: "true"
+  # Enable certificate based authentication
+  # path to a PEM certificate to use as the client certificate
+  # clientCert: "/certs/client.pem"
+  # path to a private key file to use as the client key
+  # clientKey: "/certs/client-key.pem"
+  # path to a CA cert bundle to use to verify SSL connections
+  # caCerts: "/certs/ca.pem"
+  # # certs volumes, required to mount ssl certificates when elasticsearch has tls enabled
+  # certsVolumes:
+  #   - name: es-certs
+  #     secret:
+  #       defaultMode: 420
+  #       secretName: es-certs
+  # # mount certs volumes, required to mount ssl certificates when elasticsearch has tls enabled
+  # certsVolumeMounts:
+  #   - name: es-certs
+  #     mountPath: /certs
+  #     readOnly: true
+
+# Default internal between alert checks against the elasticsearch datasource, in minutes
+runIntervalMins: 1
+
+# Default rule buffer duration, in minutes
+bufferTimeMins: 15
+
+# Amount of time to retry and deliver failed alerts (1440 minutes per day)
+alertRetryLimitMins: 2880
+
+# Default time before realerting, in minutes
+realertIntervalMins: ""
+
+# For ES 5: The name of the index which stores elastalert's statuses
+# For ES 6: The prefix of the names of indices which store elastalert's statuses.
+#
+# See https://github.com/Yelp/elastalert/commit/c250100b7be07c68a53789569a86f87193ec37f4 for more details about this differentiation.
+#
+# CAUTION: It is recommended to set this to `elastalert` for ES6+. Otherwise elastalert produces confusing index names due to https://github.com/Yelp/elastalert/issues/1479#issuecomment-356380179
+writebackIndex: elastalert_status

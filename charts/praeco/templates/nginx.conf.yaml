@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "praeco.fullname" . }}-nginx-config
+  labels:
+    app: {{ template "praeco.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  nginx_config: |-
+    user  www-data;
+    worker_processes  1;
+    
+    error_log  stderr warn;
+    pid        /var/run/nginx.pid;
+    
+    events {
+        worker_connections  1024;
+    }
+    
+    http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+        sendfile        off;
+        keepalive_timeout  60;
+        #gzip  on;
+        add_header Cache-Control no-cache;
+        include /etc/nginx/conf.d/*.conf;
+    }
