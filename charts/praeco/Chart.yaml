@@ -1,0 +1,9 @@
+apiVersion: v2
+appVersion: 1.8.13
+dependencies:
+- name: elastalert
+  repository: https://daichi703n.github.io/charts/stable
+  version: 0.1.5
+description: Praeco Helm chart for Kubernetes
+name: praeco
+version: 0.1.8
