@@ -11,7 +11,7 @@ api:
     # -- Image name for API container
     name: apicurio/apicurio-studio-api
     # -- Image tag for API container
-    tag: latest
+    tag: "0.2.62.Final"
   # -- API Replicas
   replicas: 1
   # -- API Image pull policy
@@ -30,15 +30,25 @@ api:
   extraSecretEnvVars: {}
   # -- Security context for API container
   securityContext:
+    runAsUser: 185
     runAsGroup: 1000
-    runAsUser: 1000
+  ingress:
+    # -- Ingress class name for API
+    ingressClassName: nginx
+    # -- Annotations for API ingress
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
+    # -- Ingress path for API
+    path: /studio-api/?(.*)
+    # -- Path type for API ingress
+    pathType: ImplementationSpecific
 
 ui:
   image:
     # -- Image name for UI container
     name: apicurio/apicurio-studio-ui
     # -- Image tag for UI container
-    tag: latest
+    tag: "0.2.62.Final"
   # -- UI Replicas
   replicas: 1
   # -- UI Image pull policy
@@ -51,33 +61,40 @@ ui:
     APICURIO_LOGGING_LEVEL: INFO
     # -- UI JVM options
     JAVA_TOOL_OPTIONS: -Djava.net.preferIPv4Stack=true
-    # -- Enable Microcks integration?
-    APICURIO_UI_FEATURE_MICROCKS: "false"
     # -- Channel Regex
     APICURIO_UI_VALIDATION_CHANNELNAME_REGEXP: ([^{}\/]*(\{[a-zA-Z_][0-9a-zA-Z_]*\})?)+
   # -- Same as `envVars` but passed as secrets
   extraSecretEnvVars: {}
   # -- Security context for UI container
   securityContext:
+    runAsUser: 185
     runAsGroup: 1000
-    runAsUser: 1000
   # -- Override API URL - will default to `https://<.Values.general.hostname>/studio-api`
   apiUrl: null
   # -- Override Edit URL - will default to `wss://<.Values.general.hostname>/ws`
   editingUrl: null
+  ingress:
+    # -- Ingress class name for UI
+    ingressClassName: nginx
+    # -- Annotations for UI ingress
+    annotations: {}
+    # -- Ingress path for UI
+    path: /
+    # -- Path type for UI ingress
+    pathType: Prefix
 
 ws:
   image:
     # -- Image name for WS container
     name: apicurio/apicurio-studio-ws
     # -- Image tag for WS container
-    tag: latest
+    tag: "0.2.62.Final"
   # -- WS Replicas
   replicas: 1
   # -- WS Image pull policy
   imagePullPolicy: IfNotPresent
   # -- Dictionary of name/value environment var pairs
-  # Will ve evaluated as templates
+  # Will be evaluated as templates
   # @default -- See `values.yaml` and [container docs](https://hub.docker.com/r/apicurio/apicurio-studio-ws/)
   extraEnvVars:
     # -- WS logging level
@@ -88,31 +105,39 @@ ws:
   extraSecretEnvVars: {}
   # -- Security context for WS container
   securityContext:
+    runAsUser: 185
     runAsGroup: 1000
-    runAsUser: 1000
+  ingress:
+    # -- Ingress class name for WS
+    ingressClassName: nginx
+    # -- Annotations for WS ingress
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
+      ingress.kubernetes.io/proxy-connect-timeout: "3600"
+      ingress.kubernetes.io/proxy-read-timeout: "3600"
+      ingress.kubernetes.io/proxy-send-timeout: "3600"
+      ingress.kubernetes.io/send-timeout: "3600"
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+    # -- Ingress path for WS
+    path: /ws/?(.*)
+    # -- Path type for WS ingress
+    pathType: ImplementationSpecific
 
-#Configure microcks application
-microcks:
-  api:
-    # -- URL to mickrocks application
-    url: http://www.example.com/api
-  client:
-    # -- Microcks Client ID
-    id: microcks-serviceaccount
-    # -- Microcks Client Secret
-    secret: apicuriomr
-
-# Configure keycloak application
+# -- Configure Keycloak/OIDC authentication
 keycloak:
+  # -- Enable Keycloak/OIDC authentication
+  enabled: false
   # -- Public URL to Keycloak
   url: https://www.example.com/auth
   # -- Keycloak Realm
   realm: Apicurio
   client:
     # -- Keycloak Client ID
-    id: apicurio-studio
+    id: apicurio
     # -- Keycloak Client Secret
-    secret: apicuriokc
+    secret: ""
 
 database:
   # -- Initialize DB?
@@ -128,8 +153,11 @@ global:
 
 # Postgres subchart settings
 postgresql:
-  # -- Install Postgres? See See https://artifacthub.io/packages/helm/bitnami/postgresql for docs on all Postgres values
+  # -- Install Postgres? See https://artifacthub.io/packages/helm/bitnami/postgresql for docs on all Postgres values
   enabled: true
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
   # -- Custom db host name if not using the subchart
   host: null
   # -- Apicurio DB name
@@ -137,15 +165,227 @@ postgresql:
   # -- Apicurio DB user
   postgresqlUsername: apicuriodb
   # -- Apicurio DB user password
-  postgresqlPassword: vSX5RILHBk
+  postgresqlPassword: ""
   service:
     # -- postgres port
     port: 5432
 
-# TODO: mysql subchart?
-
+# -- Apicurio ingress configuration
 ingress:
-  # -- Enable ingresses?
+  # -- Enable ingresses for Apicurio components (api, ui, ws)?
   enabled: false
-  # -- TLS settings
-  tls: []
+  # -- Hostname for ingress rules
+  host: www.example.com
+  # -- TLS secret name for ingress
+  tlsSecretName: ""
+
+# -- Microcks API mocking platform (optional)
+microcks:
+  # -- Enable Microcks deployment alongside Apicurio
+  enabled: false
+  # -- Client settings used by Apicurio to connect to Microcks (works regardless of whether Microcks is deployed by this chart)
+  client:
+    # -- Microcks API URL (auto-derived when microcks.enabled is true)
+    apiUrl: ""
+    # -- Microcks service account Client ID in Keycloak
+    id: microcks-serviceaccount
+    # -- Microcks service account Client Secret
+    secret: ""
+  # -- Microcks application settings
+  app:
+    # -- Microcks app replicas
+    replicaCount: 1
+    image:
+      # -- Microcks image
+      name: quay.io/microcks/microcks
+      # -- Microcks image tag
+      tag: "1.8.0"
+      # -- Microcks image pull policy
+      pullPolicy: IfNotPresent
+    # -- Microcks container port
+    containerPort: 8080
+    # -- Microcks resource limits/requests
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        cpu: 200m
+    # -- Extra environment variables for Microcks app
+    env:
+      JAVA_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=2"
+      JAVA_MAJOR_VERSION: "11"
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATA_MONGODB_DATABASE: microcks
+    service:
+      # -- Microcks service port
+      port: 8080
+      # -- Microcks service port name
+      portName: spring
+    # -- Enable gRPC support
+    grpcEnabled: false
+    grpcService:
+      # -- gRPC service port
+      port: 9090
+      # -- gRPC service port name
+      portName: spring-grpc
+    ingress:
+      # -- Microcks ingress host
+      host: ""
+      # -- Microcks ingress class
+      ingressClassName: nginx
+      annotations:
+        ingress.kubernetes.io/rewrite-target: /
+      # -- Microcks ingress path
+      path: /
+      # -- Microcks ingress path type
+      pathType: Prefix
+      # -- Microcks ingress TLS secret name
+      tlsSecretName: ""
+    grpcIngress:
+      ingressClassName: nginx
+      annotations:
+        ingress.kubernetes.io/rewrite-target: /
+        nginx.ingress.kubernetes.io/backend-protocol: GRPC
+        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      host: ""
+      path: /
+      pathType: Prefix
+    livenessProbe:
+      httpGet:
+        path: /api/health
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 25
+      periodSeconds: 10
+      failureThreshold: 3
+      successThreshold: 1
+      timeoutSeconds: 3
+    readinessProbe:
+      httpGet:
+        path: /api/health
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 35
+      periodSeconds: 10
+      failureThreshold: 3
+      successThreshold: 1
+      timeoutSeconds: 3
+    startupProbe:
+      httpGet:
+        path: /api/health
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      failureThreshold: 10
+      successThreshold: 1
+      timeoutSeconds: 3
+  # -- Microcks Keycloak settings (for Microcks' own auth)
+  keycloak:
+    # -- Keycloak realm for Microcks (defaults to main keycloak.realm if not set)
+    realm: ""
+    # -- Keycloak resource/client ID for Microcks backend
+    resource: microcks-app
+  # -- MongoDB settings for Microcks
+  mongodb:
+    # -- MongoDB replicas
+    replicaCount: 1
+    image:
+      # -- MongoDB image
+      name: docker.io/bitnamilegacy/mongodb
+      # -- MongoDB image tag
+      tag: "4.4.10"
+      # -- MongoDB image pull policy
+      pullPolicy: IfNotPresent
+    # -- MongoDB container port
+    containerPort: 27017
+    # -- MongoDB resource limits/requests
+    resources: {}
+    securityContext:
+      pod:
+        # -- MongoDB pod fsGroup
+        fsGroup: 1001
+      container:
+        # -- Run MongoDB as non-root
+        runAsNonRoot: true
+        # -- MongoDB container user ID
+        runAsUser: 1001
+    # -- MongoDB environment variables
+    env:
+      BITNAMI_DEBUG: "false"
+      MONGODB_EXTRA_USERNAMES: microcks
+      MONGODB_EXTRA_DATABASES: microcks
+      MONGODB_ROOT_USER: root
+      ALLOW_EMPTY_PASSWORD: "no"
+      MONGODB_SYSTEM_LOG_VERBOSITY: "0"
+      MONGODB_DISABLE_SYSTEM_LOG: "no"
+      MONGODB_DISABLE_JAVASCRIPT: "no"
+      MONGODB_ENABLE_JOURNAL: "yes"
+      MONGODB_ENABLE_IPV6: "no"
+      MONGODB_ENABLE_DIRECTORY_PER_DB: "no"
+    service:
+      # -- MongoDB service port
+      port: 27017
+      # -- MongoDB service port name
+      portName: mongodb
+    persistence:
+      # -- MongoDB PVC size
+      size: 20Gi
+      # -- MongoDB PVC access mode
+      accessMode: ReadWriteOnce
+      # -- MongoDB storage class (uses global.storageClass if not set)
+      storageClass: null
+  # -- Postman runtime settings
+  postman:
+    # -- Postman replicas
+    replicaCount: 1
+    image:
+      # -- Postman runtime image
+      name: quay.io/microcks/microcks-postman-runtime
+      # -- Postman runtime image tag
+      tag: "latest"
+      # -- Postman runtime image pull policy
+      pullPolicy: IfNotPresent
+    # -- Postman container port
+    containerPort: 3000
+    # -- Postman resource limits/requests
+    resources:
+      limits:
+        memory: 256Mi
+    # -- Postman environment variables
+    env:
+      LOG_LEVEL: info
+    service:
+      # -- Postman service port
+      port: 8080
+      # -- Postman service port name
+      portName: postman-runtime
+      # -- Postman service target port
+      targetPort: 3000
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: 3000
+        scheme: HTTP
+      initialDelaySeconds: 4
+      periodSeconds: 20
+      failureThreshold: 3
+      successThreshold: 1
+      timeoutSeconds: 3
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 3000
+        scheme: HTTP
+      initialDelaySeconds: 5
+      periodSeconds: 20
+      failureThreshold: 3
+      successThreshold: 1
+      timeoutSeconds: 3
+  # -- Microcks secrets
+  secrets:
+    mongodb:
+      # -- MongoDB user password
+      mongodb-passwords: ""
+      # -- MongoDB root password
+      mongodb-root-password: ""

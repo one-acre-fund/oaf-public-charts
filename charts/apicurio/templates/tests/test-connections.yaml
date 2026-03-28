@@ -6,7 +6,6 @@ metadata:
     "helm.sh/hook": test-success
 spec:
   containers:
-    # TODO: find better API-level tests...
     - image: jwilder/dockerize
       imagePullPolicy: IfNotPresent
       name: test-connections
@@ -20,4 +19,10 @@ spec:
         - -wait=http://{{ .Release.Name }}-ui:8080/ready
         # WS
         - -wait=http://{{ .Release.Name }}-ws:8080/metrics
+        {{- if .Values.microcks.enabled }}
+        # Microcks
+        - -wait=http://{{ include "microcks.fullname" . }}:{{ .Values.microcks.app.service.port }}/api/health
+        # MongoDB
+        - -wait=tcp://{{ include "microcks.mongodb.name" . }}:{{ .Values.microcks.mongodb.service.port }}
+        {{- end }}
   restartPolicy: Never

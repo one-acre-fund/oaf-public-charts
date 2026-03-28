@@ -1,14 +1,20 @@
 apiVersion: v2
 name: apicurio
-version: 1.0.15
+version: 2.0.0
+appVersion: "0.2.62.Final"
 description: Apicurio Studio API designer
 icon: https://avatars.githubusercontent.com/u/28107283?s=400&v=4
 type: application
 keywords:
   - api
+  - api-design
+  - openapi
+  - asyncapi
+  - microcks
 home: http://www.apicur.io/
 sources:
   - https://github.com/Apicurio/apicurio-studio
+  - https://github.com/microcks/microcks
   - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/apicurio
 maintainers:
   - name: Yann-J

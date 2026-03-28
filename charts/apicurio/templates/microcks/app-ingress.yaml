@@ -1,0 +1,64 @@
+{{- if and .Values.microcks.enabled .Values.microcks.app.ingress.host }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "microcks.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "microcks.labels" . | nindent 4 }}
+  {{- with .Values.microcks.app.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.microcks.app.ingress.ingressClassName }}
+  rules:
+    - host: {{ .Values.microcks.app.ingress.host }}
+      http:
+        paths:
+          - path: {{ .Values.microcks.app.ingress.path }}
+            pathType: {{ .Values.microcks.app.ingress.pathType }}
+            backend:
+              service:
+                name: {{ include "microcks.fullname" . }}
+                port:
+                  number: {{ .Values.microcks.app.service.port }}
+  {{- if .Values.microcks.app.ingress.tlsSecretName }}
+  tls:
+    - hosts:
+        - {{ .Values.microcks.app.ingress.host }}
+      secretName: {{ .Values.microcks.app.ingress.tlsSecretName }}
+  {{- end }}
+{{- if .Values.microcks.app.grpcEnabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "microcks.grpc.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "microcks.labels" . | nindent 4 }}
+  {{- with .Values.microcks.app.grpcIngress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.microcks.app.grpcIngress.ingressClassName }}
+  rules:
+    - host: {{ .Values.microcks.app.grpcIngress.host }}
+      http:
+        paths:
+          - path: {{ .Values.microcks.app.grpcIngress.path }}
+            pathType: {{ .Values.microcks.app.grpcIngress.pathType }}
+            backend:
+              service:
+                name: {{ include "microcks.grpc.name" . }}
+                port:
+                  number: {{ .Values.microcks.app.grpcService.port }}
+  {{- if .Values.microcks.app.grpcIngress.host }}
+  tls:
+    - hosts:
+        - {{ .Values.microcks.app.grpcIngress.host }}
+  {{- end }}
+{{- end }}
+{{- end }}

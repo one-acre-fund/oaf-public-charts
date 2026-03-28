@@ -51,12 +51,15 @@ spec:
             - name: APICURIO_DB_USER_NAME
               value: {{ .Values.postgresql.postgresqlUsername | quote }}
 
+            {{- if or .Values.microcks.enabled .Values.microcks.client.apiUrl }}
             # Microcks settings
             - name: APICURIO_MICROCKS_API_URL
-              value: {{ .Values.microcks.api.url | quote }}
+              value: {{ include "microcks.apiUrl" . | quote }}
             - name: APICURIO_MICROCKS_CLIENT_ID
               value: {{ .Values.microcks.client.id | quote }}
+            {{- end }}
 
+            {{- if .Values.keycloak.enabled }}
             # Keycloak settings
             - name: APICURIO_KC_AUTH_URL
               value: {{ .Values.keycloak.url | quote }}
@@ -64,6 +67,7 @@ spec:
               value: {{ .Values.keycloak.realm | quote }}
             - name: APICURIO_KC_CLIENT_ID
               value: {{ .Values.keycloak.client.id | quote }}
+            {{- end }}
 
             # Others
             - name: APICURIO_SHARE_FOR_EVERYONE

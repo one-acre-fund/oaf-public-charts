@@ -22,7 +22,7 @@ spec:
         {{- .Values.ui.securityContext | toYaml | nindent 8 }}
       restartPolicy: Always
       containers:
-        - name: api
+        - name: ui
           image: "{{ .Values.ui.image.name }}:{{ .Values.ui.image.tag }}"
           imagePullPolicy: {{ .Values.ui.imagePullPolicy }}
           terminationMessagePolicy: FallbackToLogsOnError
@@ -35,12 +35,17 @@ spec:
             - name: APICURIO_UI_EDITING_URL
               value: {{ coalesce .Values.ui.editingUrl (print "wss://" .Values.general.hostname "/ws") }}
 
+            {{- if or .Values.microcks.enabled .Values.microcks.client.apiUrl }}
             # Microcks settings
+            - name: APICURIO_UI_FEATURE_MICROCKS
+              value: "true"
             - name: APICURIO_MICROCKS_API_URL
-              value: {{ .Values.microcks.api.url | quote }}
+              value: {{ include "microcks.apiUrl" . | quote }}
             - name: APICURIO_MICROCKS_CLIENT_ID
               value: {{ .Values.microcks.client.id | quote }}
+            {{- end }}
 
+            {{- if .Values.keycloak.enabled }}
             # Keycloak settings
             - name: APICURIO_KC_AUTH_URL
               value: {{ .Values.keycloak.url | quote }}
@@ -48,6 +53,9 @@ spec:
               value: {{ .Values.keycloak.realm | quote }}
             - name: APICURIO_KC_CLIENT_ID
               value: {{ .Values.keycloak.client.id | quote }}
+            - name: QUARKUS_OIDC_AUTHENTICATION_COOKIE_PATH
+              value: "/"
+            {{- end }}
 
             {{- range $key, $value := .Values.ui.extraEnvVars }}
             - name: {{ $key }}

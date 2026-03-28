@@ -1,0 +1,19 @@
+{{- if .Values.microcks.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "microcks.postman.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "microcks.labels" . | nindent 4 }}
+    container: postman-runtime
+spec:
+  type: ClusterIP
+  ports:
+    - name: {{ .Values.microcks.postman.service.portName }}
+      port: {{ .Values.microcks.postman.service.port }}
+      protocol: TCP
+      targetPort: {{ .Values.microcks.postman.service.targetPort }}
+  selector:
+    {{- include "microcks.postman.selectorLabels" . | nindent 4 }}
+{{- end }}

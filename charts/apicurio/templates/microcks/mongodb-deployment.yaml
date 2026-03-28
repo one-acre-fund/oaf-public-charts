@@ -1,0 +1,76 @@
+{{- if .Values.microcks.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "microcks.mongodb.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "microcks.mongodb.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.microcks.mongodb.replicaCount }}
+  revisionHistoryLimit: 10
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "microcks.mongodb.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "microcks.mongodb.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+    spec:
+      serviceAccountName: {{ include "microcks.mongodb.name" . }}
+      securityContext:
+        fsGroup: {{ .Values.microcks.mongodb.securityContext.pod.fsGroup }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "microcks.mongodb.selectorLabels" . | nindent 20 }}
+                namespaces:
+                  - {{ .Release.Namespace }}
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: mongodb
+          image: "{{ .Values.microcks.mongodb.image.name }}:{{ .Values.microcks.mongodb.image.tag }}"
+          imagePullPolicy: {{ .Values.microcks.mongodb.image.pullPolicy }}
+          securityContext:
+            runAsNonRoot: {{ .Values.microcks.mongodb.securityContext.container.runAsNonRoot }}
+            runAsUser: {{ .Values.microcks.mongodb.securityContext.container.runAsUser }}
+          ports:
+            - name: mongodb
+              containerPort: {{ .Values.microcks.mongodb.containerPort }}
+              protocol: TCP
+          env:
+            {{- range $key, $value := .Values.microcks.mongodb.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            - name: MONGODB_EXTRA_PASSWORDS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "microcks.mongodb.name" . }}
+                  key: mongodb-passwords
+            - name: MONGODB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "microcks.mongodb.name" . }}
+                  key: mongodb-root-password
+          {{- with .Values.microcks.mongodb.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: datadir
+              mountPath: /bitnami/mongodb
+      volumes:
+        - name: datadir
+          persistentVolumeClaim:
+            claimName: {{ include "microcks.mongodb.name" . }}
+      terminationGracePeriodSeconds: 30
+{{- end }}

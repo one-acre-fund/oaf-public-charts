@@ -1,0 +1,52 @@
+{{- if .Values.microcks.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "microcks.postman.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "microcks.labels" . | nindent 4 }}
+    container: postman-runtime
+spec:
+  replicas: {{ .Values.microcks.postman.replicaCount }}
+  revisionHistoryLimit: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      {{- include "microcks.postman.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/microcks/configmap.yaml") . | sha256sum }}
+      labels:
+        {{- include "microcks.postman.matchLabels" . | nindent 8 }}
+    spec:
+      securityContext: {}
+      containers:
+        - name: postman-runtime
+          image: "{{ .Values.microcks.postman.image.name }}:{{ .Values.microcks.postman.image.tag }}"
+          imagePullPolicy: {{ .Values.microcks.postman.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.microcks.postman.containerPort }}
+              protocol: TCP
+          env:
+            {{- range $key, $value := .Values.microcks.postman.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- with .Values.microcks.postman.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          livenessProbe:
+            {{- toYaml .Values.microcks.postman.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.microcks.postman.readinessProbe | nindent 12 }}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      terminationGracePeriodSeconds: 30
+{{- end }}
