@@ -1,6 +1,6 @@
 # apicurio
 
-![Version: 1.0.15](https://img.shields.io/badge/Version-1.0.15-informational?style=flat-square)
+![Version: 2.0.0](https://img.shields.io/badge/Version-2.0.0-informational?style=flat-square)
 
 Apicurio Studio API designer
 
@@ -39,19 +39,24 @@ $ helm install my-release one-acre-fund/apicurio \
 
 When `microcks.enabled=true`, the Apicurio UI automatically enables Microcks integration and derives the Microcks API URL from the deployed service. You can override this with `microcks.client.apiUrl`.
 
-## Enabling Keycloak
+## Keycloak Configuration
 
-To enable Keycloak/OIDC authentication:
+Keycloak is enabled by default. Configure your Keycloak instance:
 
 ```console
 $ helm install my-release one-acre-fund/apicurio \
-  --set keycloak.enabled=true \
   --set keycloak.url=https://keycloak.example.com/auth \
   --set keycloak.client.id=apicurio \
   --set keycloak.client.secret=<client-secret>
 ```
 
-See [KEYCLOAK-SETUP.md](KEYCLOAK-SETUP.md) for detailed client configuration.
+To disable Keycloak:
+
+```console
+$ helm install my-release one-acre-fund/apicurio --set keycloak.enabled=false
+```
+
+See [KEYCLOAK-SETUP.md](KEYCLOAK-SETUP.md) for detailed client setup.
 
 ## Enabling Ingress
 

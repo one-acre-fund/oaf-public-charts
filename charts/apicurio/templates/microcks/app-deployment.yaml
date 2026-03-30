@@ -33,6 +33,11 @@ spec:
           ports:
             - containerPort: {{ .Values.microcks.app.containerPort }}
               protocol: TCP
+            {{- if .Values.microcks.app.grpcEnabled }}
+            - name: grpc
+              containerPort: {{ .Values.microcks.app.grpcService.port }}
+              protocol: TCP
+            {{- end }}
           env:
             - name: SPRING_DATA_MONGODB_HOST
               value: "{{ include "microcks.mongodb.name" . }}"

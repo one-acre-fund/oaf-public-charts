@@ -44,7 +44,7 @@ data:
     keycloak.use-resource-role-mappings=true
     keycloak.bearer-only=true
     keycloak.ssl-required=external
-    keycloak.disable-trust-manager=true
+    keycloak.disable-trust-manager={{ .Values.microcks.keycloak.disableTrustManager | default false }}
 
     # Keycloak access configuration properties
     sso.public-url=${KEYCLOAK_PUBLIC_URL:${keycloak.auth-server-url}}

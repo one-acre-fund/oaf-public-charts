@@ -180,7 +180,7 @@ For users who need access to Microcks:
 |------------|-------------|
 | `keycloak.url` | Your Keycloak base URL (e.g., `https://auth.example.com/auth`) |
 | `keycloak.realm` | Your Keycloak realm name |
-| `keycloak.client.id` | Apicurio client ID (default: `apicurio-studio`) |
+| `keycloak.client.id` | Apicurio client ID (default: `apicurio`) |
 | `keycloak.client.secret` | Apicurio client secret from step 1 |
 | `microcks.client.id` | Microcks service account client ID (default: `microcks-serviceaccount`) |
 | `microcks.client.secret` | Microcks service account client secret from step 4 |

@@ -128,7 +128,7 @@ ws:
 # -- Configure Keycloak/OIDC authentication
 keycloak:
   # -- Enable Keycloak/OIDC authentication
-  enabled: false
+  enabled: true
   # -- Public URL to Keycloak
   url: https://www.example.com/auth
   # -- Keycloak Realm
@@ -248,6 +248,7 @@ microcks:
         nginx.ingress.kubernetes.io/backend-protocol: GRPC
         nginx.ingress.kubernetes.io/ssl-passthrough: "true"
       host: ""
+      tlsSecretName: ""
       path: /
       pathType: Prefix
     livenessProbe:
@@ -286,6 +287,8 @@ microcks:
     realm: ""
     # -- Keycloak resource/client ID for Microcks backend
     resource: microcks-app
+    # -- Disable SSL certificate validation for Keycloak (set to true only for dev with self-signed certs)
+    disableTrustManager: false
   # -- MongoDB settings for Microcks
   mongodb:
     # -- MongoDB replicas
@@ -343,7 +346,7 @@ microcks:
       # -- Postman runtime image
       name: quay.io/microcks/microcks-postman-runtime
       # -- Postman runtime image tag
-      tag: "latest"
+      tag: "1.5.0"
       # -- Postman runtime image pull policy
       pullPolicy: IfNotPresent
     # -- Postman container port

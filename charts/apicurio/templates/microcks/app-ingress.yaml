@@ -59,6 +59,9 @@ spec:
   tls:
     - hosts:
         - {{ .Values.microcks.app.grpcIngress.host }}
+      {{- if .Values.microcks.app.grpcIngress.tlsSecretName }}
+      secretName: {{ .Values.microcks.app.grpcIngress.tlsSecretName }}
+      {{- end }}
   {{- end }}
 {{- end }}
 {{- end }}
