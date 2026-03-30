@@ -13,11 +13,61 @@
 
 ## TL;DR;
 
-This chart will install an Apicurio instance, with an optional dependent Postgres backing db.
+This chart will install an Apicurio Studio instance with an optional dependent Postgres backing db and optional Microcks API mocking platform.
 
 ```console
 $ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
 $ helm install my-release one-acre-fund/apicurio
+```
+
+## Enabling Microcks
+
+To deploy Microcks alongside Apicurio Studio for API mocking:
+
+```console
+$ helm install my-release one-acre-fund/apicurio \
+  --set microcks.enabled=true \
+  --set microcks.secrets.mongodb.mongodb-passwords=<password> \
+  --set microcks.secrets.mongodb.mongodb-root-password=<root-password>
+```
+
+When `microcks.enabled=true`, the Apicurio UI automatically enables Microcks integration and derives the Microcks API URL from the deployed service. You can override this with `microcks.client.apiUrl`.
+
+## Keycloak Configuration
+
+Keycloak is enabled by default. Configure your Keycloak instance:
+
+```console
+$ helm install my-release one-acre-fund/apicurio \
+  --set keycloak.url=https://keycloak.example.com/auth \
+  --set keycloak.client.id=apicurio \
+  --set keycloak.client.secret=<client-secret>
+```
+
+To disable Keycloak:
+
+```console
+$ helm install my-release one-acre-fund/apicurio --set keycloak.enabled=false
+```
+
+See [KEYCLOAK-SETUP.md](KEYCLOAK-SETUP.md) for detailed client setup.
+
+## Enabling Ingress
+
+```console
+$ helm install my-release one-acre-fund/apicurio \
+  --set ingress.enabled=true \
+  --set ingress.host=apicurio.example.com \
+  --set ingress.tlsSecretName=my-tls-secret
+```
+
+For Microcks ingress, set `microcks.app.ingress.host`:
+
+```console
+$ helm install my-release one-acre-fund/apicurio \
+  --set microcks.enabled=true \
+  --set microcks.app.ingress.host=mocks.example.com \
+  --set microcks.app.ingress.tlsSecretName=my-tls-secret
 ```
 
 __WARNING__: The [Apicurio docs](https://www.apicur.io/studio/docs/setting-up-keycloak-for-use-with-apicurio) are wrong/incomplete about the Github integration. The documented instructions will let you login and link accounts, but NOT publish into your repository. To enable this, you will need to:
@@ -27,6 +77,35 @@ __WARNING__: The [Apicurio docs](https://www.apicur.io/studio/docs/setting-up-ke
 * Use at least these scopes for your Github identity provider configuration: `read:org,repo,user`
 
 For more details, see [this ticket](https://github.com/Apicurio/apicurio-studio/issues/821).
+
+## Known Issues
+
+### Bloated Keycloak Tokens
+
+If Keycloak's "Full Scope Allowed" is enabled on the `apicurio` client, the access token will include roles from ALL clients in the realm. This can inflate the token beyond the 4096-byte cookie limit, causing:
+
+- OIDC `State verification has failed` errors (HTTP 401)
+- `502 Bad Gateway` from the ingress controller (header too large)
+
+**Fix:** In the Keycloak Admin Console:
+1. Go to **Clients** > **apicurio** > **Client scopes** tab
+2. Click on the **apicurio-dedicated** scope
+3. Go to **Scope** tab and set **Full scope allowed** to **OFF**
+4. Remove unnecessary default client scopes (keep only: `openid`, `email`, `profile`, `roles`)
+
+### OIDC State Verification Failure (Trailing Slash)
+
+The Apicurio UI (Quarkus-based) may fail OIDC state verification when the URL is accessed without a trailing slash. The chart sets `QUARKUS_OIDC_AUTHENTICATION_COOKIE_PATH=/` by default when `keycloak.enabled=true` to prevent this.
+
+### PostgreSQL Password Persistence
+
+Bitnami's PostgreSQL image only sets passwords during first initialization. Changing `postgresql.postgresqlPassword` in Helm values will NOT update the password inside an existing database. To change the password on an existing deployment:
+
+1. `kubectl exec` into the PostgreSQL pod
+2. Run `ALTER USER apicuriodb WITH PASSWORD 'new-password';`
+3. Update the Helm values to match
+
+Or delete the PVC and let Helm recreate it (data loss).
 
 {{ template "chart.requirementsSection" . }}
 

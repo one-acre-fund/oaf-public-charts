@@ -1,0 +1,39 @@
+{{- if .Values.microcks.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "microcks.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "microcks.labels" . | nindent 4 }}
+    container: spring
+spec:
+  type: ClusterIP
+  ports:
+    - name: {{ .Values.microcks.app.service.portName }}
+      port: {{ .Values.microcks.app.service.port }}
+      protocol: TCP
+      targetPort: {{ .Values.microcks.app.containerPort }}
+  selector:
+    {{- include "microcks.app.selectorLabels" . | nindent 4 }}
+{{- if .Values.microcks.app.grpcEnabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "microcks.grpc.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "microcks.labels" . | nindent 4 }}
+    container: spring
+spec:
+  type: ClusterIP
+  ports:
+    - name: {{ .Values.microcks.app.grpcService.portName }}
+      port: {{ .Values.microcks.app.grpcService.port }}
+      protocol: TCP
+      targetPort: {{ .Values.microcks.app.grpcService.port }}
+  selector:
+    {{- include "microcks.app.selectorLabels" . | nindent 4 }}
+{{- end }}
+{{- end }}

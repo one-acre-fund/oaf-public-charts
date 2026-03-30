@@ -1,0 +1,18 @@
+{{- if .Values.microcks.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "microcks.mongodb.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "microcks.mongodb.selectorLabels" . | nindent 4 }}
+spec:
+  {{- if or .Values.microcks.mongodb.persistence.storageClass .Values.global.storageClass }}
+  storageClassName: {{ coalesce .Values.microcks.mongodb.persistence.storageClass .Values.global.storageClass }}
+  {{- end }}
+  accessModes:
+    - {{ .Values.microcks.mongodb.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.microcks.mongodb.persistence.size }}
+{{- end }}

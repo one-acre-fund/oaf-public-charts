@@ -2,7 +2,34 @@ Thank you for installing {{ .Chart.Name }}.
 
 Your release is named {{ .Release.Name }}.
 
-To learn more about the release, try:
+Apicurio Studio components deployed:
+  - API:       {{ .Release.Name }}-api
+  - UI:        {{ .Release.Name }}-ui
+  - WebSocket: {{ .Release.Name }}-ws
+{{- if .Values.postgresql.enabled }}
+  - PostgreSQL: {{ .Release.Name }}-postgresql
+{{- end }}
+
+{{- if .Values.microcks.enabled }}
+
+Microcks components deployed:
+  - App:             {{ include "microcks.fullname" . }}
+  - MongoDB:         {{ include "microcks.mongodb.name" . }}
+  - Postman Runtime: {{ include "microcks.postman.name" . }}
+{{- end }}
+
+To access the UI via port-forward:
+
+  kubectl port-forward svc/{{ .Release.Name }}-ui 8080:8080 -n {{ .Release.Namespace }}
+
+{{- if .Values.microcks.enabled }}
+
+To access Microcks via port-forward:
+
+  kubectl port-forward svc/{{ include "microcks.fullname" . }} 9393:{{ .Values.microcks.app.service.port }} -n {{ .Release.Namespace }}
+{{- end }}
+
+To learn more about the release:
 
   $ helm status {{ .Release.Name }}
-  $ helm get {{ .Release.Name }}
+  $ helm get all {{ .Release.Name }}

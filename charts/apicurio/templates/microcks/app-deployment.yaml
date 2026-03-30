@@ -1,0 +1,90 @@
+{{- if .Values.microcks.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "microcks.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "microcks.labels" . | nindent 4 }}
+    container: spring
+spec:
+  replicas: {{ .Values.microcks.app.replicaCount }}
+  revisionHistoryLimit: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      {{- include "microcks.app.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/microcks/configmap.yaml") . | sha256sum }}
+      labels:
+        {{- include "microcks.app.matchLabels" . | nindent 8 }}
+    spec:
+      securityContext: {}
+      containers:
+        - name: spring
+          image: "{{ .Values.microcks.app.image.name }}:{{ .Values.microcks.app.image.tag }}"
+          imagePullPolicy: {{ .Values.microcks.app.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.microcks.app.containerPort }}
+              protocol: TCP
+            {{- if .Values.microcks.app.grpcEnabled }}
+            - name: grpc
+              containerPort: {{ .Values.microcks.app.grpcService.port }}
+              protocol: TCP
+            {{- end }}
+          env:
+            - name: SPRING_DATA_MONGODB_HOST
+              value: "{{ include "microcks.mongodb.name" . }}"
+            - name: SPRING_DATA_MONGODB_PORT
+              value: "{{ .Values.microcks.mongodb.service.port }}"
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "microcks.mongodb.name" . }}
+                  key: mongodb-usernames
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "microcks.mongodb.name" . }}
+                  key: mongodb-passwords
+            - name: POSTMAN_RUNNER_URL
+              value: {{ include "microcks.postmanUrl" . | quote }}
+            - name: TEST_CALLBACK_URL
+              value: {{ include "microcks.callbackUrl" . | quote }}
+            {{- if .Values.keycloak.enabled }}
+            - name: KEYCLOAK_URL
+              value: {{ .Values.keycloak.url | quote }}
+            - name: KEYCLOAK_PUBLIC_URL
+              value: {{ .Values.keycloak.url | quote }}
+            {{- end }}
+            {{- range $key, $value := .Values.microcks.app.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- with .Values.microcks.app.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          livenessProbe:
+            {{- toYaml .Values.microcks.app.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.microcks.app.readinessProbe | nindent 12 }}
+          startupProbe:
+            {{- toYaml .Values.microcks.app.startupProbe | nindent 12 }}
+          volumeMounts:
+            - name: microcks-config
+              mountPath: /deployments/config
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      volumes:
+        - name: microcks-config
+          configMap:
+            name: {{ include "microcks.fullname" . }}-config
+      terminationGracePeriodSeconds: 30
+{{- end }}

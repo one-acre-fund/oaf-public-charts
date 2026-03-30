@@ -1,0 +1,143 @@
+{{- if .Values.microcks.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "microcks.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "microcks.labels" . | nindent 4 }}
+    container: spring
+data:
+  application.properties: |-
+    # Application configuration properties
+    tests-callback.url=${TEST_CALLBACK_URL}
+    postman-runner.url=${POSTMAN_RUNNER_URL}
+    async-minion.url=${ASYNC_MINION_URL|http://localhost:8081}
+
+    network.username=
+    network.password=
+
+    {{- if .Values.microcks.app.ingress.host }}
+    validation.resourceUrl=https://{{ .Values.microcks.app.ingress.host }}/api/resources/
+    {{- else }}
+    validation.resourceUrl=http://{{ include "microcks.fullname" . }}:{{ .Values.microcks.app.service.port }}/api/resources/
+    {{- end }}
+    services.update.interval=${SERVICES_UPDATE_INTERVAL:0 0 0/2 * * *}
+    mocks.rest.enable-cors-policy=${ENABLE_CORS_POLICY:true}
+
+    # Logging configuration properties
+    logging.config=/deployments/config/logback.xml
+
+    {{- if .Values.keycloak.enabled }}
+    # Spring Security adapter configuration properties
+    spring.security.oauth2.client.registration.keycloak.client-id={{ .Values.microcks.keycloak.resource }}
+    spring.security.oauth2.client.registration.keycloak.authorization-grant-type=authorization_code
+    spring.security.oauth2.client.registration.keycloak.scope=openid,profile
+    spring.security.oauth2.client.provider.keycloak.issuer-uri=${KEYCLOAK_URL}/realms/{{ include "microcks.keycloakRealm" . }}
+    spring.security.oauth2.client.provider.keycloak.user-name-attribute=preferred_username
+    spring.security.oauth2.resourceserver.jwt.issuer-uri=${sso.public-url}/realms/{{ include "microcks.keycloakRealm" . }}
+
+    # Keycloak configuration properties
+    keycloak.auth-server-url=${KEYCLOAK_URL}
+    keycloak.realm={{ include "microcks.keycloakRealm" . }}
+    keycloak.resource={{ .Values.microcks.keycloak.resource }}
+    keycloak.use-resource-role-mappings=true
+    keycloak.bearer-only=true
+    keycloak.ssl-required=external
+    keycloak.disable-trust-manager={{ .Values.microcks.keycloak.disableTrustManager | default false }}
+
+    # Keycloak access configuration properties
+    sso.public-url=${KEYCLOAK_PUBLIC_URL:${keycloak.auth-server-url}}
+    {{- end }}
+
+    # Async mocking support.
+    async-api.enabled=false
+    async-api.default-binding=KAFKA
+    async-api.default-frequency=10
+
+    # Kafka configuration properties
+    spring.kafka.producer.bootstrap-servers=${KAFKA_BOOTSTRAP_SERVER:localhost:9092}
+
+    {{- if .Values.microcks.app.grpcEnabled }}
+    # Grpc server properties
+    grpc.server.certChainFilePath=/deployments/config/grpc/tls.crt
+    grpc.server.privateKeyFilePath=/deployments/config/grpc/tls.key
+    {{- end }}
+
+    # AI Copilot configuration properties
+    ai-copilot.enabled=false
+    ai-copilot.implementation=openai
+    ai-copilot.openai.api-key=sk-my-openai-api-token
+    ai-copilot.openai.timeout=20
+  features.properties: |-
+    features.feature.microcks-hub.enabled=true
+    features.feature.microcks-hub.endpoint=https://hub.microcks.io/api
+    features.feature.microcks-hub.allowed-roles=admin,manager,manager-any
+
+    features.feature.repository-filter.enabled=false
+    features.feature.repository-filter.label-key=app
+    features.feature.repository-filter.label-label=Application
+    features.feature.repository-filter.label-list=app,status
+
+    features.feature.repository-tenancy.enabled=false
+    features.feature.repository-tenancy.artifact-import-allowed-roles=admin,manager,manager-any
+
+    features.feature.async-api.enabled=false
+    features.feature.async-api.default-binding=KAFKA
+    features.feature.async-api.endpoint-WS={{ .Values.microcks.app.grpcIngress.host | default "mocks-ws.example.org" }}
+    features.feature.async-api.endpoint-KAFKA=microcks-kafka.192.168.99.100.nip.io:443
+
+    features.feature.ai-copilot.enabled=false
+  logback.xml: |-
+    <?xml version="1.0" encoding="UTF-8"?>
+
+    <configuration scan="true">
+      <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+          <charset>utf-8</charset>
+          <Pattern>%d{HH:mm:ss.SSS} [%p] %c - %m%n</Pattern>
+        </encoder>
+      </appender>
+
+      <logger name="io.github.microcks" level="INFO"/>
+      <logger name="org.mongodb" level="INFO"/>
+      <logger name="org.springframework.data.mongodb" level="INFO"/>
+      <logger name="org.reflections" level="WARN"/>
+      <logger name="sun.net.www.protocol.http" level="INFO"/>
+
+      <logger name="jdk.event.security" level="WARN"/>
+      <logger name="javax.activation" level="WARN"/>
+      <logger name="javax.mail" level="WARN"/>
+      <logger name="javax.xml.bind" level="WARN"/>
+      <logger name="ch.qos.logback" level="WARN"/>
+      <logger name="com.codahale.metrics" level="WARN"/>
+      <logger name="com.ryantenney" level="WARN"/>
+      <logger name="com.sun.xml.internal.bind" level="WARN"/>
+      <logger name="com.zaxxer" level="WARN"/>
+      <logger name="io.undertow" level="WARN"/>
+      <logger name="org.apache" level="WARN"/>
+      <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
+      <logger name="org.bson" level="WARN"/>
+      <logger name="org.hibernate.validator" level="WARN"/>
+      <logger name="org.hibernate" level="WARN"/>
+      <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
+      <logger name="org.springframework" level="WARN"/>
+      <logger name="org.springframework.aop" level="WARN"/>
+      <logger name="org.springframework.web" level="WARN"/>
+      <logger name="org.springframework.security" level="WARN"/>
+      <logger name="org.springframework.cache" level="WARN"/>
+      <logger name="org.springframework.scheduling" level="WARN"/>
+      <logger name="org.thymeleaf" level="WARN"/>
+      <logger name="org.xnio" level="WARN"/>
+      <logger name="com.mangofactory.swagger" level="WARN"/>
+      <logger name="sun.rmi.transport" level="WARN"/>
+
+      <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+      </contextListener>
+
+      <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+      </root>
+    </configuration>
+{{- end }}
