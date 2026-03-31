@@ -199,7 +199,7 @@ microcks:
       # -- Microcks image
       name: quay.io/microcks/microcks
       # -- Microcks image tag
-      tag: "1.8.0"
+      tag: "1.13.2"
       # -- Microcks image pull policy
       pullPolicy: IfNotPresent
     # -- Microcks container port
@@ -297,7 +297,7 @@ microcks:
       # -- MongoDB image
       name: docker.io/bitnamilegacy/mongodb
       # -- MongoDB image tag
-      tag: "4.4.10"
+      tag: "8.0.13"
       # -- MongoDB image pull policy
       pullPolicy: IfNotPresent
     # -- MongoDB container port
