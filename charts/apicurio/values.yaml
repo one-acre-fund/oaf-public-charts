@@ -160,12 +160,13 @@ postgresql:
     repository: bitnamilegacy/postgresql
   # -- Custom db host name if not using the subchart
   host: null
-  # -- Apicurio DB name
-  postgresqlDatabase: apicuriodb
-  # -- Apicurio DB user
-  postgresqlUsername: apicuriodb
-  # -- Apicurio DB user password
-  postgresqlPassword: ""
+  auth:
+    # -- Apicurio DB user
+    username: apicuriodb
+    # -- Apicurio DB user password
+    password: ""
+    # -- Apicurio DB name
+    database: apicuriodb
   service:
     # -- postgres port
     port: 5432
