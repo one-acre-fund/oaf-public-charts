@@ -1,7 +1,7 @@
 {{/* ---- Apicurio Studio helpers ---- */}}
 
 {{ define "secrets_api" -}}
-APICURIO_DB_PASSWORD: {{ .Values.postgresql.postgresqlPassword | b64enc }}
+APICURIO_DB_PASSWORD: {{ .Values.postgresql.auth.password | b64enc }}
 {{- if .Values.keycloak.enabled }}
 APICURIO_KC_CLIENT_SECRET: {{ .Values.keycloak.client.secret | b64enc }}
 {{- end }}
@@ -29,7 +29,7 @@ APICURIO_MICROCKS_CLIENT_SECRET: {{ .Values.microcks.client.secret | b64enc }}
 {{- end }}
 
 {{ define "secrets_ws" -}}
-APICURIO_DB_PASSWORD: {{ .Values.postgresql.postgresqlPassword | b64enc }}
+APICURIO_DB_PASSWORD: {{ .Values.postgresql.auth.password | b64enc }}
 # Extras
 {{- range $key, $value := .Values.ws.extraSecretEnvVars }}
 {{ $key }}: {{- tpl $value $ | b64enc }}
@@ -41,7 +41,7 @@ APICURIO_DB_PASSWORD: {{ .Values.postgresql.postgresqlPassword | b64enc }}
 {{- end -}}
 
 {{- define "dbUrl" -}}
-{{ printf "jdbc:postgresql://%s:%s/%s" (include "dbHost" .) ( toString .Values.postgresql.service.port ) .Values.postgresql.postgresqlDatabase }}
+{{ printf "jdbc:postgresql://%s:%s/%s" (include "dbHost" .) ( toString .Values.postgresql.service.port ) .Values.postgresql.auth.database }}
 {{- end -}}
 
 {{- define "tcpProbe" -}}

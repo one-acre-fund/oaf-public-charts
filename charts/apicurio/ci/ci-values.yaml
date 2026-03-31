@@ -5,15 +5,3 @@ keycloak:
   client:
     id: apicurio-studio
     secret: apicuriokc
-
-microcks:
-  enabled: true
-  client:
-    secret: testmicrocksecret
-  secrets:
-    mongodb:
-      mongodb-passwords: testpass
-      mongodb-root-password: testrootpass
-
-postgresql:
-  postgresqlPassword: testdbpass

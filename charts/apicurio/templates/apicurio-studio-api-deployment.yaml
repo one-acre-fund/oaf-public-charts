@@ -49,7 +49,7 @@ spec:
             - name: APICURIO_DB_TYPE
               value: {{ .Values.database.type | quote }}
             - name: APICURIO_DB_USER_NAME
-              value: {{ .Values.postgresql.postgresqlUsername | quote }}
+              value: {{ .Values.postgresql.auth.username | quote }}
 
             {{- if or .Values.microcks.enabled .Values.microcks.client.apiUrl }}
             # Microcks settings
