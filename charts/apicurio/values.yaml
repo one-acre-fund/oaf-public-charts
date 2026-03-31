@@ -199,7 +199,7 @@ microcks:
       # -- Microcks image
       name: quay.io/microcks/microcks
       # -- Microcks image tag
-      tag: "1.8.0"
+      tag: "1.13.2"
       # -- Microcks image pull policy
       pullPolicy: IfNotPresent
     # -- Microcks container port
@@ -213,7 +213,7 @@ microcks:
     # -- Extra environment variables for Microcks app
     env:
       JAVA_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=2"
-      JAVA_MAJOR_VERSION: "11"
+      JAVA_MAJOR_VERSION: "21"
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATA_MONGODB_DATABASE: microcks
     service:
@@ -297,7 +297,7 @@ microcks:
       # -- MongoDB image
       name: docker.io/bitnamilegacy/mongodb
       # -- MongoDB image tag
-      tag: "4.4.10"
+      tag: "8.0.13"
       # -- MongoDB image pull policy
       pullPolicy: IfNotPresent
     # -- MongoDB container port
