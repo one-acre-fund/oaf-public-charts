@@ -9,8 +9,6 @@ A Helm chart for Growthbook
 | Name | Email | Url |
 | ---- | ------ | --- |
 | bisonlou | <bisonlou@gmail.com> |  |
-| Yann-J | <yann.jouanique@gmail.com> |  |
-| Nzeugaa | <jean.poutcheu@gmail.com> |  |
 | orchide | <orchideirakoze@gmail.com> |  |
 
 ## TL;DR;
