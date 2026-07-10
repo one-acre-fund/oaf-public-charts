@@ -1,6 +1,6 @@
 # growthbook
 
-![Version: 0.1.22](https://img.shields.io/badge/Version-0.1.22-informational?style=flat-square)
+![Version: 0.1.23](https://img.shields.io/badge/Version-0.1.23-informational?style=flat-square)
 
 A Helm chart for Growthbook
 
@@ -9,8 +9,6 @@ A Helm chart for Growthbook
 | Name | Email | Url |
 | ---- | ------ | --- |
 | bisonlou | <bisonlou@gmail.com> |  |
-| Yann-J | <yann.jouanique@gmail.com> |  |
-| Nzeugaa | <jean.poutcheu@gmail.com> |  |
 | orchide | <orchideirakoze@gmail.com> |  |
 
 ## TL;DR;
