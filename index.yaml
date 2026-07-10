@@ -1174,6 +1174,27 @@ entries:
   growthbook:
   - apiVersion: v2
     appVersion: 1.16.1
+    created: "2026-07-10T07:42:04.62291165Z"
+    dependencies:
+    - condition: mongodb.enabled
+      name: mongodb
+      repository: https://charts.bitnami.com/bitnami/
+      version: ~13.6.1
+    description: A Helm chart for Growthbook
+    digest: 8f554747d530fffe9f4513a57428bfba407b6c1644fd2ed7c7e431e72f593e7e
+    icon: https://cdn.svgporn.com/logos/growth-book-icon.svg
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    - email: orchideirakoze@gmail.com
+      name: orchide
+    name: growthbook
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/growthbook-0.2.0/growthbook-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.16.1
     created: "2026-07-10T06:55:11.391012229Z"
     dependencies:
     - condition: mongodb.enabled
@@ -7246,4 +7267,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-0.1.0/uptime-wrapper-0.1.0.tgz
     version: 0.1.0
-generated: "2026-07-10T06:55:11.391561337Z"
+generated: "2026-07-10T07:42:04.623484256Z"
