@@ -31,10 +31,12 @@ spec:
         - name: wait-db
           image: jwilder/dockerize:latest
           imagePullPolicy: IfNotPresent
+          # Use Kubernetes $(VAR) expansion in args; ${VAR} is not expanded in exec-form command.
           command:
             - dockerize
+          args:
             - -wait
-            - tcp://${MONGODB_HOST}:${MONGODB_PORT}
+            - tcp://$(MONGODB_HOST):$(MONGODB_PORT)
             - -timeout
             - 120s
           env:
