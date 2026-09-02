@@ -28,6 +28,19 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# The Secret holding GrowthBook's credentials.
+#   create: true  — this chart templates it from the values below.
+#   create: false — something else owns it (ExternalSecrets/Vault under GitOps,
+#                   where values come from git and must not hold credentials).
+#                   The Deployment still reads every credential from it by name,
+#                   so the Secret must supply JWT_SECRET, ENCRYPTION_KEY,
+#                   MONGODB_URI, and — when the matching feature is enabled —
+#                   EMAIL_HOST_PASSWORD, LICENSE_KEY and SSO_CONFIG.
+#   name          — override only if that Secret is not the release fullname.
+growthbookSecret:
+  create: true
+  name: ""
+
 growthbook:
   sso:
     enabled: false

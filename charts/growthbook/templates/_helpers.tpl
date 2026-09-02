@@ -24,6 +24,19 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
+Name of the Secret holding GrowthBook's credentials (JWT_SECRET, ENCRYPTION_KEY,
+EMAIL_HOST_PASSWORD, LICENSE_KEY, SSO_CONFIG, MONGODB_URI).
+
+Defaults to the release fullname, which this chart creates. Set
+growthbookSecret.create=false when something else owns it — ExternalSecrets or a
+sealed secret under GitOps, where values come from git and must not contain
+credentials — and growthbookSecret.name if that Secret is named differently.
+*/}}
+{{- define "growthbook.secretName" -}}
+{{- .Values.growthbookSecret.name | default (include "growthbook.fullname" .) }}
+{{- end }}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "growthbook.chart" -}}
