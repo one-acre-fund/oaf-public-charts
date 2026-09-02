@@ -20,6 +20,35 @@ $ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
 $ helm install my-release one-acre-fund/growthbook
 ```
 
+## Managing credentials outside the chart
+
+By default the chart creates the Secret holding `JWT_SECRET`, `ENCRYPTION_KEY`,
+`MONGODB_URI` and — when the matching feature is enabled — `EMAIL_HOST_PASSWORD`,
+`LICENSE_KEY` and `SSO_CONFIG`, from the values you supply.
+
+Set `growthbookSecret.create=false` to have something else own it (ExternalSecrets,
+sealed secrets, or a Secret you apply yourself). The Deployment still reads every
+credential from that Secret by name, so it must supply all of the keys above.
+
+**Migrating an existing release is order-sensitive.** Flipping `create` to `false`
+removes the Secret from the chart's desired state, and `helm upgrade` will delete
+the one it previously managed — while the Deployment still references it by name.
+Losing it mid-upgrade fails the rollout and destroys the credential data.
+
+Do it in this order:
+
+1. Create the external Secret **first**, using the same name the chart used —
+   `growthbookSecret.name` if set, otherwise the release fullname. Copy the
+   existing values across; `ENCRYPTION_KEY` in particular cannot be regenerated
+   without re-encrypting stored data.
+2. Confirm it holds every key the Deployment reads.
+3. Only then upgrade with `growthbookSecret.create=false`.
+
+Under GitOps the same ordering applies. With ArgoCD, give the ExternalSecret
+`argocd.argoproj.io/sync-wave: "-1"` so it reconciles before the Deployment, and
+leave pruning disabled for the first sync so the previously Helm-managed Secret
+is not removed before its replacement exists.
+
 {{ template "chart.requirementsSection" . }}
 
 {{ template "chart.valuesSection" . }}
