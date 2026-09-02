@@ -60,12 +60,12 @@ spec:
             - name: LICENSE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "growthbook.fullname" . }}
+                  name: {{ include "growthbook.secretName" . }}
                   key: LICENSE_KEY
             - name: SSO_CONFIG
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "growthbook.fullname" . }}
+                  name: {{ include "growthbook.secretName" . }}
                   key: SSO_CONFIG
             {{- end }}
             {{- range $key, $value := .Values.growthbook.extraEnvVars }}
@@ -76,17 +76,17 @@ spec:
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "growthbook.fullname" . }}
+                  name: {{ include "growthbook.secretName" . }}
                   key: JWT_SECRET
             - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "growthbook.fullname" . }}
+                  name: {{ include "growthbook.secretName" . }}
                   key: ENCRYPTION_KEY
             - name: MONGODB_URI
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "growthbook.fullname" . }}
+                  name: {{ include "growthbook.secretName" . }}
                   key: MONGODB_URI
             - name: EMAIL_ENABLED
               value: {{ .Values.growthbook.email.enabled | quote }}
@@ -100,7 +100,7 @@ spec:
             - name: EMAIL_HOST_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "growthbook.fullname" . }}
+                  name: {{ include "growthbook.secretName" . }}
                   key: EMAIL_HOST_PASSWORD
             - name: EMAIL_FROM
               value: {{ .Values.growthbook.email.senderEmail | quote }}
