@@ -20,7 +20,11 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5.3.0
         with:
-          python-version: 3.15.0-alpha.5
+          # chart-testing-action installs yamllint==1.27.1, which builds pyyaml
+          # from source. There is no pyyaml wheel for 3.15, and the sdist fails
+          # to compile against a prerelease CPython — keep this on a stable
+          # release with wheels available.
+          python-version: "3.12"
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.6.1
