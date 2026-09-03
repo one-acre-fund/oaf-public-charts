@@ -1,3 +1,14 @@
+# The Secrets holding Apicurio Studio credentials: <release>-api, <release>-ui
+# and <release>-ws (plus the microcks mongodb Secret when microcks is enabled).
+#
+#   create: true  — this chart templates them from the values below.
+#   create: false — something else owns them (ExternalSecrets/Vault under
+#                   GitOps, where values come from git and must not hold
+#                   credentials). The Deployments envFrom those exact names,
+#                   so the replacements must keep them.
+apicurioSecrets:
+  create: true
+
 general:
   # -- Publicly reachable host name for the UI
   hostname: www.example.com
