@@ -3,6 +3,36 @@ entries:
   apicurio:
   - apiVersion: v2
     appVersion: 0.2.62.Final
+    created: "2026-09-03T02:51:48.045176392Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~11.6.6
+    description: Apicurio Studio API designer
+    digest: c1b3af7942e0412580acd1a6296a3c3496a7185ea5f0d429b1f8dd92849a245e
+    home: http://www.apicur.io/
+    icon: https://avatars.githubusercontent.com/u/28107283?s=400&v=4
+    keywords:
+    - api
+    - api-design
+    - openapi
+    - asyncapi
+    - microcks
+    maintainers:
+    - email: yann.jouanique@gmail.com
+      name: Yann-J
+    name: apicurio
+    sources:
+    - https://github.com/Apicurio/apicurio-studio
+    - https://github.com/microcks/microcks
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/apicurio
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/apicurio-2.3.0/apicurio-2.3.0.tgz
+    version: 2.3.0
+  - apiVersion: v2
+    appVersion: 0.2.62.Final
     created: "2026-07-10T06:55:11.212390455Z"
     dependencies:
     - condition: postgresql.enabled
@@ -7288,4 +7318,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-0.1.0/uptime-wrapper-0.1.0.tgz
     version: 0.1.0
-generated: "2026-09-02T10:56:52.112588445Z"
+generated: "2026-09-03T02:51:48.045511801Z"
