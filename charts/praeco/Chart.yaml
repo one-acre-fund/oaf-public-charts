@@ -12,3 +12,14 @@ dependencies:
   - name: elastalert
     repository: "file://charts/elastalert"
     version: 0.2.0
+
+# ct lint requires maintainers on a new chart, and validates that `name` is a
+# real GitHub handle. Matching the convention in the other OAF charts here
+# (nocodb, uptime-wrapper): GitHub username plus contact email.
+maintainers:
+  - name: ajimoh-oaf
+    email: abdullah.jimoh@oneacrefund.org
+
+sources:
+  - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/praeco
+  - https://github.com/daichi703n/praeco-helm
