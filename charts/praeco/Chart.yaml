@@ -1,0 +1,25 @@
+apiVersion: v2
+name: praeco
+description: Praeco Helm chart for Kubernetes (OAF fork of daichi703n/praeco 0.1.8)
+# Forked from upstream 0.1.8 to add elastalert.configSecret.create, so the
+# Elasticsearch password and Slack webhook can come from an ExternalSecret
+# rather than being committed to git. Nothing else is changed.
+version: 0.2.0
+appVersion: 1.8.13
+dependencies:
+  # Vendored on purpose: the subchart carries the OAF change, so this must not
+  # resolve to the upstream repo on `helm dependency update`.
+  - name: elastalert
+    repository: "file://charts/elastalert"
+    version: 0.2.0
+
+# ct lint requires maintainers on a new chart, and validates that `name` is a
+# real GitHub handle. Matching the convention in the other OAF charts here
+# (nocodb, uptime-wrapper): GitHub username plus contact email.
+maintainers:
+  - name: ajimoh-oaf
+    email: abdullah.jimoh@oneacrefund.org
+
+sources:
+  - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/praeco
+  - https://github.com/daichi703n/praeco-helm

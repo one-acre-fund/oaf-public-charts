@@ -1,3 +1,9 @@
+# OAF addition. When false the chart does not render its -secret Secret;
+# supply it yourself (an ExternalSecret of the same name, pulling the values
+# from Vault). Default true = upstream behaviour.
+secret:
+  create: true
+
 # Default values for uptime-wrapper.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.

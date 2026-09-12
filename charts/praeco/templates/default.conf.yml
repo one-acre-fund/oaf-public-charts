@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "praeco.fullname" . }}-nginx-default-config
+  labels:
+    app: {{ template "praeco.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  nginx_config_default: |-
+    # cache github api
+    proxy_cache_path /tmp/nginx_cache levels=1:2 keys_zone=github_api_cache:60m max_size=10g 
+                    inactive=60m use_temp_path=off;
+
+    server {
+      listen 8080;
+
+      location /api {
+          rewrite ^/api/?(.*)$ /$1 break;
+          proxy_pass http://{{ template "praeco.fullname" . }}-elastalert:3030/;
+      }
+
+      location /api-ws {
+          rewrite ^/api-ws/?(.*)$ /$1 break;
+          proxy_pass http://{{ template "praeco.fullname" . }}-elastalert:3333/;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "Upgrade";
+      }
+
+      location /api-app/releases {
+          proxy_cache github_api_cache;
+          proxy_pass https://api.github.com/repos/ServerCentral/praeco/releases;
+      }
+
+      location / {
+          root /var/www/html;
+          try_files $uri $uri/ /index.html;
+      }
+    }

@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "elastalert.fullname" . }}
+  labels:
+{{ include "elastalert.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "elastalert.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "elastalert.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ template "elastalert.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: volume-mount-hack
+          image: busybox
+          command: ["sh", "-c", "cp /opt/elastalert/ruleset/* /opt/elastalert/rules/; chmod -R 777 /opt/elastalert/rules; chmod -R 777 /opt/elastalert/rule_templates;"]
+          volumeMounts:
+          - name: rules
+            mountPath: '/opt/elastalert/ruleset'
+            # subPath: ruleset
+          - name: data
+            mountPath: '/opt/elastalert/rules'
+            subPath: rules
+          - name: data
+            mountPath: '/opt/elastalert/rule_templates'
+            subPath: rule_templates
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          volumeMounts:
+            - name: data
+              mountPath: '/opt/elastalert/rules'
+              subPath: rules
+            - name: data
+              mountPath: '/opt/elastalert/rule_templates'
+              subPath: rule_templates
+            - name: config
+              mountPath: '/opt/elastalert/config.yaml'
+              subPath: config.yaml
+            - name: baserule-config
+              mountPath: '/opt/elastalert/rules/BaseRule.config'
+              subPath: BaseRule.config
+            - name: api-config
+              mountPath: '/opt/elastalert-server/config/config.json'
+              subPath: config.json
+{{- if .Values.elasticsearch.certsVolumeMounts }}
+{{ toYaml .Values.elasticsearch.certsVolumeMounts | indent 12 }}
+{{- end }}
+          ports:
+            - name: http
+              containerPort: 3030
+              protocol: TCP
+            - name: ws
+              containerPort: 3333
+              protocol: TCP
+            {{- if .Values.metrics.enabled }}
+            - name: metrics
+              containerPort: 9979
+              protocol: TCP
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ template "elastalert.fullname" . }}
+        - name: config
+          secret:
+            secretName: {{ template "elastalert.fullname" . }}-config
+            items:
+            - key: elastalert_config
+              path: config.yaml
+        - name: baserule-config
+          secret:
+            secretName: {{ template "elastalert.fullname" . }}-baserule-config
+            defaultMode: 0644
+            items:
+            - key: baserule_config
+              path: BaseRule.config
+        - name: api-config
+          secret:
+            secretName: {{ template "elastalert.fullname" . }}-api-config
+            defaultMode: 0644
+            items:
+            - key: elastalert_api_config
+              path: config.json
+        - name: rules
+          configMap:
+            name: {{ template "elastalert.fullname" . }}-rules
+            items:
+{{- range $key, $value := .Values.rules }}
+            - key: {{ $key }}
+              path: {{ $key }}.yaml
+              mode: 0777
+{{- end }}
+{{- if .Values.elasticsearch.certsVolumes }}
+{{ toYaml .Values.elasticsearch.certsVolumes | indent 8 }}
+{{- end }}
