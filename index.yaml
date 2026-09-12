@@ -7147,6 +7147,26 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/pgbouncer-0.1.0/pgbouncer-0.1.0.tgz
     version: 0.1.0
+  praeco:
+  - apiVersion: v2
+    appVersion: 1.8.13
+    created: "2026-09-12T23:36:05.805098155Z"
+    dependencies:
+    - name: elastalert
+      repository: file://charts/elastalert
+      version: 0.2.0
+    description: Praeco Helm chart for Kubernetes (OAF fork of daichi703n/praeco 0.1.8)
+    digest: 84e63a29ef9c3b1597802afc74aeeff25075f11165f9a327b167ef9e002a08f0
+    maintainers:
+    - email: abdullah.jimoh@oneacrefund.org
+      name: ajimoh-oaf
+    name: praeco
+    sources:
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/praeco
+    - https://github.com/daichi703n/praeco-helm
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/praeco-0.2.0/praeco-0.2.0.tgz
+    version: 0.2.0
   sydent:
   - apiVersion: v2
     appVersion: 1.16.1
@@ -7255,6 +7275,19 @@ entries:
   uptime-wrapper:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2026-09-12T23:36:05.999387197Z"
+    description: A Helm chart for Kubernetes
+    digest: 3b317a2a060114589835cc8c993e83148ebed97586aaea43cd2d475b0856364f
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: uptime-wrapper
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-1.1.0/uptime-wrapper-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2025-02-10T13:13:51.95083559Z"
     description: A Helm chart for Kubernetes
     digest: fbc8db89eec6b42d1b2477941273f6ab06505193d9440fb32340cd0604d598f9
@@ -7318,4 +7351,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-0.1.0/uptime-wrapper-0.1.0.tgz
     version: 0.1.0
-generated: "2026-09-03T02:51:48.045511801Z"
+generated: "2026-09-12T23:36:05.999758838Z"
