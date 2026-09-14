@@ -1,0 +1,321 @@
+{{- include "oafpass.validateValues" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oafpass.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "oafpass.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "oafpass.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- if or .Values.podAnnotations (and .Values.secret.create (not .Values.secret.name)) }}
+      annotations:
+        {{- if and .Values.secret.create (not .Values.secret.name) }}
+        # Roll the pods when the rendered Secret changes.
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      labels:
+        {{- include "oafpass.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "oafpass.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automount }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        {{- if eq .Values.auth.mode "oauth2-proxy" }}
+        # Fronts Yopass: the Service points here, and every request — creating a
+        # secret and opening one — passes a Google login first.
+        - name: oauth2-proxy
+          image: "{{ .Values.auth.oauth2Proxy.image.repository }}:{{ .Values.auth.oauth2Proxy.image.tag }}"
+          imagePullPolicy: {{ .Values.auth.oauth2Proxy.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          args:
+            - --http-address=0.0.0.0:{{ .Values.auth.oauth2Proxy.port }}
+            - --upstream=http://127.0.0.1:1337
+            - --provider={{ .Values.auth.oauth2Proxy.provider }}
+            - --redirect-url={{ include "oafpass.oauth2Proxy.redirectUrl" . }}
+            - --cookie-secure={{ .Values.auth.oauth2Proxy.cookieSecure }}
+            - --cookie-expire={{ .Values.auth.oauth2Proxy.cookieExpire }}
+            - --cookie-refresh={{ .Values.auth.oauth2Proxy.cookieRefresh }}
+            - --skip-provider-button={{ .Values.auth.oauth2Proxy.skipProviderButton }}
+            # Behind an ingress controller, so trust X-Forwarded-* for the
+            # redirect host and the logged client IP.
+            - --reverse-proxy=true
+            - --silence-ping-logging=true
+            {{- range .Values.auth.oauth2Proxy.emailDomains }}
+            - --email-domain={{ . }}
+            {{- end }}
+            {{- range .Values.auth.oauth2Proxy.skipAuthRoutes }}
+            - --skip-auth-route={{ . }}
+            {{- end }}
+            {{- with .Values.auth.oauth2Proxy.extraArgs }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          env:
+            - name: OAUTH2_PROXY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "oafpass.secretName" . }}
+                  key: {{ .Values.secretKeys.oauth2ProxyClientId }}
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "oafpass.secretName" . }}
+                  key: {{ .Values.secretKeys.oauth2ProxyClientSecret }}
+            - name: OAUTH2_PROXY_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "oafpass.secretName" . }}
+                  key: {{ .Values.secretKeys.oauth2ProxyCookieSecret }}
+            {{- range $key, $value := .Values.auth.oauth2Proxy.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          ports:
+            - name: oauth2-proxy
+              containerPort: {{ .Values.auth.oauth2Proxy.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: oauth2-proxy
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: oauth2-proxy
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          {{- with .Values.auth.oauth2Proxy.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+        {{- end }}
+        - name: oafpass
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            - name: PORT
+              value: "1337"
+            - name: LOG_LEVEL
+              value: {{ .Values.oafpass.logLevel | quote }}
+            - name: HEALTH_CHECK
+              value: {{ .Values.oafpass.healthCheck | quote }}
+            - name: DATABASE
+              value: {{ .Values.database.type | quote }}
+            {{- if eq .Values.database.type "memcached" }}
+            - name: MEMCACHED
+              value: {{ include "oafpass.memcachedAddress" . | quote }}
+            {{- else }}
+            - name: REDIS
+              {{- if or .Values.database.redis.existingSecret .Values.secret.redisUrl }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ default (include "oafpass.secretName" .) .Values.database.redis.existingSecret }}
+                  key: {{ .Values.database.redis.existingSecretUrlKey }}
+              {{- else }}
+              value: {{ .Values.database.redis.url | quote }}
+              {{- end }}
+            {{- end }}
+            - name: MAX_LENGTH
+              value: {{ .Values.oafpass.maxLength | quote }}
+            - name: DEFAULT_EXPIRY
+              value: {{ .Values.oafpass.defaultExpiry | quote }}
+            {{- with .Values.oafpass.forceExpiration }}
+            - name: FORCE_EXPIRATION
+              value: {{ . | quote }}
+            {{- end }}
+            - name: FORCE_ONETIME_SECRETS
+              value: {{ .Values.oafpass.forceOnetimeSecrets | quote }}
+            - name: ARGON2
+              value: {{ .Values.oafpass.argon2 | quote }}
+            - name: DISABLE_UPLOAD
+              value: {{ .Values.oafpass.disableUpload | quote }}
+            {{- if not .Values.oafpass.disableUpload }}
+            - name: MAX_FILE_SIZE
+              value: {{ .Values.oafpass.maxFileSize | quote }}
+            {{- end }}
+            - name: READ_ONLY
+              value: {{ .Values.oafpass.readOnly | quote }}
+            - name: DISABLE_SECRET_REQUESTS
+              value: {{ .Values.oafpass.disableSecretRequests | quote }}
+            - name: NO_LANGUAGE_SWITCHER
+              value: {{ .Values.oafpass.noLanguageSwitcher | quote }}
+            - name: AUDIT_LOG
+              value: {{ .Values.oafpass.auditLog | quote }}
+            {{- with .Values.oafpass.auditLogFile }}
+            - name: AUDIT_LOG_FILE
+              value: {{ . | quote }}
+            {{- end }}
+            - name: METRICS_PORT
+              value: {{ .Values.oafpass.metricsPort | quote }}
+            {{- with include "oafpass.publicUrl" . }}
+            - name: PUBLIC_URL
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with (coalesce .Values.oafpass.corsAllowOrigin (include "oafpass.publicUrl" .)) }}
+            - name: CORS_ALLOW_ORIGIN
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.oafpass.trustedProxies }}
+            - name: TRUSTED_PROXIES
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.oafpass.privacyNoticeUrl }}
+            - name: PRIVACY_NOTICE_URL
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.oafpass.imprintUrl }}
+            - name: IMPRINT_URL
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.branding.appName }}
+            - name: APP_NAME
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.branding.logoUrl }}
+            - name: LOGO_URL
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.branding.themeLight }}
+            - name: THEME_LIGHT
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.branding.themeDark }}
+            - name: THEME_DARK
+              value: {{ . | quote }}
+            {{- end }}
+            {{- if eq .Values.auth.mode "oidc" }}
+            # Yopass' own OIDC. Gates secret *creation* only — recipients open
+            # links without signing in. Licensed feature; LICENSE_KEY below is
+            # not optional here.
+            - name: OIDC_ISSUER
+              value: {{ .Values.auth.oidc.issuer | quote }}
+            - name: OIDC_CLIENT_ID
+              value: {{ .Values.auth.oidc.clientId | quote }}
+            - name: OIDC_REDIRECT_URL
+              value: {{ include "oafpass.oidc.redirectUrl" . | quote }}
+            - name: REQUIRE_AUTH
+              value: {{ .Values.auth.oidc.requireAuth | quote }}
+            {{- with .Values.auth.oidc.allowedDomains }}
+            - name: OIDC_ALLOWED_DOMAINS
+              value: {{ . | quote }}
+            {{- end }}
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "oafpass.secretName" . }}
+                  key: {{ .Values.secretKeys.oidcClientSecret }}
+                  optional: true
+            - name: OIDC_SESSION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "oafpass.secretName" . }}
+                  key: {{ .Values.secretKeys.oidcSessionKey }}
+                  optional: true
+            - name: LICENSE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "oafpass.secretName" . }}
+                  key: {{ .Values.secretKeys.licenseKey }}
+            {{- end }}
+            - name: API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "oafpass.secretName" . }}
+                  key: {{ .Values.secretKeys.apiToken }}
+                  optional: true
+            {{- range $key, $value := .Values.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- with .Values.extraEnvFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.extraArgs }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 1337
+              protocol: TCP
+            {{- if gt (int .Values.oafpass.metricsPort) 0 }}
+            - name: metrics
+              containerPort: {{ .Values.oafpass.metricsPort }}
+              protocol: TCP
+            {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      volumes:
+        # readOnlyRootFilesystem is on; Yopass and oauth2-proxy still want a
+        # writable /tmp.
+        - name: tmp
+          emptyDir: {}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

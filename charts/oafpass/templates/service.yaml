@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "oafpass.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "oafpass.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ include "oafpass.service.targetPort" . }}
+      protocol: TCP
+      name: http
+    {{- if gt (int .Values.oafpass.metricsPort) 0 }}
+    - port: {{ .Values.oafpass.metricsPort }}
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+    {{- end }}
+  selector:
+    {{- include "oafpass.selectorLabels" . | nindent 4 }}

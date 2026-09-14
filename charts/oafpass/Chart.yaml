@@ -1,0 +1,31 @@
+apiVersion: v2
+name: oafpass
+description: oafpass — One Acre Fund's branded Yopass deployment for client-side encrypted secret sharing, with optional Google sign-in in front of it
+type: application
+
+# This is the chart version. This version number should be incremented each time
+# you make changes to the chart and its templates, including the app version.
+version: 0.1.0
+
+# The version of Yopass (https://github.com/jhaals/yopass) this chart deploys.
+appVersion: "14.9.0"
+
+keywords:
+  - oafpass
+  - yopass
+  - secrets
+  - password-sharing
+  - oauth2-proxy
+
+home: https://yopass.se
+
+icon: https://raw.githubusercontent.com/jhaals/yopass/master/website/public/favicon.png
+
+sources:
+  - https://github.com/jhaals/yopass
+  - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/oafpass
+
+maintainers:
+  - name: ajimoh-oaf
+    email: jimoh.abdullah69@gmail.com
+    url: https://github.com/ajimoh-oaf

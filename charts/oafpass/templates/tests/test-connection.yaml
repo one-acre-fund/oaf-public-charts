@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "oafpass.fullname" . }}-test-connection"
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "oafpass.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  containers:
+    # /health is on the oauth2-proxy skip-auth list, so this stays a straight
+    # 200 in every auth mode.
+    - name: wget
+      image: busybox:1.36
+      command: ['wget']
+      args: ['-q', '-O-', '{{ include "oafpass.fullname" . }}:{{ .Values.service.port }}/health']

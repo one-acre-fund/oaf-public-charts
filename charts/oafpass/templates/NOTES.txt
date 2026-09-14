@@ -1,0 +1,42 @@
+{{ .Values.branding.appName | default "oafpass" }} {{ .Chart.AppVersion }} is deployed as {{ include "oafpass.fullname" . }}.
+
+{{- if .Values.ingress.enabled }}
+
+Reach it at:
+{{- range .Values.ingress.hosts }}
+{{- $scheme := "http" }}
+{{- if $.Values.ingress.tls }}{{ $scheme = "https" }}{{ end }}
+{{- range .paths }}
+  {{ $scheme }}://{{ .host }}{{ .path }}
+{{- end }}
+{{- end }}
+{{- else }}
+
+No ingress. Port-forward to try it:
+  kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "oafpass.fullname" . }} 8080:{{ .Values.service.port }}
+  open http://127.0.0.1:8080
+{{- end }}
+
+Sign-in mode: {{ .Values.auth.mode }}
+{{- if eq .Values.auth.mode "oauth2-proxy" }}
+  oauth2-proxy fronts every request. Register this exact callback in the Google
+  OAuth client, or sign-in fails with redirect_uri_mismatch:
+
+    {{ include "oafpass.oauth2Proxy.redirectUrl" . }}
+
+  Allowed email domains: {{ join ", " .Values.auth.oauth2Proxy.emailDomains }}
+{{- else if eq .Values.auth.mode "oidc" }}
+  Yopass' own OIDC gates secret creation; recipients open links without an
+  account. Register this callback in the Google OAuth client:
+
+    {{ include "oafpass.oidc.redirectUrl" . }}
+{{- else }}
+  auth.mode=none — anyone who can reach the ingress can create and read
+  secrets. Set auth.mode=oauth2-proxy before exposing this publicly.
+{{- end }}
+
+Storage: {{ .Values.database.type }}
+{{- if and (eq .Values.database.type "memcached") .Values.database.memcached.enabled }}
+  Bundled memcached, {{ .Values.database.memcached.memoryLimitMb }}Mi, in-memory only.
+  Secrets still in flight are lost if that pod restarts.
+{{- end }}

@@ -21,6 +21,7 @@ helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
 * [Mautic](https://www.mautic.org/)
 * [n8n](https://n8n.io/)
 * [Nocodb](https://www.nocodb.com/)
+* [oafpass](https://github.com/jhaals/yopass) (Yopass)
 * [PgBouncer](https://www.pgbouncer.org/)
 * [Sydent](https://github.com/matrix-org/sydent)
 * [Uptime Wrapper](https://uptime-kuma-api.readthedocs.io/en/latest)

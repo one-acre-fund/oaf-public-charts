@@ -1,0 +1,375 @@
+# Default values for oafpass.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Number of Yopass replicas. With the bundled in-cluster memcached this can
+# safely be raised; with `database.memcached.enabled=false` and a shared
+# backend it can be raised too. Sessions are the only sticky part — see
+# `auth.oidc.sessionKey` / `auth.oauth2Proxy`.
+replicaCount: 1
+
+image:
+  # -- Yopass image repository.
+  repository: jhaals/yopass
+  # -- Image pull policy.
+  pullPolicy: IfNotPresent
+  # -- Image tag. Defaults to the chart appVersion when empty.
+  tag: ""
+
+# -- Image pull secrets for the Yopass and sidecar images.
+imagePullSecrets: []
+# -- Override the chart name used in resource names.
+nameOverride: ""
+# -- Override the full resource name prefix (usually `<release>-<chart>`).
+fullnameOverride: ""
+
+serviceAccount:
+  # -- Create a ServiceAccount for the Yopass pods.
+  create: true
+  # -- Mount the ServiceAccount token into the pods. Yopass talks to no
+  # Kubernetes API, so this stays off.
+  automount: false
+  # -- Annotations for the ServiceAccount.
+  annotations: {}
+  # -- Name of the ServiceAccount to use. Generated from the fullname when empty.
+  name: ""
+
+# -- Extra annotations for the Yopass pods.
+podAnnotations: {}
+# -- Extra labels for the Yopass pods.
+podLabels: {}
+
+# -- Pod-level security context.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+# -- Container-level security context, applied to every container in the pod.
+# Yopass keeps nothing on disk unless `oafpass.fileStore` is set to `local`.
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  # -- Service type.
+  type: ClusterIP
+  # -- Service port. Traffic lands on oauth2-proxy when
+  # `auth.mode=oauth2-proxy`, otherwise straight on Yopass.
+  port: 80
+
+ingress:
+  # -- Deploy an Ingress for Yopass.
+  enabled: false
+  # -- `ingressClassName` of the Ingress.
+  className: ""
+  # -- Annotations for the Ingress.
+  annotations: {}
+  # -- Ingress hosts and paths.
+  hosts:
+    - host: oafpass.local
+      paths:
+        - path: /
+          pathType: Prefix
+  # -- Ingress TLS configuration.
+  tls: []
+
+# oafpass (Yopass) server settings. Every key here maps to a documented flag —
+# https://github.com/jhaals/yopass/blob/master/docs/server-options.md
+oafpass:
+  # -- Public URL Yopass builds secret links with (`--public-url`). Set this to
+  # the ingress host or copied links point at the wrong origin.
+  publicUrl: ""
+  # -- Log level: `debug`, `info`, `warn` or `error` (`--log-level`).
+  logLevel: info
+  # -- Register `/health` and `/ready` (`--health-check`). Required by the
+  # default probes below.
+  healthCheck: true
+  # -- Maximum secret length in characters (`--max-length`).
+  maxLength: 10000
+  # -- Default expiry offered in the UI (`--default-expiry`). Yopass accepts
+  # `1h`, `1d` or `1w` and rejects anything else at startup.
+  defaultExpiry: 1h
+  # -- Cap every secret at this expiry, overriding the user's choice
+  # (`--force-expiration`). One of `1h`, `1d`, `1w`. Empty leaves the user's
+  # choice alone.
+  forceExpiration: ""
+  # -- Force every secret to be one-time only (`--force-onetime-secrets`).
+  forceOnetimeSecrets: false
+  # -- Use Argon2id for password key derivation (`--argon2`). Slower, stronger.
+  argon2: false
+  # -- Disable file uploads (`--disable-upload`).
+  disableUpload: false
+  # -- Maximum upload size (`--max-file-size`). Ignored when uploads are off.
+  maxFileSize: 512KB
+  # -- `CORS` allow-origin header (`--cors-allow-origin`). Chart default is the
+  # public URL only; set `"*"` to restore the upstream default.
+  corsAllowOrigin: ""
+  # -- Comma-separated CIDRs whose `X-Forwarded-For` Yopass trusts
+  # (`--trusted-proxies`). Set it when the client IP matters in the audit log.
+  trustedProxies: ""
+  # -- Emit structured audit log lines for every secret operation
+  # (`--audit-log`). Goes to stdout unless `auditLogFile` is set.
+  auditLog: false
+  # -- Write the audit log to this path instead of stdout (`--audit-log-file`).
+  # Needs a writable volume — see `extraVolumes` / `extraVolumeMounts`.
+  auditLogFile: ""
+  # -- Prometheus metrics port (`--metrics-port`). `-1` disables metrics.
+  metricsPort: -1
+  # -- Serve the UI read-only: existing secrets can be opened, no new ones
+  # created (`--read-only`).
+  readOnly: false
+  # -- Disable the secret-request feature (`--disable-secret-requests`).
+  disableSecretRequests: false
+  # -- Hide the language switcher (`--no-language-switcher`).
+  noLanguageSwitcher: false
+  # -- URL of a privacy notice linked in the footer (`--privacy-notice-url`).
+  privacyNoticeUrl: ""
+  # -- URL of an imprint linked in the footer (`--imprint-url`).
+  imprintUrl: ""
+
+# Branding. All four map to flags; leave empty for Yopass' own look.
+branding:
+  # -- Product name shown in the UI and page title (`--app-name`).
+  appName: oafpass
+  # -- URL of a logo served in the header (`--logo-url`).
+  logoUrl: ""
+  # -- Built-in light theme (`--theme-light`), e.g. `emerald`.
+  themeLight: ""
+  # -- Built-in dark theme (`--theme-dark`), e.g. `dim`.
+  themeDark: ""
+
+# Storage backend for the encrypted blobs. Yopass exits at startup without one.
+database:
+  # -- Backend type: `memcached` or `redis` (`--database`).
+  type: memcached
+  memcached:
+    # -- Deploy the bundled single-replica memcached. Turn it off to point at
+    # `database.memcachedAddress` instead.
+    enabled: true
+    image:
+      # -- Memcached image repository.
+      repository: memcached
+      # -- Memcached image tag.
+      tag: 1.6-alpine
+      # -- Memcached image pull policy.
+      pullPolicy: IfNotPresent
+    # -- Memcached cache size in MiB (`-m`). This is the ceiling on all live
+    # secrets at once; memcached evicts the oldest when it fills.
+    memoryLimitMb: 64
+    # -- Extra args for the memcached container.
+    extraArgs: []
+    # -- Resources for the memcached container.
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 25m
+        memory: 96Mi
+  # -- Memcached address used when `database.memcached.enabled=false`
+  # (`--memcached`).
+  memcachedAddress: ""
+  redis:
+    # -- Redis connection URL (`--redis`), e.g.
+    # `redis://redis.tools:6379/0`. Only read when `database.type=redis`.
+    url: ""
+    # -- Read the URL from a Secret key instead, so a password in the URL stays
+    # out of git. Defaults to the chart Secret (see `secret`) when empty.
+    existingSecret: ""
+    # -- Key holding the Redis URL in that Secret.
+    existingSecretUrlKey: redis-url
+
+# Sign-in. Three modes:
+#
+#   none          Yopass is open to anyone who can reach the ingress.
+#   oauth2-proxy  an oauth2-proxy sidecar fronts Yopass and every request —
+#                 creating *and* reading — needs a Google login. No licence.
+#   oidc          Yopass' own OIDC support. Only secret *creation* is gated;
+#                 recipients open links without an account. Requires a Yopass
+#                 licence key (`license.*`) — the server refuses to start with
+#                 OIDC flags and no licence.
+auth:
+  # -- Sign-in mode: `none`, `oauth2-proxy` or `oidc`.
+  mode: none
+
+  oauth2Proxy:
+    image:
+      # -- oauth2-proxy image repository.
+      repository: quay.io/oauth2-proxy/oauth2-proxy
+      # -- oauth2-proxy image tag.
+      tag: v7.7.1
+      # -- oauth2-proxy image pull policy.
+      pullPolicy: IfNotPresent
+    # -- Port the sidecar listens on. The Service targets this port in this mode.
+    port: 4180
+    # -- Identity provider (`--provider`). `google` for Google Workspace.
+    provider: google
+    # -- Email domains allowed to sign in (`--email-domain`). `["*"]` allows any
+    # account that completes the Google login — set your own domain instead.
+    emailDomains:
+      - "*"
+    # -- Full callback URL registered with the provider (`--redirect-url`).
+    # Must be `https://<host>/oauth2/callback`. Derived from `oafpass.publicUrl`
+    # when empty.
+    redirectUrl: ""
+    # -- Only send the session cookie over HTTPS (`--cookie-secure`).
+    cookieSecure: true
+    # -- Session cookie lifetime (`--cookie-expire`).
+    cookieExpire: 168h
+    # -- How often the session is refreshed against the provider
+    # (`--cookie-refresh`). Must be shorter than `cookieExpire`.
+    cookieRefresh: 1h
+    # -- Skip the "Sign in with Google" interstitial and redirect straight to
+    # the provider (`--skip-provider-button`).
+    skipProviderButton: true
+    # -- Paths served without a login, as regexes (`--skip-auth-route`). The
+    # health endpoints are here so kubelet probes and uptime checks do not get
+    # bounced to Google.
+    skipAuthRoutes:
+      - ^/health$
+      - ^/ready$
+    # -- Extra args for oauth2-proxy.
+    extraArgs: []
+    # -- Extra environment variables for oauth2-proxy.
+    extraEnv: {}
+    # -- Resources for the oauth2-proxy container.
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 25m
+        memory: 64Mi
+
+  oidc:
+    # -- Issuer URL (`--oidc-issuer`). `https://accounts.google.com` for Google.
+    issuer: https://accounts.google.com
+    # -- OAuth2 client ID (`--oidc-client-id`).
+    clientId: ""
+    # -- Callback URL (`--oidc-redirect-url`). Must be
+    # `https://<host>/auth/callback`. Derived from `oafpass.publicUrl` when empty.
+    redirectUrl: ""
+    # -- Comma-separated email domains allowed to sign in
+    # (`--oidc-allowed-domains`).
+    allowedDomains: ""
+    # -- Refuse to create secrets without a login (`--require-auth`). Reading
+    # stays open either way.
+    requireAuth: true
+
+license:
+  # -- Yopass licence key, required by `auth.mode=oidc`. Prefer delivering it
+  # through the Secret (`secret.licenseKey`) rather than here.
+  key: ""
+
+# The chart Secret carries every credential the containers read. Set
+# `create: false` and let an ExternalSecret of the same name own it in
+# clusters where secrets come from Vault; the containers read it identically
+# either way.
+secret:
+  # -- Render the Secret from the values below. `false` expects a Secret named
+  # `secret.name` (or the chart fullname) to already exist.
+  create: true
+  # -- Name of the Secret. Defaults to the chart fullname when empty.
+  name: ""
+  # -- Google OAuth2 client ID for `auth.mode=oauth2-proxy`.
+  oauth2ProxyClientId: ""
+  # -- Google OAuth2 client secret for `auth.mode=oauth2-proxy`.
+  oauth2ProxyClientSecret: ""
+  # -- Cookie-signing seed for oauth2-proxy. Must be 16, 24 or 32 bytes —
+  # `openssl rand -base64 32 | tr -- '+/' '-_'`. Changing it logs everyone out.
+  oauth2ProxyCookieSecret: ""
+  # -- OAuth2 client secret for `auth.mode=oidc`.
+  oidcClientSecret: ""
+  # -- 64-byte hex session key shared by all replicas in `auth.mode=oidc`
+  # (`--oidc-session-key`), from `openssl rand -hex 64`. Without it users are
+  # logged out whenever a request lands on another pod.
+  oidcSessionKey: ""
+  # -- Yopass licence key for `auth.mode=oidc`.
+  licenseKey: ""
+  # -- Static bearer token for API clients (`--api-token`). Optional.
+  apiToken: ""
+  # -- Redis URL, when it carries a password and `database.type=redis`.
+  redisUrl: ""
+
+# -- Keys read out of the Secret. Override when an existing Secret names them
+# differently.
+secretKeys:
+  oauth2ProxyClientId: oauth2-proxy-client-id
+  oauth2ProxyClientSecret: oauth2-proxy-client-secret
+  oauth2ProxyCookieSecret: oauth2-proxy-cookie-secret
+  oidcClientSecret: oidc-client-secret
+  oidcSessionKey: oidc-session-key
+  licenseKey: license-key
+  apiToken: api-token
+
+# -- Extra flags for the Yopass server, e.g. `["--file-store=s3"]`.
+extraArgs: []
+
+# -- Extra environment variables for the Yopass container.
+extraEnv: {}
+
+# -- Extra environment variables sourced from existing ConfigMaps/Secrets.
+extraEnvFrom: []
+
+# -- Resources for the Yopass container.
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+# -- Liveness probe for the Yopass container. Probes hit Yopass directly, not
+# through oauth2-proxy.
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 20
+
+# -- Readiness probe for the Yopass container.
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+autoscaling:
+  # -- Deploy a HorizontalPodAutoscaler.
+  enabled: false
+  # -- Minimum replicas.
+  minReplicas: 1
+  # -- Maximum replicas.
+  maxReplicas: 5
+  # -- Target average CPU utilisation.
+  targetCPUUtilizationPercentage: 80
+  # -- Target average memory utilisation.
+  targetMemoryUtilizationPercentage: ""
+
+# -- Extra volumes on the Deployment.
+extraVolumes: []
+
+# -- Extra volume mounts on the Yopass container.
+extraVolumeMounts: []
+
+# -- Node selector for the pods.
+nodeSelector: {}
+
+# -- Tolerations for the pods.
+tolerations: []
+
+# -- Affinity rules for the pods.
+affinity: {}
+
+# -- Topology spread constraints for the pods.
+topologySpreadConstraints: []
