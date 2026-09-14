@@ -1,0 +1,103 @@
+{{- if and (eq .Values.database.type "memcached") .Values.database.memcached.enabled -}}
+{{/*
+Bundled storage for the encrypted blobs. Separate Deployment rather than a
+sidecar so every oafpass replica reads the same cache. Memcached is in-memory
+only: restarting it drops the secrets still in flight, which for short-lived
+one-time links is the intended trade-off. Point `database.type=redis` at a
+persistent Redis if secrets must survive a restart.
+*/}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oafpass.memcached.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "oafpass.memcached.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    # Two memcached pods would split the cache and hand out 404s for secrets
+    # stored on the other one.
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "oafpass.memcached.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "oafpass.memcached.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: false
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: memcached
+          image: "{{ .Values.database.memcached.image.repository }}:{{ .Values.database.memcached.image.tag }}"
+          imagePullPolicy: {{ .Values.database.memcached.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          args:
+            - -m
+            - {{ .Values.database.memcached.memoryLimitMb | quote }}
+            {{- with .Values.database.memcached.extraArgs }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: memcached
+              containerPort: 11211
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: memcached
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          readinessProbe:
+            tcpSocket:
+              port: memcached
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          {{- with .Values.database.memcached.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "oafpass.memcached.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    {{- include "oafpass.memcached.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 11211
+      targetPort: memcached
+      protocol: TCP
+      name: memcached
+  selector:
+    {{- include "oafpass.memcached.selectorLabels" . | nindent 4 }}
+{{- end }}

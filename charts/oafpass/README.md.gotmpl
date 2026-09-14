@@ -1,0 +1,91 @@
+{{ template "chart.header" . }}
+{{ template "chart.versionBadge" . }}
+{{ template "chart.appVersionBadge" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+## TL;DR
+
+[Yopass](https://yopass.se) shares secrets through one-time links. The message is
+encrypted in the browser and the key never leaves the fragment of the URL, so the
+server stores ciphertext it cannot read. This chart deploys it under One Acre
+Fund's `oafpass` branding, with a storage backend and an optional Google login
+in front.
+
+```console
+helm repo add one-acre-fund https://one-acre-fund.github.io/oaf-public-charts
+helm install oafpass one-acre-fund/oafpass
+```
+
+## Sign-in
+
+`auth.mode` picks one of three:
+
+| `auth.mode` | What it does | Licence |
+|-------------|--------------|---------|
+| `none` | Anyone who reaches the ingress can create and read secrets. | — |
+| `oauth2-proxy` | An [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/) sidecar fronts Yopass. **Every** request — creating a secret and opening one — needs a Google login from an allowed domain. | none |
+| `oidc` | Yopass' own OIDC. Only secret *creation* is gated; recipients open links without an account. | **a paid Yopass licence key** — the server refuses to start with OIDC configured and no licence |
+
+Both authenticated modes need a Google OAuth 2.0 client (APIs & Services →
+Credentials → OAuth client ID → Web application) with the callback registered
+verbatim, or Google answers `redirect_uri_mismatch`:
+
+* `oauth2-proxy` → `https://<host>/oauth2/callback`
+* `oidc` → `https://<host>/auth/callback`
+
+`oafpass.publicUrl` is where both are derived from, so set it to the ingress
+host. It is also what Yopass builds the copied secret links out of.
+
+### oauth2-proxy quick setup
+
+```yaml
+auth:
+  mode: oauth2-proxy
+  oauth2Proxy:
+    emailDomains:
+      - oneacrefund.org      # do not leave this at "*"
+oafpass:
+  publicUrl: https://oafpass.oneacrefund.org
+secret:
+  oauth2ProxyClientId: "<client id>.apps.googleusercontent.com"
+  oauth2ProxyClientSecret: "GOCSPX-..."
+  # openssl rand -base64 32 | tr -- '+/' '-_'
+  oauth2ProxyCookieSecret: "..."
+```
+
+Because oauth2-proxy gates reads as well as writes, a link shared with someone
+outside the allowed domains will not open. That is the trade-off for not needing
+a licence; `oidc` is the mode that keeps reads public.
+
+## Secrets
+
+Everything credential-shaped lives in one Secret so a cluster can hand the whole
+thing to [External Secrets](https://external-secrets.io/) instead of git:
+
+```yaml
+secret:
+  create: false            # nothing rendered from values
+  name: oafpass            # an ExternalSecret owns a Secret of this name
+```
+
+The container wiring is identical either way. `secretKeys.*` renames the keys if
+an existing Secret spells them differently.
+
+## Storage
+
+Yopass exits at startup without a backend.
+
+* `database.type=memcached` (default) deploys a single bundled memcached. It is
+  in-memory only: secrets still in flight are lost when that pod restarts. For
+  short-lived one-time links that is usually the right trade-off.
+* `database.type=redis` points at an external Redis via `database.redis.url`,
+  or at a Secret key when the URL carries a password.
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
