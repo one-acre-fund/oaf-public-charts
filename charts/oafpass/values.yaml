@@ -88,9 +88,10 @@ oafpass:
   publicUrl: ""
   # -- Log level: `debug`, `info`, `warn` or `error` (`--log-level`).
   logLevel: info
-  # -- Register `/health` and `/ready` (`--health-check`). Required by the
-  # default probes below.
-  healthCheck: true
+  # There is deliberately no `healthCheck` value. Yopass' `--health-check` is
+  # not an endpoint toggle: it runs a single database check and exits, so a
+  # server container that sets it crash-loops. `/health` and `/ready` are
+  # served unconditionally, which is what the probes below use.
   # -- Maximum secret length in characters (`--max-length`).
   maxLength: 10000
   # -- Default expiry offered in the UI (`--default-expiry`). Yopass accepts

@@ -130,8 +130,10 @@ spec:
               value: "1337"
             - name: LOG_LEVEL
               value: {{ .Values.oafpass.logLevel | quote }}
-            - name: HEALTH_CHECK
-              value: {{ .Values.oafpass.healthCheck | quote }}
+            # No HEALTH_CHECK here, deliberately. --health-check is not a
+            # toggle for the /health endpoint — it runs one database check and
+            # exits (main.go: os.Exit(0)), so setting it crash-loops the
+            # container. /health and /ready are always registered.
             - name: DATABASE
               value: {{ .Values.database.type | quote }}
             {{- if eq .Values.database.type "memcached" }}

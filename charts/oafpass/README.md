@@ -1,6 +1,6 @@
 # oafpass
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.9.0](https://img.shields.io/badge/AppVersion-14.9.0-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.9.0](https://img.shields.io/badge/AppVersion-14.9.0-informational?style=flat-square)
 
 oafpass — One Acre Fund's branded Yopass deployment for client-side encrypted secret sharing, with optional Google sign-in in front of it
 
@@ -168,7 +168,6 @@ Yopass exits at startup without a backend.
 | oafpass.disableUpload | bool | `false` | Disable file uploads (`--disable-upload`). |
 | oafpass.forceExpiration | string | `""` | Cap every secret at this expiry, overriding the user's choice (`--force-expiration`). One of `1h`, `1d`, `1w`. Empty leaves the user's choice alone. |
 | oafpass.forceOnetimeSecrets | bool | `false` | Force every secret to be one-time only (`--force-onetime-secrets`). |
-| oafpass.healthCheck | bool | `true` | Register `/health` and `/ready` (`--health-check`). Required by the default probes below. |
 | oafpass.imprintUrl | string | `""` | URL of an imprint linked in the footer (`--imprint-url`). |
 | oafpass.logLevel | string | `"info"` | Log level: `debug`, `info`, `warn` or `error` (`--log-level`). |
 | oafpass.maxFileSize | string | `"512KB"` | Maximum upload size (`--max-file-size`). Ignored when uploads are off. |
