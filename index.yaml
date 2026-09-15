@@ -6924,6 +6924,32 @@ entries:
   oafpass:
   - apiVersion: v2
     appVersion: 14.9.0
+    created: "2026-09-15T12:03:26.057157222Z"
+    description: oafpass — One Acre Fund's branded Yopass deployment for client-side
+      encrypted secret sharing, with optional Google sign-in in front of it
+    digest: c2140650fa28317c284c44673eac7fc37eae66c5868d3cda4f7e00be3c22150a
+    home: https://yopass.se
+    icon: https://raw.githubusercontent.com/jhaals/yopass/master/website/public/favicon.png
+    keywords:
+    - oafpass
+    - yopass
+    - secrets
+    - password-sharing
+    - oauth2-proxy
+    maintainers:
+    - email: jimoh.abdullah69@gmail.com
+      name: ajimoh-oaf
+      url: https://github.com/ajimoh-oaf
+    name: oafpass
+    sources:
+    - https://github.com/jhaals/yopass
+    - https://github.com/one-acre-fund/oaf-public-charts/tree/main/charts/oafpass
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/oafpass-0.1.3/oafpass-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 14.9.0
     created: "2026-09-15T11:17:46.93253271Z"
     description: oafpass — One Acre Fund's branded Yopass deployment for client-side
       encrypted secret sharing, with optional Google sign-in in front of it
@@ -7430,4 +7456,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-0.1.0/uptime-wrapper-0.1.0.tgz
     version: 0.1.0
-generated: "2026-09-15T11:17:46.932958237Z"
+generated: "2026-09-15T12:03:26.057562059Z"
