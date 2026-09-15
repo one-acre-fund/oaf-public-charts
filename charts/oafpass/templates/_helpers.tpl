@@ -157,8 +157,20 @@ Fail early on value combinations that only break at runtime.
 {{- if and (eq .Values.auth.mode "oidc") (not .Values.auth.oidc.clientId) }}
 {{- fail "auth.mode=oidc needs auth.oidc.clientId" }}
 {{- end }}
-{{- if and (eq .Values.auth.mode "oidc") .Values.secret.create (not .Values.secret.licenseKey) (not .Values.license.key) }}
-{{- fail "auth.mode=oidc needs a Yopass licence key (secret.licenseKey or license.key) — the server refuses to start with OIDC configured and no licence" }}
+{{/*
+Licence-gated settings. Yopass does not degrade for these — it calls
+logger.Fatal in validateFlags and the container crash-loops. license.enabled is
+the assertion that a key actually reaches the container, which the chart cannot
+verify itself when an ExternalSecret owns the Secret.
+*/}}
+{{- if and (eq .Values.auth.mode "oidc") (not .Values.license.enabled) }}
+{{- fail "auth.mode=oidc requires a Yopass licence — set license.enabled=true once a key is delivered (secret.licenseKey or an ExternalSecret), or the server refuses to start" }}
+{{- end }}
+{{- if and .Values.oafpass.auditLog (not .Values.license.enabled) }}
+{{- fail "oafpass.auditLog=true requires a Yopass licence — the server exits with \"--audit-log requires a valid license key\". Set license.enabled=true once a key is delivered, or turn auditLog off" }}
+{{- end }}
+{{- if and .Values.oafpass.webhookUrl (not .Values.license.enabled) }}
+{{- fail "oafpass.webhookUrl requires a Yopass licence — the server exits with \"--webhook-url requires a valid license key\"" }}
 {{- end }}
 {{- if not (has .Values.oafpass.defaultExpiry (list "1h" "1d" "1w")) }}
 {{- fail (printf "oafpass.defaultExpiry must be one of 1h, 1d, 1w — got %q" .Values.oafpass.defaultExpiry) }}

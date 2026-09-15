@@ -116,11 +116,17 @@ oafpass:
   # (`--trusted-proxies`). Set it when the client IP matters in the audit log.
   trustedProxies: ""
   # -- Emit structured audit log lines for every secret operation
-  # (`--audit-log`). Goes to stdout unless `auditLogFile` is set.
+  # (`--audit-log`). Goes to stdout unless `auditLogFile` is set. LICENSED:
+  # Yopass exits with "--audit-log requires a valid license key" if this is on
+  # without one, so it is gated on `license.enabled`.
   auditLog: false
   # -- Write the audit log to this path instead of stdout (`--audit-log-file`).
   # Needs a writable volume — see `extraVolumes` / `extraVolumeMounts`.
   auditLogFile: ""
+  # -- URL receiving webhook notifications for secret lifecycle events
+  # (`--webhook-url`). LICENSED: the server exits without a valid key, so this
+  # is gated on `license.enabled` too.
+  webhookUrl: ""
   # -- Prometheus metrics port (`--metrics-port`). `-1` disables metrics.
   metricsPort: -1
   # -- Serve the UI read-only: existing secrets can be opened, no new ones
@@ -136,6 +142,11 @@ oafpass:
   imprintUrl: ""
 
 # Branding. All four map to flags; leave empty for Yopass' own look.
+#
+# LICENSED, and silently so: the server accepts these without a licence and
+# then drops them when serving /config (server.go gates APP_NAME and LOGO_URL
+# on License.CurrentlyValid()), so the UI keeps saying "Yopass". No error, no
+# log line. Set `license.enabled` and deliver a key to make them take effect.
 branding:
   # -- Product name shown in the UI and page title (`--app-name`).
   appName: oafpass
@@ -265,8 +276,13 @@ auth:
     requireAuth: true
 
 license:
-  # -- Yopass licence key, required by `auth.mode=oidc`. Prefer delivering it
-  # through the Secret (`secret.licenseKey`) rather than here.
+  # -- Set true when a valid Yopass licence key reaches the container, whether
+  # from `secret.licenseKey` or an ExternalSecret. It is an assertion, not a
+  # switch: the chart uses it to allow licence-gated settings, and cannot read
+  # the key itself when the Secret is owned externally.
+  enabled: false
+  # -- Yopass licence key. Prefer delivering it through the Secret
+  # (`secret.licenseKey`) rather than here.
   key: ""
 
 # The chart Secret carries every credential the containers read. Set

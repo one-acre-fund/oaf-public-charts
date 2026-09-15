@@ -194,6 +194,10 @@ spec:
             - name: TRUSTED_PROXIES
               value: {{ . | quote }}
             {{- end }}
+            {{- with .Values.oafpass.webhookUrl }}
+            - name: WEBHOOK_URL
+              value: {{ . | quote }}
+            {{- end }}
             {{- with .Values.oafpass.privacyNoticeUrl }}
             - name: PRIVACY_NOTICE_URL
               value: {{ . | quote }}
@@ -220,8 +224,8 @@ spec:
             {{- end }}
             {{- if eq .Values.auth.mode "oidc" }}
             # Yopass' own OIDC. Gates secret *creation* only — recipients open
-            # links without signing in. Licensed feature; LICENSE_KEY below is
-            # not optional here.
+            # links without signing in. Licensed: validateValues refuses this
+            # mode unless license.enabled is set.
             - name: OIDC_ISSUER
               value: {{ .Values.auth.oidc.issuer | quote }}
             - name: OIDC_CLIENT_ID
@@ -246,6 +250,10 @@ spec:
                   name: {{ include "oafpass.secretName" . }}
                   key: {{ .Values.secretKeys.oidcSessionKey }}
                   optional: true
+            {{- end }}
+            {{- if .Values.license.enabled }}
+            # Not only for OIDC: audit logging and the branding flags are
+            # licence-gated too, so the key ships in every auth mode.
             - name: LICENSE_KEY
               valueFrom:
                 secretKeyRef:

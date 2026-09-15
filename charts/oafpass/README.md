@@ -1,6 +1,6 @@
 # oafpass
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.9.0](https://img.shields.io/badge/AppVersion-14.9.0-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.9.0](https://img.shields.io/badge/AppVersion-14.9.0-informational?style=flat-square)
 
 oafpass — One Acre Fund's branded Yopass deployment for client-side encrypted secret sharing, with optional Google sign-in in front of it
 
@@ -68,6 +68,22 @@ secret:
 Because oauth2-proxy gates reads as well as writes, a link shared with someone
 outside the allowed domains will not open. That is the trade-off for not needing
 a licence; `oidc` is the mode that keeps reads public.
+
+## What a Yopass licence gates
+
+Several settings are business-licence features. Two failure modes, and the
+silent one is the trap:
+
+| Setting | Without a licence |
+|---|---|
+| `oafpass.auditLog`, `oafpass.webhookUrl`, `auth.mode: oidc` | **Container crash-loops.** `validateFlags` calls `logger.Fatal`, e.g. `--audit-log requires a valid license key`. |
+| `branding.appName`, `branding.logoUrl`, `branding.themeLight/themeDark` | **Silently ignored.** The server accepts the flags, then omits them from `/config`, so the UI keeps Yopass' own name and look. No error, no log line. |
+| `oafpass.maxFileSize` | Capped at 1MB. |
+
+`license.enabled` is the chart's guard: it refuses to render the crash-looping
+combinations rather than letting them reach the cluster. It is an assertion that
+a key actually reaches the container, since the chart cannot read the Secret
+when an ExternalSecret owns it. Set it alongside the key itself.
 
 ## Secrets
 
@@ -155,12 +171,13 @@ Yopass exits at startup without a backend.
 | ingress.enabled | bool | `false` | Deploy an Ingress for Yopass. |
 | ingress.hosts | list | `[{"host":"oafpass.local","paths":[{"path":"/","pathType":"Prefix"}]}]` | Ingress hosts and paths. |
 | ingress.tls | list | `[]` | Ingress TLS configuration. |
-| license.key | string | `""` | Yopass licence key, required by `auth.mode=oidc`. Prefer delivering it through the Secret (`secret.licenseKey`) rather than here. |
+| license.enabled | bool | `false` | Set true when a valid Yopass licence key reaches the container, whether from `secret.licenseKey` or an ExternalSecret. It is an assertion, not a switch: the chart uses it to allow licence-gated settings, and cannot read the key itself when the Secret is owned externally. |
+| license.key | string | `""` | Yopass licence key. Prefer delivering it through the Secret (`secret.licenseKey`) rather than here. |
 | livenessProbe | object | `{"httpGet":{"path":"/health","port":"http"},"initialDelaySeconds":10,"periodSeconds":20}` | Liveness probe for the Yopass container. Probes hit Yopass directly, not through oauth2-proxy. |
 | nameOverride | string | `""` | Override the chart name used in resource names. |
 | nodeSelector | object | `{}` | Node selector for the pods. |
 | oafpass.argon2 | bool | `false` | Use Argon2id for password key derivation (`--argon2`). Slower, stronger. |
-| oafpass.auditLog | bool | `false` | Emit structured audit log lines for every secret operation (`--audit-log`). Goes to stdout unless `auditLogFile` is set. |
+| oafpass.auditLog | bool | `false` | Emit structured audit log lines for every secret operation (`--audit-log`). Goes to stdout unless `auditLogFile` is set. LICENSED: Yopass exits with "--audit-log requires a valid license key" if this is on without one, so it is gated on `license.enabled`. |
 | oafpass.auditLogFile | string | `""` | Write the audit log to this path instead of stdout (`--audit-log-file`). Needs a writable volume — see `extraVolumes` / `extraVolumeMounts`. |
 | oafpass.corsAllowOrigin | string | `""` | `CORS` allow-origin header (`--cors-allow-origin`). Chart default is the public URL only; set `"*"` to restore the upstream default. |
 | oafpass.defaultExpiry | string | `"1h"` | Default expiry offered in the UI (`--default-expiry`). Yopass accepts `1h`, `1d` or `1w` and rejects anything else at startup. |
@@ -178,6 +195,7 @@ Yopass exits at startup without a backend.
 | oafpass.publicUrl | string | `""` | Public URL Yopass builds secret links with (`--public-url`). Set this to the ingress host or copied links point at the wrong origin. |
 | oafpass.readOnly | bool | `false` | Serve the UI read-only: existing secrets can be opened, no new ones created (`--read-only`). |
 | oafpass.trustedProxies | string | `""` | Comma-separated CIDRs whose `X-Forwarded-For` Yopass trusts (`--trusted-proxies`). Set it when the client IP matters in the audit log. |
+| oafpass.webhookUrl | string | `""` | URL receiving webhook notifications for secret lifecycle events (`--webhook-url`). LICENSED: the server exits without a valid key, so this is gated on `license.enabled` too. |
 | podAnnotations | object | `{}` | Extra annotations for the Yopass pods. |
 | podLabels | object | `{}` | Extra labels for the Yopass pods. |
 | podSecurityContext | object | `{"fsGroup":1000,"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000,"seccompProfile":{"type":"RuntimeDefault"}}` | Pod-level security context. |
