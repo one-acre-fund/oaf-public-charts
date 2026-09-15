@@ -62,6 +62,22 @@ Because oauth2-proxy gates reads as well as writes, a link shared with someone
 outside the allowed domains will not open. That is the trade-off for not needing
 a licence; `oidc` is the mode that keeps reads public.
 
+## What a Yopass licence gates
+
+Several settings are business-licence features. Two failure modes, and the
+silent one is the trap:
+
+| Setting | Without a licence |
+|---|---|
+| `oafpass.auditLog`, `oafpass.webhookUrl`, `auth.mode: oidc` | **Container crash-loops.** `validateFlags` calls `logger.Fatal`, e.g. `--audit-log requires a valid license key`. |
+| `branding.appName`, `branding.logoUrl`, `branding.themeLight/themeDark` | **Silently ignored.** The server accepts the flags, then omits them from `/config`, so the UI keeps Yopass' own name and look. No error, no log line. |
+| `oafpass.maxFileSize` | Capped at 1MB. |
+
+`license.enabled` is the chart's guard: it refuses to render the crash-looping
+combinations rather than letting them reach the cluster. It is an assertion that
+a key actually reaches the container, since the chart cannot read the Secret
+when an ExternalSecret owns it. Set it alongside the key itself.
+
 ## Secrets
 
 Everything credential-shaped lives in one Secret so a cluster can hand the whole
