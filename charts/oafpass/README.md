@@ -1,6 +1,6 @@
 # oafpass
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.9.0](https://img.shields.io/badge/AppVersion-14.9.0-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 14.9.0](https://img.shields.io/badge/AppVersion-14.9.0-informational?style=flat-square)
 
 oafpass — One Acre Fund's branded Yopass deployment for client-side encrypted secret sharing, with optional Google sign-in in front of it
 
@@ -55,9 +55,9 @@ auth:
   mode: oauth2-proxy
   oauth2Proxy:
     emailDomains:
-      - oneacrefund.org      # do not leave this at "*"
+      - example.com          # do not leave this at "*"
 oafpass:
-  publicUrl: https://oafpass.oneacrefund.org
+  publicUrl: https://secrets.example.com
 secret:
   oauth2ProxyClientId: "<client id>.apps.googleusercontent.com"
   oauth2ProxyClientSecret: "GOCSPX-..."
