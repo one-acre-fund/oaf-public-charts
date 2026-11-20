@@ -68,6 +68,10 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+# Set false when the "kutt" Secret is supplied externally (e.g. ExternalSecret).
+secret:
+  create: true
+
 secretEnv:
   MAIL_PASSWORD: "mailpassword"
   MAIL_USER: "admin@mail.com"
