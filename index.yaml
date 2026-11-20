@@ -4706,6 +4706,29 @@ entries:
   kutt:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2026-11-20T01:48:40.979071796Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~12.1.2
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: ~17.3.11
+    description: A Helm chart for Kubernetes
+    digest: 5af691512ba53fff55cf26ee18f55ea6f16514172c7c6c691d233b4abe649a2f
+    icon: https://raw.githubusercontent.com/thedevs-network/kutt/9d1c873897c3f5b9a1bd0c74dc5d23f2ed01f2ec/static/images/logo-github.png
+    maintainers:
+    - email: bisonlou@gmail.com
+      name: bisonlou
+    name: kutt
+    type: application
+    urls:
+    - https://github.com/one-acre-fund/oaf-public-charts/releases/download/kutt-0.2.6/kutt-0.2.6.tgz
+    version: 0.2.6
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2023-02-17T09:59:28.685899147Z"
     dependencies:
     - condition: postgresql.enabled
@@ -7456,4 +7479,4 @@ entries:
     urls:
     - https://github.com/one-acre-fund/oaf-public-charts/releases/download/uptime-wrapper-0.1.0/uptime-wrapper-0.1.0.tgz
     version: 0.1.0
-generated: "2026-09-15T12:03:26.057562059Z"
+generated: "2026-11-20T01:48:40.979435102Z"
