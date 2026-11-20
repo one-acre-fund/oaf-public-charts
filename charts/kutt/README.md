@@ -1,6 +1,6 @@
 # kutt
 
-![Version: 0.2.5](https://img.shields.io/badge/Version-0.2.5-informational?style=flat-square)
+![Version: 0.2.6](https://img.shields.io/badge/Version-0.2.6-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -80,6 +80,7 @@ $ helm install my-release one-acre-fund/kutt
 | redis.existingSecret | string | `"redis"` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
+| secret.create | bool | `true` | Set false when the "kutt" Secret is supplied externally (e.g. ExternalSecret). |
 | secretEnv.JWT_SECRET | string | `"verysecret"` |  |
 | secretEnv.MAIL_PASSWORD | string | `"mailpassword"` |  |
 | secretEnv.MAIL_USER | string | `"admin@mail.com"` |  |
